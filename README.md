@@ -5,6 +5,10 @@
 
 Movie World app using [The Movie DB](https://www.themoviedb.org) built with Compose Multiplatform and MVVM architecture.<br>
 
+<p float="left">
+  <img width="40%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/1680805226666_100.PNG" />
+  <img width="40%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/1680804761350_100.PNG" />
+</p>
 
 # Main Features
 1. Movie list 
