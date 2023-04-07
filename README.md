@@ -1,6 +1,6 @@
 # Movie World  
-[![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
-[![Build Status](https://travis-ci.org/skydoves/TheMovies2.svg?branch=master)](https://travis-ci.org/piashcse/Hilt-MVVM-Compose-Movie)
+![badge-Android](https://img.shields.io/badge/Platform-Android-brightgreen)
+![badge-iOS](https://img.shields.io/badge/Platform-iOS-lightgray)
 <a href="https://github.com/piashcse"><img alt="License" src="https://img.shields.io/static/v1?label=GitHub&message=piashcse&color=C51162"/></a>
 
 Movie World app using [The Movie DB](https://www.themoviedb.org) built with Compose Multiplatform and MVVM architecture.<br>
