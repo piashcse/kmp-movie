@@ -18,7 +18,6 @@ internal fun HomeScreen(viewModel: NowPlayingViewModel) {
                     ProgressIndicator()
                 }
                 is DataState.Success<List<MovieItem>> -> {
-                    println("testing ${it.data.first().title}")
                     MovieList(it.data)
                 }
                 else -> {
