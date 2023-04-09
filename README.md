@@ -19,7 +19,7 @@ Movie World app using [The Movie DB](https://www.themoviedb.org) built with Comp
 - Movie List 
 
 ## Architecture
-  - MVVM Architecture (Composable View - ViewModel - Model)
+  - MVVM Architecture (Model - ComposableView - ViewModel)
 
 ## Built With 🛠
 - [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform) - Compose Multiplatform, a modern UI framework for Kotlin that makes building performant and beautiful user interfaces.
