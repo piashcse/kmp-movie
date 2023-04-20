@@ -1,24 +1,23 @@
-package ui.home
+package ui.detail
 
-import data.model.MovieItem
+import data.model.moviedetail.MovieDetail
 import data.repository.MovieRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import moe.tlaster.precompose.viewmodel.ViewModel
 import utils.network.DataState
 
-class NowPlayingViewModel : ViewModel() {
+class MovieDetailViewModel {
     private val viewModelScope = CoroutineScope(Dispatchers.Main)
     private val repo = MovieRepository()
-    val nowPlayingResponse = MutableStateFlow<DataState<List<MovieItem>>?>(DataState.Loading)
+    val movieDetail = MutableStateFlow<DataState<MovieDetail>?>(DataState.Loading)
 
-    fun nowPlayingView(page: Int) {
+    fun movieDetail(movieId: Int) {
         viewModelScope.launch(Dispatchers.Main) {
-            repo.nowPlayingView(page).collectLatest {
-                nowPlayingResponse.value = it
+            repo.movieDetail(movieId).collectLatest {
+                movieDetail.value = it
             }
         }
     }

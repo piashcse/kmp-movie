@@ -1,8 +1,8 @@
 package data.remote
 
-import data.remote.model.BaseModel
+import data.model.BaseModel
 
-interface ApiInterface {
+interface NowPlayingApiInterface {
     suspend fun nowPlayingMovieList(
          page: Int
     ): BaseModel

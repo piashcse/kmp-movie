@@ -1,12 +1,12 @@
 package data.remote
 
-import data.remote.model.BaseModel
+import data.model.BaseModel
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import utils.AppConstant
 
-class NowPlayingMovieApiImpl : ApiInterface {
+class NowPlayingMovieApiImpl : NowPlayingApiInterface {
     private fun HttpRequestBuilder.nowPlayingMovie(
         page: Int,
         api_key: String = AppConstant.API_KEY

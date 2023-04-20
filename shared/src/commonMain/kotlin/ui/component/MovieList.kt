@@ -1,6 +1,7 @@
 package ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,12 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberAsyncImagePainter
-import data.remote.model.MovieItem
+import data.model.MovieItem
 import utils.AppConstant
 import utils.cornerRadius
 
 @Composable
-internal fun MovieList(listItems: List<MovieItem>) {
+internal fun MovieList(listItems: List<MovieItem>, onclick: (id:Int) -> Unit) {
     LazyVerticalGrid(columns = GridCells.Fixed(2),
         modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp),
         content = {
@@ -34,7 +35,9 @@ internal fun MovieList(listItems: List<MovieItem>) {
                             )
                         ),
                         contentDescription = it.poster_path,
-                        modifier = Modifier.size(250.dp).cornerRadius(10),
+                        modifier = Modifier.size(250.dp).cornerRadius(10).clickable {
+                            onclick(it.id)
+                        },
                         contentScale = ContentScale.Crop,
                     )
                 }

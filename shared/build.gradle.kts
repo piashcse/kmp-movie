@@ -30,15 +30,18 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
+                implementation(compose.animation)
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
-                implementation("io.ktor:ktor-client-core:2.2.4")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.1")
-                implementation("io.ktor:ktor-client-content-negotiation:2.2.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-                api("io.github.qdsfdhvh:image-loader:1.3.1")
+                implementation("io.ktor:ktor-client-core:2.3.0")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
+                implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+                api("io.github.qdsfdhvh:image-loader:1.4.0")
+                api("moe.tlaster:precompose:1.4.0")
+                api("moe.tlaster:precompose-viewmodel:1.4.0")
             }
         }
         val androidMain by getting {
@@ -46,7 +49,7 @@ kotlin {
                 api("androidx.activity:activity-compose:1.7.0")
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.10.0")
-                implementation("io.ktor:ktor-client-okhttp:2.2.4")
+                implementation("io.ktor:ktor-client-okhttp:2.3.0")
             }
         }
         val iosX64Main by getting
@@ -58,8 +61,8 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:2.2.4")
-                implementation("io.ktor:ktor-client-ios:2.2.1")
+                implementation("io.ktor:ktor-client-darwin:2.3.0")
+                implementation("io.ktor:ktor-client-ios:2.3.0")
             }
         }
     }
@@ -78,10 +81,10 @@ android {
         targetSdk = (findProperty("android.targetSdk") as String).toInt()
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlin {
-        jvmToolchain(11)
+        jvmToolchain(17)
     }
 }

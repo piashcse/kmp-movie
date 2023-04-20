@@ -1,11 +1,21 @@
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
-import ui.home.NowPlayingViewModel
-import ui.home.HomeScreen
+import moe.tlaster.precompose.navigation.rememberNavigator
+import navigation.Navigation
+import ui.component.AppBarWithArrow
 
 @Composable
-internal fun App(viewModel: NowPlayingViewModel = NowPlayingViewModel()) {
+internal fun App() {
+    val navigator = rememberNavigator()
+    val canGoBack = navigator.canGoBack.collectAsState(false)
     MaterialTheme {
-        HomeScreen(viewModel)
+        Scaffold(topBar = {
+            AppBarWithArrow("Movie World", isBackEnable = canGoBack.value) {
+                navigator.goBack()
+            }
+        }) {
+            Navigation(navigator)
+        }
     }
 }
