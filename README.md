@@ -17,6 +17,8 @@ Movie World app using [The Movie DB](https://www.themoviedb.org) built with Comp
 
 # Main Features
 - Movie List 
+- Movie Detail
+- Navigation 
 
 ## Architecture
   - MVVM Architecture (Model - ComposableView - ViewModel)
@@ -24,6 +26,7 @@ Movie World app using [The Movie DB](https://www.themoviedb.org) built with Comp
 ## Built With 🛠
 - [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform) - Compose Multiplatform, a modern UI framework for Kotlin that makes building performant and beautiful user interfaces.
 - [Jetpack Compose](https://developer.android.com/jetpack/compose) - Jetpack Compose is Android’s modern toolkit for building native UI.
+- [Navigation](https://github.com/Tlaster/PreCompose) - Compose Multiplatform Navigation && State Management
 - [Ktor Client](https://ktor.io/docs/welcome.html) - Ktor includes a multiplatform asynchronous HTTP client, which allows you to make requests and handle responses.
 - [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) - For asynchronous and more.
 - [Image Loader](https://github.com/qdsfdhvh/compose-imageloader) - Compose Image library for Kotlin Multiplatform.
