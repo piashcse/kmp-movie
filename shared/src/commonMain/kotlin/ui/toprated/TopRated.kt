@@ -1,7 +1,11 @@
-package ui.home
+package ui.toprated
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import data.model.MovieItem
@@ -12,15 +16,12 @@ import ui.component.ProgressIndicator
 import utils.network.DataState
 
 @Composable
-fun HomeScreen(
-    navigator: Navigator,
-    viewModel: NowPlayingViewModel = NowPlayingViewModel()
-) {
+fun TopRated(navigator: Navigator, viewModel: TopRatedViewModel = TopRatedViewModel()) {
     LaunchedEffect(true) {
         viewModel.nowPlayingView(1)
     }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        viewModel.nowPlayingResponse.collectAsState().value?.let {
+        viewModel.topRatedMovieResponse.collectAsState().value?.let {
             when (it) {
                 is DataState.Loading -> {
                     ProgressIndicator()
@@ -31,6 +32,9 @@ fun HomeScreen(
                         navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
                     }
                 }
+                is DataState.Error ->{
+                    Text("Text ${it.exception}")
+                }
 
                 else -> {
 
@@ -39,5 +43,3 @@ fun HomeScreen(
         }
     }
 }
-
-

@@ -1,4 +1,4 @@
-package data.remote
+package data.remote.moviedetail
 
 import data.model.moviedetail.MovieDetail
 

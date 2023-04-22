@@ -25,7 +25,7 @@ import utils.roundTo
 
 @Composable
 fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDetailViewModel = MovieDetailViewModel()){
-    LaunchedEffect(key1 = 1){
+    LaunchedEffect(true){
         movieDetailViewModel.movieDetail(movieId)
     }
     Column(
@@ -80,7 +80,7 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                                         text = it.data.original_language,
                                     )
                                     SubtitleSecondary(
-                                        text = "Language"
+                                        text = AppConstant.AppString.LANGUAGE
                                     )
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -88,7 +88,7 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                                         text = it.data.vote_average.roundTo(1).toString(),
                                     )
                                     SubtitleSecondary(
-                                        text = "Rating"
+                                        text = AppConstant.AppString.RATING
                                     )
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -96,7 +96,7 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                                         text = it.data.runtime.hourMinutes()
                                     )
                                     SubtitleSecondary(
-                                        text = "Duration"
+                                        text = AppConstant.AppString.DURATION
                                     )
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -104,12 +104,12 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                                         text = it.data.release_date
                                     )
                                     SubtitleSecondary(
-                                        text = "Release Date"
+                                        text = AppConstant.AppString.RELEASE_DATE
                                     )
                                 }
                             }
                             Text(
-                                text = "Description",
+                                text = AppConstant.AppString.DESCRIPTION,
                                 color = FontColor,
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.SemiBold

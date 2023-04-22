@@ -1,4 +1,4 @@
-package data.remote
+package data.remote.nowplaying
 
 import data.model.BaseModel
 

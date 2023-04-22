@@ -1,6 +1,7 @@
-package data.remote
+package data.remote.moviedetail
 
 import data.model.moviedetail.MovieDetail
+import data.remote.client
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*

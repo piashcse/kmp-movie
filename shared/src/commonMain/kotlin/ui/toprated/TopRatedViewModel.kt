@@ -1,4 +1,4 @@
-package ui.home
+package ui.toprated
 
 import data.model.MovieItem
 import data.repository.MovieRepository
@@ -10,15 +10,15 @@ import kotlinx.coroutines.launch
 import moe.tlaster.precompose.viewmodel.ViewModel
 import utils.network.DataState
 
-class NowPlayingViewModel : ViewModel() {
+class TopRatedViewModel : ViewModel() {
     private val viewModelScope = CoroutineScope(Dispatchers.Main)
     private val repo = MovieRepository()
-    val nowPlayingResponse = MutableStateFlow<DataState<List<MovieItem>>?>(DataState.Loading)
+    val topRatedMovieResponse = MutableStateFlow<DataState<List<MovieItem>>?>(DataState.Loading)
 
     fun nowPlayingView(page: Int) {
         viewModelScope.launch(Dispatchers.Main) {
-            repo.nowPlayingMovie(page).collectLatest {
-                nowPlayingResponse.value = it
+            repo.topRatedMovie(page).collectLatest {
+                topRatedMovieResponse.value = it
             }
         }
     }

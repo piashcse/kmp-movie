@@ -1,7 +1,10 @@
-package ui.home
+package ui.upcoming
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import data.model.MovieItem
@@ -12,15 +15,12 @@ import ui.component.ProgressIndicator
 import utils.network.DataState
 
 @Composable
-fun HomeScreen(
-    navigator: Navigator,
-    viewModel: NowPlayingViewModel = NowPlayingViewModel()
-) {
+fun Upcoming(navigator: Navigator, viewModel: UpcomingViewModel = UpcomingViewModel()) {
     LaunchedEffect(true) {
         viewModel.nowPlayingView(1)
     }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        viewModel.nowPlayingResponse.collectAsState().value?.let {
+        viewModel.upComingMovieResponse.collectAsState().value?.let {
             when (it) {
                 is DataState.Loading -> {
                     ProgressIndicator()
@@ -39,5 +39,3 @@ fun HomeScreen(
         }
     }
 }
-
-
