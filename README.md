@@ -19,6 +19,7 @@ Movie World app using [The Movie DB](https://www.themoviedb.org) built with Comp
 - Movie List 
 - Movie Detail
 - Navigation 
+- Bottom Navigation
 
 ## Architecture
   - MVVM Architecture (Model - ComposableView - ViewModel)
@@ -33,6 +34,10 @@ Movie World app using [The Movie DB](https://www.themoviedb.org) built with Comp
 - [Android Studio](https://developer.android.com/studio/intro) - Android Studio is the official Integrated Development Environment (IDE) for Android app development.
 - [XCode](https://developer.apple.com/xcode/) - Xcode 14 includes everything you need to develop, test, and distribute apps across all Apple platforms.
 
+## Acknowledgements 
+
+- [JetBrains/compose-multiplatform-ios-android-template](https://github.com/JetBrains/compose-multiplatform-ios-android-template#readme):
+  For Starter template
 
 ## 👨 Developed By
 
