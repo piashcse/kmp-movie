@@ -118,7 +118,11 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                         }
                     }
                 }
-                else -> {
+                is DataState.Error ->{
+                    Text("Error :${it.exception}")
+                }
+                else ->{
+
                 }
             }
         }

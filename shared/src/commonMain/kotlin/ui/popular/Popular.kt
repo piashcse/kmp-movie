@@ -33,10 +33,7 @@ fun Popular(navigator: Navigator, viewModel: PopularViewModel = PopularViewModel
                     }
                 }
                 is DataState.Error ->{
-                    Text("Text ${it.exception}")
-                }
-                else -> {
-
+                    Text("Error :${it.exception}")
                 }
             }
         }

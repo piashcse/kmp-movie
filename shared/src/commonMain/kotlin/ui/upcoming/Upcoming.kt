@@ -2,6 +2,7 @@ package ui.upcoming
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,8 +33,8 @@ fun Upcoming(navigator: Navigator, viewModel: UpcomingViewModel = UpcomingViewMo
                     }
                 }
 
-                else -> {
-
+                is DataState.Error ->{
+                    Text("Error :${it.exception}")
                 }
             }
         }

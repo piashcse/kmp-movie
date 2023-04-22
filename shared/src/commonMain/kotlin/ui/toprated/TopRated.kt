@@ -33,12 +33,9 @@ fun TopRated(navigator: Navigator, viewModel: TopRatedViewModel = TopRatedViewMo
                     }
                 }
                 is DataState.Error ->{
-                    Text("Text ${it.exception}")
+                    Text("Error :${it.exception}")
                 }
 
-                else -> {
-
-                }
             }
         }
     }
