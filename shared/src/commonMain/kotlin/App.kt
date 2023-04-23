@@ -11,7 +11,7 @@ import navigation.Navigation
 import navigation.NavigationScreen
 import navigation.currentRoute
 import ui.component.AppBarWithArrow
-import utils.AppConstant
+import utils.AppString
 
 @Composable
 internal fun App() {
@@ -19,7 +19,7 @@ internal fun App() {
     MaterialTheme {
         Scaffold(topBar = {
             AppBarWithArrow(
-                AppConstant.AppString.APP_TITLE, isBackEnable = isBackButtonEnable(navigator)
+              AppString.APP_TITLE, isBackEnable = isBackButtonEnable(navigator)
             ) {
                 navigator.goBack()
             }

@@ -2,6 +2,7 @@ package ui.detail
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -18,14 +19,20 @@ import moe.tlaster.precompose.navigation.Navigator
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import ui.component.ProgressIndicator
+import ui.component.shimmerBackground
 import utils.AppConstant
+import utils.AppString
 import utils.hourMinutes
 import utils.network.DataState
 import utils.roundTo
 
 @Composable
-fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDetailViewModel = MovieDetailViewModel()){
-    LaunchedEffect(true){
+fun MovieDetail(
+    navigator: Navigator,
+    movieId: Int,
+    movieDetailViewModel: MovieDetailViewModel = MovieDetailViewModel()
+) {
+    LaunchedEffect(true) {
         movieDetailViewModel.movieDetail(movieId)
     }
     Column(
@@ -52,7 +59,9 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                             contentDescription = it.data.poster_path,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(300.dp),
+                                .height(300.dp).shimmerBackground(
+                                    RoundedCornerShape(5.dp)
+                                ),
                             contentScale = ContentScale.Crop,
                         )
                         Column(
@@ -80,7 +89,7 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                                         text = it.data.original_language,
                                     )
                                     SubtitleSecondary(
-                                        text = AppConstant.AppString.LANGUAGE
+                                        text = AppString.LANGUAGE
                                     )
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -88,7 +97,7 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                                         text = it.data.vote_average.roundTo(1).toString(),
                                     )
                                     SubtitleSecondary(
-                                        text = AppConstant.AppString.RATING
+                                        text = AppString.RATING
                                     )
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -96,7 +105,7 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                                         text = it.data.runtime.hourMinutes()
                                     )
                                     SubtitleSecondary(
-                                        text = AppConstant.AppString.DURATION
+                                        text = AppString.DURATION
                                     )
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -104,12 +113,12 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                                         text = it.data.release_date
                                     )
                                     SubtitleSecondary(
-                                        text = AppConstant.AppString.RELEASE_DATE
+                                        text = AppString.RELEASE_DATE
                                     )
                                 }
                             }
                             Text(
-                                text = AppConstant.AppString.DESCRIPTION,
+                                text = AppString.DESCRIPTION,
                                 color = FontColor,
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.SemiBold
@@ -118,10 +127,12 @@ fun MovieDetail(navigator: Navigator, movieId:Int, movieDetailViewModel: MovieDe
                         }
                     }
                 }
-                is DataState.Error ->{
+
+                is DataState.Error -> {
                     Text("Error :${it.exception}")
                 }
-                else ->{
+
+                else -> {
 
                 }
             }

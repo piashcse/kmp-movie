@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -18,7 +19,7 @@ import utils.AppConstant
 import utils.cornerRadius
 
 @Composable
-internal fun MovieList(listItems: List<MovieItem>, onclick: (id:Int) -> Unit) {
+internal fun MovieList(listItems: List<MovieItem>, onclick: (id: Int) -> Unit) {
     LazyVerticalGrid(columns = GridCells.Fixed(2),
         modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp),
         content = {
@@ -35,7 +36,9 @@ internal fun MovieList(listItems: List<MovieItem>, onclick: (id:Int) -> Unit) {
                             )
                         ),
                         contentDescription = it.poster_path,
-                        modifier = Modifier.size(250.dp).cornerRadius(10).clickable {
+                        modifier = Modifier.size(250.dp).cornerRadius(10).shimmerBackground(
+                            RoundedCornerShape(5.dp)
+                        ).clickable {
                             onclick(it.id)
                         },
                         contentScale = ContentScale.Crop,

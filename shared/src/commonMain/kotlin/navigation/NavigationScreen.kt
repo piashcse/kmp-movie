@@ -11,11 +11,11 @@ import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import utils.AppConstant
+import utils.AppString
 
 sealed class NavigationScreen(
     val route: String,
-    val title: String = AppConstant.AppString.APP_TITLE,
+    val title: String = AppString.APP_TITLE,
     val navIcon: (@Composable () -> Unit) = {
         Icon(
             Icons.Filled.Home, contentDescription = "home"
