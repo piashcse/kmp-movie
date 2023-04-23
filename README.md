@@ -34,6 +34,21 @@ Movie World app using [The Movie DB](https://www.themoviedb.org) built with Comp
 - [Android Studio](https://developer.android.com/studio/intro) - Android Studio is the official Integrated Development Environment (IDE) for Android app development.
 - [XCode](https://developer.apple.com/xcode/) - Xcode 14 includes everything you need to develop, test, and distribute apps across all Apple platforms.
 
+## Project structure 
+
+This Compose Multiplatform project includes three modules:
+
+### [`shared`](/shared)
+This is a Kotlin module that contains the logic common for both Android and iOS applications, the code you share between platforms.
+This shared module is also where you write your Compose Multiplatform code. In `shared/src/commonMain/kotlin/App.kt`, you can find the shared root `@Composable` function for your app.
+It uses Gradle as the build system. You can add dependencies and change settings in `shared/build.gradle.kts`. The shared module builds into an Android library and an iOS framework.
+
+### [`androidApp`](/androidApp)
+This is a Kotlin module that builds into an Android application. It uses Gradle as the build system. The `androidApp` module depends on and uses the shared module as a regular Android library.
+
+### [`iosApp`](/iosApp)
+This is an Xcode project that builds into an iOS application. It depends on and uses the shared module as a CocoaPods dependency.
+
 ## Acknowledgements 
 
 - [JetBrains/compose-multiplatform-ios-android-template](https://github.com/JetBrains/compose-multiplatform-ios-android-template#readme):
