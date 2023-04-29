@@ -24,4 +24,8 @@ interface ApiInterface{
     suspend fun movieDetail(
         movieId: Int
     ): MovieDetail
+
+    suspend fun movieSearch(
+        searchKey: String
+    ): BaseModelV2
 }

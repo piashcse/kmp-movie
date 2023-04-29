@@ -10,7 +10,7 @@ import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
 import utils.AppConstant
 
-class ApiImpl : ApiInterface{
+class ApiImpl : ApiInterface {
     private fun HttpRequestBuilder.nowPlayingMovie(
         page: Int,
         api_key: String = AppConstant.API_KEY
@@ -22,6 +22,7 @@ class ApiImpl : ApiInterface{
             parameters.append("api_key", api_key)
         }
     }
+
     private fun HttpRequestBuilder.popularMovie(
         page: Int,
         api_key: String = AppConstant.API_KEY
@@ -33,6 +34,7 @@ class ApiImpl : ApiInterface{
             parameters.append("api_key", api_key)
         }
     }
+
     private fun HttpRequestBuilder.topRatedMovie(
         page: Int,
         api_key: String = AppConstant.API_KEY
@@ -64,6 +66,18 @@ class ApiImpl : ApiInterface{
         url {
             takeFrom(AppConstant.BASE_URL)
             encodedPath = "3/movie/$movieId"
+            parameters.append("api_key", api_key)
+        }
+    }
+
+    private fun HttpRequestBuilder.movieSearch(
+        searchKey: String,
+        api_key: String = AppConstant.API_KEY
+    ) {
+        url {
+            takeFrom(AppConstant.BASE_URL)
+            encodedPath = "3/search/movie"
+            parameters.append("query", searchKey)
             parameters.append("api_key", api_key)
         }
     }
@@ -106,6 +120,12 @@ class ApiImpl : ApiInterface{
     override suspend fun movieDetail(movieId: Int): MovieDetail {
         return client.get {
             movieDetail(movieId)
+        }.body()
+    }
+
+    override suspend fun movieSearch(searchKey: String): BaseModelV2 {
+        return client.get {
+            movieSearch(searchKey)
         }.body()
     }
 

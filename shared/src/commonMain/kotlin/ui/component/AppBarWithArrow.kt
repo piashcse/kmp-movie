@@ -33,7 +33,6 @@ fun AppBarWithArrow(
     ) {
         Row {
             Spacer(modifier = Modifier.width(10.dp))
-
             if (isBackEnable) {
                 Image(
                     imageVector = Icons.Filled.ArrowBack,

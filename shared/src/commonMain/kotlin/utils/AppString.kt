@@ -7,4 +7,5 @@ object AppString {
     const val DURATION = "Duration"
     const val RELEASE_DATE = "Release Date"
     const val DESCRIPTION = "Description"
+    const val RATING_SEARCH = "Rating :"
 }

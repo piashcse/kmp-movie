@@ -55,4 +55,14 @@ class MovieRepository {
             emit(DataState.Error(e))
         }
     }
+
+    fun searchMovie(searchKey: String) = flow {
+        emit(DataState.Loading)
+        try {
+            val result = api.movieSearch(searchKey)
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            emit(DataState.Error(e))
+        }
+    }
 }
