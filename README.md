@@ -17,6 +17,7 @@ Movie World app using [The Movie DB](https://www.themoviedb.org) built with Comp
 
 # Main Features
 - Movie List 
+- Movie Search
 - Movie Detail
 - Navigation 
 - Bottom Navigation
