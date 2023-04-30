@@ -15,14 +15,17 @@ fun <T : Any> MutableState<DataState<T>?>.pagingLoadingState(isLoaded: (pagingSt
         is DataState.Success<T> -> {
             isLoaded(false)
         }
+
         is DataState.Loading -> {
             isLoaded(true)
         }
+
         is DataState.Error -> {
             isLoaded(false)
         }
-        else -> {
 
+        else -> {
+            isLoaded(false)
         }
     }
 }

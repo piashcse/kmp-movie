@@ -13,6 +13,7 @@ import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
 import ui.component.MovieList
 import ui.component.ProgressIndicator
+import utils.AppString
 import utils.network.DataState
 
 @Composable
@@ -33,7 +34,7 @@ fun Popular(navigator: Navigator, viewModel: PopularViewModel = PopularViewModel
                     }
                 }
                 is DataState.Error ->{
-                    Text("Error :${it.exception}")
+                    Text("${AppString.ERROR_TEXT} ${it.exception}")
                 }
             }
         }

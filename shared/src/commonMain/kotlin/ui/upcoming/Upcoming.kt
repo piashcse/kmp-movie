@@ -13,6 +13,7 @@ import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
 import ui.component.MovieList
 import ui.component.ProgressIndicator
+import utils.AppString
 import utils.network.DataState
 
 @Composable
@@ -33,8 +34,8 @@ fun Upcoming(navigator: Navigator, viewModel: UpcomingViewModel = UpcomingViewMo
                     }
                 }
 
-                is DataState.Error ->{
-                    Text("Error :${it.exception}")
+                is DataState.Error -> {
+                    Text("${AppString.ERROR_TEXT} ${it.exception}")
                 }
             }
         }

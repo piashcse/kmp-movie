@@ -66,7 +66,7 @@ fun SearchUI(
                             contentDescription = item.backdrop_path,
                             modifier = Modifier
                                 .height(100.dp)
-                                .width(80.dp).cornerRadius(8),
+                                .width(80.dp).cornerRadius(8).shimmerBackground(RoundedCornerShape(5.dp)),
                             contentScale = ContentScale.Crop,
                         )
                         Column {
