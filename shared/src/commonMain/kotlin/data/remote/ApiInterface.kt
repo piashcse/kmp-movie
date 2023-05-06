@@ -28,4 +28,8 @@ interface ApiInterface{
     suspend fun movieSearch(
         searchKey: String
     ): BaseModelV2
+
+    suspend fun recommendedMovie(
+        movieId: Int
+    ): BaseModelV2
 }
