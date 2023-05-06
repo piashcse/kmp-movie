@@ -62,14 +62,6 @@ class ApiImpl : ApiInterface {
         }
     }
 
-    private fun HttpRequestBuilder.recommendedMovie(
-        movieId: Int,
-    ) {
-        url {
-            encodedPath = "3/movie/$movieId/recommendations"
-        }
-    }
-
     override suspend fun nowPlayingMovieList(
         page: Int,
     ): BaseModel {
@@ -114,12 +106,6 @@ class ApiImpl : ApiInterface {
     override suspend fun movieSearch(searchKey: String): BaseModelV2 {
         return client.get {
             movieSearch(searchKey)
-        }.body()
-    }
-
-    override suspend fun recommendedMovie(movieId: Int): BaseModelV2 {
-        return client.get {
-            recommendedMovie(movieId)
         }.body()
     }
 
