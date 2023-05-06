@@ -7,78 +7,58 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.http.encodedPath
-import io.ktor.http.takeFrom
-import utils.AppConstant
 
 class ApiImpl : ApiInterface {
     private fun HttpRequestBuilder.nowPlayingMovie(
-        page: Int,
-        api_key: String = AppConstant.API_KEY
+        page: Int
     ) {
         url {
-            takeFrom(AppConstant.BASE_URL)
             encodedPath = "3/movie/now_playing"
             parameters.append("page", page.toString())
-            parameters.append("api_key", api_key)
         }
     }
 
     private fun HttpRequestBuilder.popularMovie(
-        page: Int,
-        api_key: String = AppConstant.API_KEY
+        page: Int
     ) {
         url {
-            takeFrom(AppConstant.BASE_URL)
             encodedPath = "3/movie/popular"
             parameters.append("page", page.toString())
-            parameters.append("api_key", api_key)
         }
     }
 
     private fun HttpRequestBuilder.topRatedMovie(
-        page: Int,
-        api_key: String = AppConstant.API_KEY
+        page: Int
     ) {
         url {
-            takeFrom(AppConstant.BASE_URL)
             encodedPath = "3/movie/top_rated"
             parameters.append("page", page.toString())
-            parameters.append("api_key", api_key)
         }
     }
 
     private fun HttpRequestBuilder.upcomingMovie(
         page: Int,
-        api_key: String = AppConstant.API_KEY
     ) {
         url {
-            takeFrom(AppConstant.BASE_URL)
             encodedPath = "3/movie/upcoming"
             parameters.append("page", page.toString())
-            parameters.append("api_key", api_key)
         }
     }
 
     private fun HttpRequestBuilder.movieDetail(
         movieId: Int,
-        api_key: String = AppConstant.API_KEY
     ) {
         url {
-            takeFrom(AppConstant.BASE_URL)
             encodedPath = "3/movie/$movieId"
-            parameters.append("api_key", api_key)
         }
     }
 
     private fun HttpRequestBuilder.movieSearch(
         searchKey: String,
-        api_key: String = AppConstant.API_KEY
     ) {
         url {
-            takeFrom(AppConstant.BASE_URL)
             encodedPath = "3/search/movie"
             parameters.append("query", searchKey)
-            parameters.append("api_key", api_key)
         }
     }
 
