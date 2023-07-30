@@ -32,7 +32,7 @@ fun MovieDetail(
     movieId: Int,
     movieDetailViewModel: MovieDetailViewModel = MovieDetailViewModel()
 ) {
-    LaunchedEffect(true) {
+    LaunchedEffect(1) {
         movieDetailViewModel.movieDetail(movieId)
     }
     Column(
@@ -42,7 +42,7 @@ fun MovieDetail(
                 DefaultBackgroundColor
             )
     ) {
-        movieDetailViewModel.movieDetail.collectAsState().value.let {
+        movieDetailViewModel.movieDetail.collectAsState().value?.let {
             when (it) {
                 is DataState.Loading -> {
                     ProgressIndicator()
@@ -130,10 +130,6 @@ fun MovieDetail(
 
                 is DataState.Error -> {
                     Text("Error :${it.exception}")
-                }
-
-                else -> {
-
                 }
             }
         }

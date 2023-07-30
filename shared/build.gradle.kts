@@ -7,7 +7,7 @@ plugins {
 }
 
 kotlin {
-    android()
+    androidTarget()
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -36,7 +36,7 @@ kotlin {
                 implementation(compose.components.resources)
                 api(compose.materialIconsExtended)
 
-                implementation("io.ktor:ktor-client-core:2.3.1")
+                implementation("io.ktor:ktor-client-core:2.3.2")
                 implementation("io.ktor:ktor-client-logging:2.3.1")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.1")
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.1")
@@ -51,7 +51,7 @@ kotlin {
                 api("androidx.activity:activity-compose:1.7.2")
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.10.1")
-                implementation("io.ktor:ktor-client-okhttp:2.3.1")
+                implementation("io.ktor:ktor-client-okhttp:2.3.2")
             }
         }
         val iosX64Main by getting
@@ -63,7 +63,7 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:2.3.1")
+                implementation("io.ktor:ktor-client-darwin:2.3.2")
                 implementation("io.ktor:ktor-client-ios:2.3.1")
             }
         }
