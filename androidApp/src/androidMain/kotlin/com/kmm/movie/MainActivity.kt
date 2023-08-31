@@ -1,4 +1,4 @@
-package com.kmm_movie
+package com.kmm.movie
 
 import MainView
 import android.os.Bundle
