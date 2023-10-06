@@ -30,10 +30,10 @@ kotlin {
                 implementation(compose.components.resources)
                 api(compose.materialIconsExtended)
 
-                implementation("io.ktor:ktor-client-core:2.3.4")
-                implementation("io.ktor:ktor-client-logging:2.3.1")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.1")
-                implementation("io.ktor:ktor-client-content-negotiation:2.3.1")
+                implementation("io.ktor:ktor-client-core:2.3.5")
+                implementation("io.ktor:ktor-client-logging:2.3.5")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.5")
+                implementation("io.ktor:ktor-client-content-negotiation:2.3.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
                 api("io.github.qdsfdhvh:image-loader:1.5.1")
                 api("moe.tlaster:precompose:1.5.4")
@@ -42,10 +42,10 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                api("androidx.activity:activity-compose:1.7.2")
+                api("androidx.activity:activity-compose:1.8.0")
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.12.0")
-                implementation("io.ktor:ktor-client-okhttp:2.3.4")
+                implementation("io.ktor:ktor-client-okhttp:2.3.5")
             }
         }
         val iosX64Main by getting
@@ -57,8 +57,8 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:2.3.4")
-                implementation("io.ktor:ktor-client-ios:2.3.1")
+                implementation("io.ktor:ktor-client-darwin:2.3.5")
+                implementation("io.ktor:ktor-client-ios:2.3.5")
             }
         }
     }
