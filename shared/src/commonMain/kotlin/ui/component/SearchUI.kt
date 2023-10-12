@@ -16,7 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImagePainter
 import data.model.BaseModelV2
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
@@ -58,7 +58,7 @@ fun SearchUI(
                             )
                         }) {
                         Image(
-                            painter = rememberAsyncImagePainter(
+                            painter = rememberImagePainter(
                                 AppConstant.IMAGE_URL.plus(
                                     item.backdrop_path
                                 )

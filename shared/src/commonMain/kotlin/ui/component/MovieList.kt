@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImagePainter
 import data.model.MovieItem
 import utils.AppConstant
 import utils.cornerRadius
@@ -30,7 +30,7 @@ internal fun MovieList(listItems: List<MovieItem>, onclick: (id: Int) -> Unit) {
                     )
                 ) {
                     Image(
-                        painter = rememberAsyncImagePainter(
+                        painter = rememberImagePainter(
                             AppConstant.IMAGE_URL.plus(
                                 it.poster_path
                             )
