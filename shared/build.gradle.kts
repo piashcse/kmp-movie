@@ -7,6 +7,8 @@ plugins {
 
 kotlin {
     androidTarget()
+    iosArm64()
+    iosSimulatorArm64()
 
     listOf(
         iosX64(),
@@ -20,7 +22,7 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
+         commonMain {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -36,11 +38,11 @@ kotlin {
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
                 api("io.github.qdsfdhvh:image-loader:1.6.8")
-                api("moe.tlaster:precompose:1.5.4")
-                api("moe.tlaster:precompose-viewmodel:1.5.4")
+                api("moe.tlaster:precompose:1.5.5")
+                api("moe.tlaster:precompose-viewmodel:1.5.5")
             }
         }
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 api("androidx.activity:activity-compose:1.8.0")
                 api("androidx.appcompat:appcompat:1.6.1")
@@ -48,14 +50,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-okhttp:2.3.5")
             }
         }
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
+        iosMain{
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:2.3.5")
                 implementation("io.ktor:ktor-client-ios:2.3.5")
