@@ -13,8 +13,8 @@ Movie World app using [The Movie DB](https://www.themoviedb.org) built with Comp
 - Android
 - ~~Desktop~~.
 <p float="left">
-  <img width="40%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/1680805226666_100.PNG" />
-  <img width="40%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/1680804761350_100.PNG" />
+  <img width="40%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/1699203945755_100.PNG" />
+  <img width="40%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/1699203963683_100.PNG" />
 </p>
 
 
