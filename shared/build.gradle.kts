@@ -32,10 +32,10 @@ kotlin {
                 implementation(compose.components.resources)
                 api(compose.materialIconsExtended)
 
-                implementation("io.ktor:ktor-client-core:2.3.5")
-                implementation("io.ktor:ktor-client-logging:2.3.5")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.5")
-                implementation("io.ktor:ktor-client-content-negotiation:2.3.5")
+                implementation("io.ktor:ktor-client-core:2.3.6")
+                implementation("io.ktor:ktor-client-logging:2.3.6")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.6")
+                implementation("io.ktor:ktor-client-content-negotiation:2.3.6")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
                 api("io.github.qdsfdhvh:image-loader:1.7.0")
                 api("moe.tlaster:precompose:1.5.7")
@@ -52,8 +52,8 @@ kotlin {
         }
         iosMain{
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:2.3.5")
-                implementation("io.ktor:ktor-client-ios:2.3.5")
+                implementation("io.ktor:ktor-client-darwin:2.3.6")
+                implementation("io.ktor:ktor-client-ios:2.3.6")
             }
         }
     }
