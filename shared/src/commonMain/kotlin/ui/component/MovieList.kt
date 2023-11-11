@@ -3,8 +3,9 @@ package ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -36,7 +37,7 @@ internal fun MovieList(listItems: List<MovieItem>, onclick: (id: Int) -> Unit) {
                             )
                         ),
                         contentDescription = it.poster_path,
-                        modifier = Modifier.size(250.dp).cornerRadius(10).shimmerBackground(
+                        modifier = Modifier.height(250.dp).fillMaxWidth().cornerRadius(10).shimmerBackground(
                             RoundedCornerShape(5.dp)
                         ).clickable {
                             onclick(it.id)

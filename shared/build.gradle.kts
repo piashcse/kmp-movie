@@ -9,6 +9,7 @@ kotlin {
     androidTarget()
     iosArm64()
     iosSimulatorArm64()
+    jvm("desktop")
 
     listOf(
         iosX64(),
@@ -54,6 +55,12 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:2.3.6")
                 implementation("io.ktor:ktor-client-ios:2.3.6")
+            }
+        }
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.common)
+                implementation("io.ktor:ktor-client-cio:2.3.6")
             }
         }
     }

@@ -2,6 +2,7 @@ rootProject.name = "Kmm-movie"
 
 include(":androidApp")
 include(":shared")
+include(":desktopApp")
 
 pluginManagement {
     repositories {
@@ -26,6 +27,10 @@ pluginManagement {
         id("org.jetbrains.compose").version(composeVersion)
         kotlin("plugin.serialization").version(kotlinVersion)
     }
+}
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version("0.4.0")
 }
 
 dependencyResolutionManagement {
