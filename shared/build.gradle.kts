@@ -38,7 +38,7 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.6")
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.6")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-                api("io.github.qdsfdhvh:image-loader:1.7.0")
+                api("io.github.qdsfdhvh:image-loader:1.7.1")
                 api("moe.tlaster:precompose:1.5.7")
                 api("moe.tlaster:precompose-viewmodel:1.5.7")
             }
