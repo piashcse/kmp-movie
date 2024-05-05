@@ -16,9 +16,9 @@ junit = "4.13.2"
 kotlin = "1.9.23"
 ktorClientCore = "2.3.10"
 precompose = "1.6.0"
-imageLoader = "1.7.8"
 landScapist = "2.3.3"
 napierVersion = "2.7.1"
+lifeCycleVersion ="2.8.0-beta02"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -41,11 +41,10 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientCore" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorClientCore" }
 precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
-precompose-view-model = { module = "moe.tlaster:precompose-viewmodel", version.ref = "precompose" }
-image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "imageLoader" }
 landscapist-coil = { module = "com.github.skydoves:landscapist-coil3", version.ref = "landScapist" }
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landScapist" }
 napier = { module = "io.github.aakira:napier", version.ref = "napierVersion" }
+lifeCycle = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifeCycleVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

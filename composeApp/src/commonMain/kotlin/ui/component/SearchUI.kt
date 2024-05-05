@@ -1,6 +1,5 @@
 package ui.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,13 +9,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.seiko.imageloader.rememberImagePainter
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
+import com.skydoves.landscapist.coil3.CoilImage
+import com.skydoves.landscapist.components.rememberImageComponent
 import data.model.BaseModelV2
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
@@ -57,17 +60,27 @@ fun SearchUI(
                                 )
                             )
                         }) {
-                        Image(
-                            painter = rememberImagePainter(
+                        CoilImage(
+                            imageModel = {
                                 AppConstant.IMAGE_URL.plus(
                                     item.backdrop_path
                                 )
+                            },
+                            imageOptions = ImageOptions(
+                                contentScale = ContentScale.Crop,
+                                alignment = Alignment.Center,
+                                contentDescription = "Movie item",
+                                colorFilter = null,
                             ),
-                            contentDescription = item.backdrop_path,
+                            component = rememberImageComponent {
+                                +CircularRevealPlugin(
+                                    duration = 800
+                                )
+                            },
                             modifier = Modifier
                                 .height(100.dp)
-                                .width(80.dp).cornerRadius(8).shimmerBackground(RoundedCornerShape(5.dp)),
-                            contentScale = ContentScale.Crop,
+                                .width(80.dp).cornerRadius(8)
+                                .shimmerBackground(RoundedCornerShape(5.dp)),
                         )
                         Column {
                             Text(

@@ -2,10 +2,10 @@ package ui
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import data.model.BaseModelV2
 import data.repository.MovieRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -14,12 +14,10 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import moe.tlaster.precompose.viewmodel.ViewModel
 import utils.network.DataState
 
 @ExperimentalCoroutinesApi
 class AppViewModel: ViewModel() {
-    private val viewModelScope = CoroutineScope(Dispatchers.Main)
     private val repo = MovieRepository()
     val searchData: MutableState<DataState<BaseModelV2>?> = mutableStateOf(null)
     @ExperimentalCoroutinesApi

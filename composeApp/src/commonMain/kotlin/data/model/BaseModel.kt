@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BaseModel(
-    val dates: Dates,
+    val dates: Dates?,
     val page: Int,
     val results: List<MovieItem>,
     val total_pages: Int,

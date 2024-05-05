@@ -50,11 +50,10 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.logging)
             implementation(libs.precompose)
-            implementation(libs.precompose.view.model)
-            implementation(libs.image.loader)
             implementation(libs.landscapist.coil)
             implementation(libs.landscapist.animation)
             implementation(libs.napier)
+            implementation(libs.lifeCycle)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -66,7 +65,7 @@ kotlin {
 }
 
 android {
-    namespace = "piash.kmp.movie"
+    namespace = "piashcse.kmp.movie"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -74,7 +73,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "piash.kmp.movie"
+        applicationId = "piashcse.kmp.movie"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
