@@ -66,7 +66,6 @@ fun MovieDetail(
             }
 
             is DataState.Error -> {
-                Text("Error :${it.exception}")
                 isLoading.value = false
             }
         }

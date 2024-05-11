@@ -24,7 +24,7 @@ import utils.network.DataState
 fun Popular(navigator: Navigator, viewModel: PopularViewModel = PopularViewModel()) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
-    LaunchedEffect(key1 = viewModel) {
+    LaunchedEffect(viewModel) {
         viewModel.nowPlaying(1)
     }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -35,7 +35,7 @@ fun Popular(navigator: Navigator, viewModel: PopularViewModel = PopularViewModel
             ProgressIndicator()
         }
     }
-    viewModel.popularMovieResponse.collectAsState().value?.let {
+    viewModel.popularMovieResponse.collectAsState().value.let {
         when (it) {
             is DataState.Loading -> {
                 isLoading.value = true

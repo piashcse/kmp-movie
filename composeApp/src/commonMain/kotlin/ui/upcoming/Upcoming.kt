@@ -23,7 +23,7 @@ import utils.network.DataState
 fun Upcoming(navigator: Navigator, viewModel: UpcomingViewModel = UpcomingViewModel()) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
-    LaunchedEffect(key1 = viewModel) {
+    LaunchedEffect(viewModel) {
         viewModel.upComing(1)
     }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -34,7 +34,7 @@ fun Upcoming(navigator: Navigator, viewModel: UpcomingViewModel = UpcomingViewMo
             ProgressIndicator()
         }
     }
-    viewModel.upComingMovieResponse.collectAsState().value?.let {
+    viewModel.upComingMovieResponse.collectAsState().value.let {
         when (it) {
             is DataState.Loading -> {
                 isLoading.value = true
@@ -44,7 +44,6 @@ fun Upcoming(navigator: Navigator, viewModel: UpcomingViewModel = UpcomingViewMo
                 isLoading.value = false
             }
             is DataState.Error ->{
-                Text("${AppString.ERROR_TEXT} ${it.exception}")
                 isLoading.value = false
             }
         }

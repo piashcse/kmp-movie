@@ -23,7 +23,7 @@ import utils.network.DataState
 fun TopRated(navigator: Navigator, viewModel: TopRatedViewModel = TopRatedViewModel()) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
-    LaunchedEffect(key1 = viewModel) {
+    LaunchedEffect(viewModel) {
         viewModel.topRated(1)
     }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -34,7 +34,7 @@ fun TopRated(navigator: Navigator, viewModel: TopRatedViewModel = TopRatedViewMo
             ProgressIndicator()
         }
     }
-    viewModel.topRatedMovieResponse.collectAsState().value?.let {
+    viewModel.topRatedMovieResponse.collectAsState().value.let {
         when (it) {
             is DataState.Loading -> {
                 isLoading.value = true
@@ -44,7 +44,6 @@ fun TopRated(navigator: Navigator, viewModel: TopRatedViewModel = TopRatedViewMo
                 isLoading.value = false
             }
             is DataState.Error ->{
-                Text("${AppString.ERROR_TEXT} ${it.exception}")
                 isLoading.value = false
             }
         }

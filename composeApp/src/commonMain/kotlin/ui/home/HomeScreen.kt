@@ -21,7 +21,7 @@ fun HomeScreen(
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
 
-    LaunchedEffect(key1 = viewModel) {
+    LaunchedEffect(viewModel) {
         viewModel.nowPlaying(1)
     }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -32,7 +32,7 @@ fun HomeScreen(
             ProgressIndicator()
         }
     }
-    viewModel.nowPlayingResponse.collectAsState().value?.let {
+    viewModel.nowPlayingResponse.collectAsState().value.let {
         when (it) {
             is DataState.Loading -> {
                 isLoading.value = true
@@ -44,7 +44,6 @@ fun HomeScreen(
             }
 
             is DataState.Error -> {
-                Text("${AppString.ERROR_TEXT} ${it.exception}")
                 isLoading.value = false
             }
         }
