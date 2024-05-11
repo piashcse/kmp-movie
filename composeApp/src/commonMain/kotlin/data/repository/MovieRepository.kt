@@ -12,7 +12,6 @@ class MovieRepository {
             val result = api.nowPlayingMovieList(page)
             emit(DataState.Success(result.results))
         } catch (e: Exception) {
-            println("error>>>")
             emit(DataState.Error(e))
         }
     }

@@ -45,7 +45,6 @@ fun Popular(navigator: Navigator, viewModel: PopularViewModel = PopularViewModel
                 isLoading.value = false
             }
             is DataState.Error ->{
-                Text("${AppString.ERROR_TEXT} ${it.exception}")
                 isLoading.value = false
             }
         }
