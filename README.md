@@ -13,6 +13,7 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
 - iOS
 - Android
 - Desktop
+- ~~Web~~
 <p float="left">
   <img width="30%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/1699203945755_100.PNG" />
   <img width="30%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/1699205418921_100.PNG" />
@@ -35,12 +36,36 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
 - [PreCompose](https://github.com/Tlaster/PreCompose) - Compose Multiplatform Navigation && State Management
 - [Ktor Client](https://ktor.io/docs/welcome.html) - Ktor includes a multiplatform asynchronous HTTP client, which allows you to make requests and handle responses.
 - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) - Kotlin multiplatform / multi-format reflectionless serialization
+- [View Model](https://developer.android.com/topic/libraries/architecture/viewmodel) - The ViewModel class is a business logic or screen level state holder. It exposes state to the UI and encapsulates related business logic
 - [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) - For asynchronous and more.
 - [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) - A cold asynchronous data stream that sequentially emits values and completes normally or with an exception.
 - [Landscapist](https://github.com/skydoves/landscapist) - 🌻 A pluggable, highly optimized Jetpack Compose and Kotlin Multiplatform image loading library that fetches and displays network images with Glide, Coil, and Fresco.
 - [Android Studio](https://developer.android.com/studio/intro) - Android Studio is the official Integrated Development Environment (IDE) for Android app development.
 - [XCode](https://developer.apple.com/xcode/) - Xcode 14 includes everything you need to develop, test, and distribute apps across all Apple platforms.
 
+## Before running!
+ - check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
+ - install JDK 17 or higher on your machine
+ - add `local.properties` file to the project root and set a path to Android SDK there
+
+### Android
+To run the application on android device/emulator:  
+ - open project in Android Studio and run imported android run configuration
+
+To build the application bundle:
+ - run `./gradlew :composeApp:assembleDebug`
+ - find `.apk` file in `composeApp/build/outputs/apk/debug/composeApp-debug.apk`
+Run android simulator UI tests: `./gradlew :composeApp:pixel5Check`
+
+### Desktop
+Run the desktop application: `./gradlew :composeApp:run`
+Run desktop UI tests: `./gradlew :composeApp:jvmTest`
+
+### iOS
+To run the application on iPhone device/simulator:
+ - Open `iosApp/iosApp.xcproject` in Xcode and run standard configuration
+ - Or use [Kotlin Multiplatform Mobile plugin](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile) for Android Studio
+Run iOS simulator UI tests: `./gradlew :composeApp:iosSimulatorArm64Test`
 ## Project structure 
 
 This Compose Multiplatform project includes three modules:
@@ -58,8 +83,7 @@ This is an Xcode project that builds into an iOS application. It depends on and 
 
 ## Acknowledgements 
 
-- [JetBrains/compose-multiplatform-ios-android-template](https://github.com/JetBrains/compose-multiplatform-ios-android-template#readme):
-  For Starter template
+- [Kotlin Multiplatform Wizard](https://kmp.jetbrains.com/) For Starter template
 
 ## 👨 Developed By
 
