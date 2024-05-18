@@ -6,9 +6,9 @@ import utils.network.DataState
 
 class MovieRepository {
     private val api = ApiImpl()
-    fun nowPlayingMovie(page: Int) = flow {
-        emit(DataState.Loading)
+    suspend fun nowPlayingMovie(page: Int) = flow {
         try {
+            emit(DataState.Loading)
             val result = api.nowPlayingMovieList(page)
             emit(DataState.Success(result.results))
         } catch (e: Exception) {
@@ -16,9 +16,9 @@ class MovieRepository {
         }
     }
 
-    fun popularMovie(page: Int) = flow {
-        emit(DataState.Loading)
+    suspend fun popularMovie(page: Int) = flow {
         try {
+            emit(DataState.Loading)
             val result = api.popularMovieList(page)
             emit(DataState.Success(result.results))
         } catch (e: Exception) {
@@ -26,7 +26,7 @@ class MovieRepository {
         }
     }
 
-    fun topRatedMovie(page: Int) = flow {
+    suspend fun topRatedMovie(page: Int) = flow {
         emit(DataState.Loading)
         try {
             val result = api.topRatedMovieList(page)
@@ -36,9 +36,9 @@ class MovieRepository {
         }
     }
 
-    fun upComingMovie(page: Int) = flow {
-        emit(DataState.Loading)
+    suspend fun upComingMovie(page: Int) = flow {
         try {
+            emit(DataState.Loading)
             val result = api.upcomingMovieList(page)
             emit(DataState.Success(result.results))
         } catch (e: Exception) {
@@ -46,9 +46,9 @@ class MovieRepository {
         }
     }
 
-    fun movieDetail(movieId: Int) = flow {
-        emit(DataState.Loading)
+    suspend fun movieDetail(movieId: Int) = flow {
         try {
+            emit(DataState.Loading)
             val result = api.movieDetail(movieId)
             emit(DataState.Success(result))
         } catch (e: Exception) {
@@ -56,9 +56,9 @@ class MovieRepository {
         }
     }
 
-    fun searchMovie(searchKey: String) = flow {
-        emit(DataState.Loading)
+    suspend fun searchMovie(searchKey: String) = flow {
         try {
+            emit(DataState.Loading)
             val result = api.movieSearch(searchKey)
             emit(DataState.Success(result))
         } catch (e: Exception) {

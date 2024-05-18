@@ -5,19 +5,22 @@ import androidx.lifecycle.viewModelScope
 import data.model.MovieItem
 import data.repository.MovieRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import utils.network.DataState
 
 class UpcomingViewModel : ViewModel() {
     private val repo = MovieRepository()
-    val upComingMovieResponse = MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
+    val _upComingMovieResponse = MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
+    val upComingMovieResponse = _upComingMovieResponse.asStateFlow()
 
     fun upComing(page: Int) {
         viewModelScope.launch {
-            repo.upComingMovie(page).collectLatest {
-                upComingMovieResponse.value = it
-            }
+            repo.upComingMovie(page).onEach {
+                _upComingMovieResponse.value = it
+            }.launchIn(viewModelScope)
         }
     }
 }
