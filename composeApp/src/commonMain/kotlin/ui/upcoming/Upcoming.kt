@@ -23,9 +23,6 @@ import utils.network.DataState
 fun Upcoming(navigator: Navigator, viewModel: UpcomingViewModel = UpcomingViewModel()) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
-    LaunchedEffect(viewModel) {
-        viewModel.upComing(1)
-    }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         MovieList(movies) { movieId ->
             navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
@@ -40,6 +37,7 @@ fun Upcoming(navigator: Navigator, viewModel: UpcomingViewModel = UpcomingViewMo
                 isLoading.value = true
             }
             is DataState.Success<List<MovieItem>> -> {
+                movies.clear()
                 movies.addAll(it.data)
                 isLoading.value = false
             }

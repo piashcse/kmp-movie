@@ -39,7 +39,7 @@ fun MovieDetail(
     val isLoading = remember { mutableStateOf(false) }
     val movieDetail = remember { mutableStateOf<MovieDetail?>(null) }
 
-    LaunchedEffect(key1 = movieDetailViewModel) {
+    LaunchedEffect(Unit) {
         movieDetailViewModel.movieDetail(movieId)
     }
     Column(

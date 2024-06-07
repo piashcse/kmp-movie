@@ -20,10 +20,6 @@ fun HomeScreen(
 ) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
-
-    LaunchedEffect(viewModel) {
-        viewModel.nowPlaying(1)
-    }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         MovieList(movies) { movieId ->
             navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
@@ -39,6 +35,7 @@ fun HomeScreen(
             }
 
             is DataState.Success<List<MovieItem>> -> {
+                movies.clear()
                 movies.addAll(it.data)
                 isLoading.value = false
             }

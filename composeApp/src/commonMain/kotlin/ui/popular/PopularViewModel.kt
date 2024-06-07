@@ -15,7 +15,9 @@ class PopularViewModel : ViewModel() {
     private val repo = MovieRepository()
     private val _popularMovieResponse = MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
     val popularMovieResponse = _popularMovieResponse.asStateFlow()
-
+    init {
+        nowPlaying(1)
+    }
     fun nowPlaying(page: Int) {
         viewModelScope.launch {
             repo.popularMovie(page).onEach {

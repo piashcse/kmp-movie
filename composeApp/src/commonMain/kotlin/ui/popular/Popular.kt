@@ -24,9 +24,7 @@ import utils.network.DataState
 fun Popular(navigator: Navigator, viewModel: PopularViewModel = PopularViewModel()) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
-    LaunchedEffect(viewModel) {
-        viewModel.nowPlaying(1)
-    }
+
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         MovieList(movies) { movieId ->
             navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
@@ -41,6 +39,7 @@ fun Popular(navigator: Navigator, viewModel: PopularViewModel = PopularViewModel
                 isLoading.value = true
             }
             is DataState.Success<List<MovieItem>> -> {
+                movies.clear()
                 movies.addAll(it.data)
                 isLoading.value = false
             }

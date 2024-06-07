@@ -23,9 +23,6 @@ import utils.network.DataState
 fun TopRated(navigator: Navigator, viewModel: TopRatedViewModel = TopRatedViewModel()) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
-    LaunchedEffect(viewModel) {
-        viewModel.topRated(1)
-    }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         MovieList(movies) { movieId ->
             navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
@@ -40,6 +37,7 @@ fun TopRated(navigator: Navigator, viewModel: TopRatedViewModel = TopRatedViewMo
                 isLoading.value = true
             }
             is DataState.Success<List<MovieItem>> -> {
+                movies.clear()
                 movies.addAll(it.data)
                 isLoading.value = false
             }
