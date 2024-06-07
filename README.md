@@ -1,5 +1,5 @@
 # KMP Movie (Compose Multiplatform)  
-[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-v1.6.10-green)](https://developer.android.com/jetpack/compose)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-v1.6.11-green)](https://developer.android.com/jetpack/compose)
 ![badge-Android](https://img.shields.io/badge/Platform-Android-brightgreen)
 ![badge-iOS](https://img.shields.io/badge/Platform-iOS-lightgray)
 ![badge-desktop](http://img.shields.io/badge/Platform-Desktop-4D76CD.svg?style=flat)
