@@ -16,7 +16,7 @@ junit = "4.13.2"
 kotlin = "2.0.0"
 ktorClientCore = "2.3.11"
 precompose = "1.6.0"
-landScapist = "2.3.3"
+landScapist = "2.3.4"
 napierVersion = "2.7.1"
 lifeCycleVersion ="2.8.0"
 
