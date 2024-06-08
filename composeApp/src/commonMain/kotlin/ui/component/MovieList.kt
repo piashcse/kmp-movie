@@ -9,6 +9,9 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,9 +25,17 @@ import data.model.MovieItem
 import utils.AppConstant
 import utils.cornerRadius
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 internal fun MovieList(listItems: List<MovieItem>, onclick: (id: Int) -> Unit) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2),
+    val windowSizeClass = calculateWindowSizeClass()
+    val rowSize = when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> 2
+        WindowWidthSizeClass.Medium -> 3
+        else -> 4
+    }
+
+    LazyVerticalGrid(columns = GridCells.Fixed(rowSize),
         modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp),
         content = {
             items(listItems) {

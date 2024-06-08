@@ -33,6 +33,9 @@ import ui.AppViewModel
 fun SearchBar(viewModel: AppViewModel, pressOnBack: () -> Unit) {
     var text by remember { mutableStateOf("") }
     val focusRequester = FocusRequester()
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
     Row(Modifier.background(color = Blue)) {
         Spacer(modifier = Modifier.width(10.dp))
         Image(
@@ -76,9 +79,5 @@ fun SearchBar(viewModel: AppViewModel, pressOnBack: () -> Unit) {
                         })
                 }
             })
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
-        }
     }
-
 }

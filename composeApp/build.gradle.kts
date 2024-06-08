@@ -55,6 +55,7 @@ kotlin {
             implementation(libs.landscapist.animation)
             implementation(libs.napier)
             implementation(libs.lifeCycle)
+            implementation(libs.windowsize)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

@@ -19,6 +19,7 @@ precompose = "1.6.0"
 landScapist = "2.3.4"
 napierVersion = "2.7.1"
 lifeCycleVersion ="2.8.0"
+windowSizeVersion ="0.5.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -45,6 +46,7 @@ landscapist-coil = { module = "com.github.skydoves:landscapist-coil3", version.r
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landScapist" }
 napier = { module = "io.github.aakira:napier", version.ref = "napierVersion" }
 lifeCycle = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifeCycleVersion" }
+windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "windowSizeVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
