@@ -2,6 +2,7 @@ package data.remote
 
 import data.model.BaseModel
 import data.model.BaseModelV2
+import data.model.artist.Artist
 import data.model.moviedetail.MovieDetail
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -62,6 +63,21 @@ class ApiImpl : ApiInterface {
         }
     }
 
+    private fun HttpRequestBuilder.recommendedMovie(
+        movieId: Int,
+    ) {
+        url {
+            encodedPath = "3/movie/$movieId/recommendations"
+        }
+    }
+    private fun HttpRequestBuilder.movieCredit(
+        movieId: Int,
+    ) {
+        url {
+            encodedPath = "3/movie/$movieId/credits"
+        }
+    }
+
     override suspend fun nowPlayingMovieList(
         page: Int,
     ): BaseModel {
@@ -106,6 +122,17 @@ class ApiImpl : ApiInterface {
     override suspend fun movieSearch(searchKey: String): BaseModelV2 {
         return client.get {
             movieSearch(searchKey)
+        }.body()
+    }
+
+    override suspend fun recommendedMovie(movieId: Int): BaseModelV2 {
+        return client.get {
+            recommendedMovie(movieId)
+        }.body()
+    }
+    override suspend fun movieCredit(movieId: Int): Artist {
+        return client.get {
+            movieCredit(movieId)
         }.body()
     }
 

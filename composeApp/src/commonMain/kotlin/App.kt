@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.navigation.BackHandler
@@ -30,7 +31,7 @@ import utils.pagingLoadingState
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-internal fun App(viewModel: AppViewModel = AppViewModel()) {
+internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
     PreComposeApp {
         val navigator = rememberNavigator()
         val isAppBarVisible = remember { mutableStateOf(true) }
@@ -39,11 +40,10 @@ internal fun App(viewModel: AppViewModel = AppViewModel()) {
         BackHandler(isAppBarVisible.value.not()) {
             isAppBarVisible.value = true
         }
-
         MaterialTheme {
             Scaffold(topBar = {
                 if (isAppBarVisible.value.not()) {
-                    SearchBar(viewModel) {
+                    SearchBar(appViewModel) {
                         isAppBarVisible.value = true
                     }
 
@@ -77,12 +77,12 @@ internal fun App(viewModel: AppViewModel = AppViewModel()) {
                 if (currentRoute(navigator) !== NavigationScreen.MovieDetail.route) {
                     Column {
                         if (isAppBarVisible.value.not()) {
-                            SearchUI(navigator, viewModel.searchData) {
+                            SearchUI(navigator, appViewModel.searchData) {
                                 isAppBarVisible.value = true
                             }
                             ProgressIndicator(searchProgressBar.value)
                         }
-                        viewModel.searchData.pagingLoadingState {
+                        appViewModel.searchData.pagingLoadingState {
                             searchProgressBar.value = it
                         }
                     }

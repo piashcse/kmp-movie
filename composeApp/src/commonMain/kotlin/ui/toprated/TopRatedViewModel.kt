@@ -17,10 +17,6 @@ class TopRatedViewModel : ViewModel() {
         MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
     val topRatedMovieResponse get() = _topRatedMovieResponse.asStateFlow()
 
-    init {
-        topRated(1)
-    }
-
     fun topRated(page: Int) {
         viewModelScope.launch {
             repo.topRatedMovie(page).onEach {

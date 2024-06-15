@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import data.model.MovieItem
+import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
 import ui.component.MovieList
@@ -20,6 +21,11 @@ fun HomeScreen(
 ) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
+
+    LaunchedEffect(Unit){
+        nowPlayingViewModel.nowPlaying(1)
+    }
+
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         MovieList(movies) { movieId ->
             navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))

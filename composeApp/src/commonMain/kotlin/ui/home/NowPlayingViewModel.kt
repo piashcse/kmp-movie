@@ -17,10 +17,6 @@ class NowPlayingViewModel : ViewModel() {
         MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
     val nowPlayingResponse get() = _nowPlayingResponse.asStateFlow()
 
-    init {
-        nowPlaying(1)
-    }
-
     fun nowPlaying(page: Int) {
         viewModelScope.launch {
             repo.nowPlayingMovie(page).onEach {

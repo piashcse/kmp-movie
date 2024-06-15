@@ -27,6 +27,10 @@ fun TopRated(
 ) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
+
+    LaunchedEffect(Unit) {
+        topRatedViewModel.topRated(1)
+    }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         MovieList(movies) { movieId ->
             navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))

@@ -65,4 +65,23 @@ class MovieRepository {
             emit(DataState.Error(e))
         }
     }
+
+    suspend fun recommendedMovie(movieId: Int) = flow {
+        try {
+            emit(DataState.Loading)
+            val result = api.recommendedMovie(movieId)
+            emit(DataState.Success(result.results))
+        } catch (e: Exception) {
+            emit(DataState.Error(e))
+        }
+    }
+    suspend fun movieCredit(movieId: Int) = flow {
+        try {
+            emit(DataState.Loading)
+            val result = api.movieCredit(movieId)
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            emit(DataState.Error(e))
+        }
+    }
 }
