@@ -11,17 +11,20 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import utils.network.DataState
 
-class NowPlayingViewModel : ViewModel(){
+class NowPlayingViewModel : ViewModel() {
     private val repo = MovieRepository()
-    private val _nowPlayingResponse = MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
-    val nowPlayingResponse = _nowPlayingResponse.asStateFlow()
+    private val _nowPlayingResponse =
+        MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
+    val nowPlayingResponse get() = _nowPlayingResponse.asStateFlow()
+
     init {
         nowPlaying(1)
     }
+
     fun nowPlaying(page: Int) {
         viewModelScope.launch {
             repo.nowPlayingMovie(page).onEach {
-                    _nowPlayingResponse.value = it
+                _nowPlayingResponse.value = it
             }.launchIn(viewModelScope)
         }
     }

@@ -13,7 +13,7 @@ import utils.network.DataState
 class MovieDetailViewModel : ViewModel() {
     private val repo = MovieRepository()
     private val _movieDetail = MutableStateFlow<DataState<MovieDetail>>(DataState.Loading)
-    val movieDetail = _movieDetail.asStateFlow()
+    val movieDetail get() = _movieDetail.asStateFlow()
 
     fun movieDetail(movieId: Int) {
         viewModelScope.launch {

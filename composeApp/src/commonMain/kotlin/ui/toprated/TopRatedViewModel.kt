@@ -13,11 +13,14 @@ import utils.network.DataState
 
 class TopRatedViewModel : ViewModel() {
     private val repo = MovieRepository()
-    private val _topRatedMovieResponse = MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
-    val topRatedMovieResponse = _topRatedMovieResponse.asStateFlow()
+    private val _topRatedMovieResponse =
+        MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
+    val topRatedMovieResponse get() = _topRatedMovieResponse.asStateFlow()
+
     init {
         topRated(1)
     }
+
     fun topRated(page: Int) {
         viewModelScope.launch {
             repo.topRatedMovie(page).onEach {

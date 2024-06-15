@@ -13,11 +13,14 @@ import utils.network.DataState
 
 class UpcomingViewModel : ViewModel() {
     private val repo = MovieRepository()
-    private val _upComingMovieResponse = MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
-    val upComingMovieResponse = _upComingMovieResponse.asStateFlow()
+    private val _upComingMovieResponse =
+        MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
+    val upComingMovieResponse get() = _upComingMovieResponse.asStateFlow()
+
     init {
         upComing(1)
     }
+
     fun upComing(page: Int) {
         viewModelScope.launch {
             repo.upComingMovie(page).onEach {
