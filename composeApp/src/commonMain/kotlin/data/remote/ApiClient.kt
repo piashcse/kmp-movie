@@ -29,6 +29,11 @@ val client = HttpClient {
     install(Logging) {
         logger = Logger.DEFAULT
         level = LogLevel.HEADERS
+        logger = object : Logger {
+            override fun log(message: String) {
+                println(message)
+            }
+        }
     }
     install(ContentNegotiation) {
         json(Json {

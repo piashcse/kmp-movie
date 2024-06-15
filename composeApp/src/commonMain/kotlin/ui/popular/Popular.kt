@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import data.model.MovieItem
 import io.github.aakira.napier.Napier
 import moe.tlaster.precompose.navigation.Navigator
@@ -21,7 +22,10 @@ import utils.AppString
 import utils.network.DataState
 
 @Composable
-fun Popular(navigator: Navigator, viewModel: PopularViewModel = PopularViewModel()) {
+fun Popular(
+    navigator: Navigator,
+    popularViewModel: PopularViewModel = viewModel { PopularViewModel() }
+) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
 
@@ -33,17 +37,19 @@ fun Popular(navigator: Navigator, viewModel: PopularViewModel = PopularViewModel
             ProgressIndicator()
         }
     }
-    viewModel.popularMovieResponse.collectAsState().value.let {
+    popularViewModel.popularMovieResponse.collectAsState().value.let {
         when (it) {
             is DataState.Loading -> {
                 isLoading.value = true
             }
+
             is DataState.Success<List<MovieItem>> -> {
                 movies.clear()
                 movies.addAll(it.data)
                 isLoading.value = false
             }
-            is DataState.Error ->{
+
+            is DataState.Error -> {
                 isLoading.value = false
             }
         }

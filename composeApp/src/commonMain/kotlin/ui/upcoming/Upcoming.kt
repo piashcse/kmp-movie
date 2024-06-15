@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import data.model.MovieItem
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
@@ -20,7 +21,10 @@ import utils.AppString
 import utils.network.DataState
 
 @Composable
-fun Upcoming(navigator: Navigator, viewModel: UpcomingViewModel = UpcomingViewModel()) {
+fun Upcoming(
+    navigator: Navigator,
+    upcomingViewModel: UpcomingViewModel = viewModel { UpcomingViewModel() }
+) {
     val isLoading = remember { mutableStateOf(false) }
     val movies = remember { mutableStateListOf<MovieItem>() }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -31,17 +35,19 @@ fun Upcoming(navigator: Navigator, viewModel: UpcomingViewModel = UpcomingViewMo
             ProgressIndicator()
         }
     }
-    viewModel.upComingMovieResponse.collectAsState().value.let {
+    upcomingViewModel.upComingMovieResponse.collectAsState().value.let {
         when (it) {
             is DataState.Loading -> {
                 isLoading.value = true
             }
+
             is DataState.Success<List<MovieItem>> -> {
                 movies.clear()
                 movies.addAll(it.data)
                 isLoading.value = false
             }
-            is DataState.Error ->{
+
+            is DataState.Error -> {
                 isLoading.value = false
             }
         }

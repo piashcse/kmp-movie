@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import ui.component.text.SubtitlePrimary
 import ui.component.text.SubtitleSecondary
 import com.skydoves.landscapist.ImageOptions
@@ -34,7 +35,7 @@ import utils.roundTo
 fun MovieDetail(
     navigator: Navigator,
     movieId: Int,
-    movieDetailViewModel: MovieDetailViewModel = MovieDetailViewModel()
+    movieDetailViewModel: MovieDetailViewModel = viewModel { MovieDetailViewModel() }
 ) {
     val isLoading = remember { mutableStateOf(false) }
     val movieDetail = remember { mutableStateOf<MovieDetail?>(null) }
