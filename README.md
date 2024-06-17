@@ -33,6 +33,10 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
 ## Architecture
   - MVVM Architecture (Model - ComposableView - ViewModel)
 
+<p float="left">
+  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/mvvm_architecture.png" />
+</p>
+
 ## Built With 🛠
 - [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform) - Compose Multiplatform, a modern UI framework for Kotlin that makes building performant and beautiful user interfaces.
 - [PreCompose](https://github.com/Tlaster/PreCompose) - Compose Multiplatform Navigation && State Management
