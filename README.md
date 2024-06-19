@@ -27,8 +27,8 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
 - Movie List 
 - Movie Search
 - Movie Detail
-- Navigation 
 - Bottom Navigation
+- Navigation Rail
 
 ## Architecture
   - MVVM Architecture (Model - ComposableView - ViewModel)
