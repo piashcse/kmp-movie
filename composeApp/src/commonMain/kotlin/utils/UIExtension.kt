@@ -1,6 +1,10 @@
 package utils
 
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -27,5 +31,15 @@ fun <T : Any> MutableState<DataState<T>?>.pagingLoadingState(isLoaded: (pagingSt
         else -> {
             isLoaded(false)
         }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+fun isCompactSize(): Boolean {
+    val windowSizeClass = calculateWindowSizeClass()
+    return when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> true
+        else -> false
     }
 }

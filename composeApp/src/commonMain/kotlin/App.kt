@@ -1,4 +1,5 @@
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.FloatingActionButton
@@ -8,8 +9,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import moe.tlaster.precompose.PreComposeApp
@@ -27,6 +31,7 @@ import ui.component.ProgressIndicator
 import ui.component.SearchBar
 import ui.component.SearchUI
 import utils.AppString
+import utils.isCompactSize
 import utils.pagingLoadingState
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -67,13 +72,19 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
                     }
                 }
             }, bottomBar = {
-                when (currentRoute(navigator)) {
-                    NavigationScreen.Home.route, NavigationScreen.Popular.route, NavigationScreen.TopRated.route, NavigationScreen.Upcoming.route -> {
-                        BottomNavigationUI(navigator)
+                if (isCompactSize()) {
+                    when (currentRoute(navigator)) {
+                        NavigationScreen.Home.route, NavigationScreen.Popular.route, NavigationScreen.TopRated.route, NavigationScreen.Upcoming.route -> {
+                            BottomNavigationUI(navigator)
+                        }
                     }
                 }
             }) {
-                Navigation(navigator)
+                if (isCompactSize()) {
+                    Navigation(navigator)
+                } else {
+                    NavigationRailUI(navigator)
+                }
                 if (currentRoute(navigator) !== NavigationScreen.MovieDetail.route) {
                     Column {
                         if (isAppBarVisible.value.not()) {
@@ -114,6 +125,34 @@ fun BottomNavigationUI(navigator: Navigator) {
                     )
                 })
         }
+    }
+}
+
+@Composable
+fun NavigationRailUI(navigator: Navigator) {
+    Row {
+        NavigationRail {
+            val items = listOf(
+                NavigationScreen.HomeNav,
+                NavigationScreen.PopularNav,
+                NavigationScreen.TopRatedNav,
+                NavigationScreen.UpcomingNav,
+            )
+            items.forEach {
+                NavigationRailItem(label = { Text(text = it.title, fontSize = 12.sp) },
+                    selected = it.route == currentRoute(navigator),
+                    icon = it.navIcon,
+                    onClick = {
+                        navigator.navigate(
+                            it.route,
+                            NavOptions(
+                                launchSingleTop = true,
+                            ),
+                        )
+                    })
+            }
+        }
+        Navigation(navigator)
     }
 }
 
