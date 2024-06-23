@@ -13,7 +13,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
@@ -39,7 +39,7 @@ fun SearchBar(viewModel: AppViewModel, pressOnBack: () -> Unit) {
     Row(Modifier.background(color = Blue)) {
         Spacer(modifier = Modifier.width(10.dp))
         Image(
-            imageVector = Icons.Filled.ArrowBack,
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             colorFilter = ColorFilter.tint(Color.White),
             contentDescription = null,
             modifier = Modifier
