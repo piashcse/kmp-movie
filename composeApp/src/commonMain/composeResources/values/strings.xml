@@ -1,0 +1,10 @@
+<resources>
+    <string name="artist_detail">Artist Detail</string>
+    <string name="know_for">Known for</string>
+    <string name="biography">Biography</string>
+    <string name="gender">Gender</string>
+    <string name="birth_day">Birthday</string>
+    <string name="place_of_birth">Place of Birth</string>
+    <string name="similar_movie">Similar Movie</string>
+    <string name="cast">Cast</string>
+</resources>

@@ -3,6 +3,7 @@ package data.remote
 import data.model.BaseModel
 import data.model.BaseModelV2
 import data.model.artist.Artist
+import data.model.artist.ArtistDetail
 import data.model.moviedetail.MovieDetail
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -77,6 +78,13 @@ class ApiImpl : ApiInterface {
             encodedPath = "3/movie/$movieId/credits"
         }
     }
+    private fun HttpRequestBuilder.artistDetail(
+        personId: Int,
+    ) {
+        url {
+            encodedPath = "3/person/$personId"
+        }
+    }
 
     override suspend fun nowPlayingMovieList(
         page: Int,
@@ -133,6 +141,12 @@ class ApiImpl : ApiInterface {
     override suspend fun movieCredit(movieId: Int): Artist {
         return client.get {
             movieCredit(movieId)
+        }.body()
+    }
+
+    override suspend fun artistDetail(personId: Int): ArtistDetail {
+        return client.get {
+            artistDetail(personId)
         }.body()
     }
 

@@ -25,7 +25,13 @@ import data.model.MovieItem
 import data.model.artist.Artist
 import data.model.artist.Cast
 import data.model.moviedetail.MovieDetail
+import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.biography
+import kmp_movie.composeapp.generated.resources.cast
+import kmp_movie.composeapp.generated.resources.similar_movie
 import moe.tlaster.precompose.navigation.Navigator
+import navigation.NavigationScreen
+import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.cornerRadius
@@ -211,10 +217,10 @@ fun UiDetail(data: MovieDetail) {
 
 
 @Composable
-fun RecommendedMovie(navigator: Navigator?, recommendedMovie: List<MovieItem>) {
+fun RecommendedMovie(navigator: Navigator, recommendedMovie: List<MovieItem>) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
-            text = "Similar Movie",
+            text =  stringResource(Res.string.similar_movie),
             color = FontColor,
             fontSize = 17.sp,
             fontWeight = FontWeight.SemiBold
@@ -228,7 +234,9 @@ fun RecommendedMovie(navigator: Navigator?, recommendedMovie: List<MovieItem>) {
                 ) {
                     CoilImage(
                         modifier = Modifier.height(190.dp).width(140.dp).cornerRadius(10)
-                            .clickable {},
+                            .clickable {
+                                navigator.navigate(NavigationScreen.MovieDetail.route.plus("/${item.id}"))
+                            },
                         imageModel = { AppConstant.IMAGE_URL.plus(item.poster_path) },
                         imageOptions = ImageOptions(
                             contentScale = ContentScale.Crop,
@@ -253,7 +261,7 @@ fun RecommendedMovie(navigator: Navigator?, recommendedMovie: List<MovieItem>) {
 fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
-            text = "Cast", color = FontColor, fontSize = 17.sp, fontWeight = FontWeight.SemiBold
+            text = stringResource(Res.string.cast), color = FontColor, fontSize = 17.sp, fontWeight = FontWeight.SemiBold
         )
         LazyRow(modifier = Modifier.fillMaxHeight()) {
             items(cast, itemContent = { item ->
@@ -266,7 +274,13 @@ fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
                 ) {
                     CoilImage(
                         modifier = Modifier.padding(bottom = 5.dp).height(80.dp).width(80.dp)
-                            .cornerRadius(40).clickable {},
+                            .cornerRadius(40).clickable {
+                                navigator?.navigate(
+                                    NavigationScreen.ArtistDetail.route.plus(
+                                        "/${item.id}"
+                                    )
+                                )
+                            },
                         imageModel = { AppConstant.IMAGE_URL.plus(item.profile_path) },
                         imageOptions = ImageOptions(
                             contentScale = ContentScale.Crop,

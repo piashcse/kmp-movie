@@ -29,7 +29,9 @@ sealed class NavigationScreen(
     data object TopRated : NavigationScreen("top_rated_screen")
     data object Upcoming : NavigationScreen("upcoming_screen")
     data object MovieDetail :
-        NavigationScreen("movie_detail_screen", objectName = "id", objectPath = "/{id}")
+        NavigationScreen("movie_detail_screen",  objectName = "artistId", objectPath = "/{artistId}")
+    data object ArtistDetail :
+        NavigationScreen("artist_detail_screen", objectName = "id", objectPath = "/{id}")
 
     data object HomeNav : NavigationScreen("home_screen", title = "Home", navIcon = {
         Icon(

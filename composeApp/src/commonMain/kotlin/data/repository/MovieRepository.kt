@@ -84,4 +84,13 @@ class MovieRepository {
             emit(DataState.Error(e))
         }
     }
+    suspend fun artistDetail(personId: Int) = flow {
+        try {
+            emit(DataState.Loading)
+            val result = api.artistDetail(personId)
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            emit(DataState.Error(e))
+        }
+    }
 }

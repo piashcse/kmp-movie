@@ -3,6 +3,7 @@ package data.remote
 import data.model.BaseModel
 import data.model.BaseModelV2
 import data.model.artist.Artist
+import data.model.artist.ArtistDetail
 import data.model.moviedetail.MovieDetail
 
 interface ApiInterface {
@@ -36,4 +37,7 @@ interface ApiInterface {
     suspend fun movieCredit(
         movieId: Int
     ): Artist
+    suspend fun artistDetail(
+        personId: Int
+    ): ArtistDetail
 }

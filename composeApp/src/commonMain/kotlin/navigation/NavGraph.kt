@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
+import ui.artistdetail.ArtistDetail
 import ui.popular.Popular
 import ui.detail.MovieDetail
 import ui.home.HomeScreen
@@ -33,6 +34,12 @@ fun Navigation(navigator: Navigator) {
             val id: Int? = backStackEntry.path<Int>(NavigationScreen.MovieDetail.objectName)
             id?.let {
                 MovieDetail(navigator, it)
+            }
+        }
+        scene(route = NavigationScreen.ArtistDetail.route.plus(NavigationScreen.ArtistDetail.objectPath)) { backStackEntry ->
+            val id: Int? = backStackEntry.path<Int>(NavigationScreen.ArtistDetail.objectName)
+            id?.let {
+                ArtistDetail(it)
             }
         }
     }
