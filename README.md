@@ -27,6 +27,7 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
 - Movie List 
 - Movie Search
 - Movie Detail
+- Artist Detail
 - Bottom Navigation
 - Navigation Rail
 
