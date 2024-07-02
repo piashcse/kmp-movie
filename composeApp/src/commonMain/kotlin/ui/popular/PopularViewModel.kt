@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import utils.network.DataState
+import utils.network.UiState
 
 class PopularViewModel : ViewModel() {
     private val repo = MovieRepository()
     private val _popularMovieResponse =
-        MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
+        MutableStateFlow<UiState<List<MovieItem>>>(UiState.Loading)
     val popularMovieResponse get() = _popularMovieResponse.asStateFlow()
 
     fun popularMovie(page: Int) {

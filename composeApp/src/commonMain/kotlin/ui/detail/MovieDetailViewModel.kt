@@ -11,16 +11,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import utils.network.DataState
+import utils.network.UiState
 
 class MovieDetailViewModel : ViewModel() {
     private val repo = MovieRepository()
-    private val _movieDetail = MutableStateFlow<DataState<MovieDetail>>(DataState.Loading)
+    private val _movieDetail = MutableStateFlow<UiState<MovieDetail>>(UiState.Loading)
     val movieDetail get() = _movieDetail.asStateFlow()
 
-    private val _recommendedMovie = MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
+    private val _recommendedMovie = MutableStateFlow<UiState<List<MovieItem>>>(UiState.Loading)
     val recommendedMovie get() = _recommendedMovie.asStateFlow()
-    private val _movieCredit = MutableStateFlow<DataState<Artist>>(DataState.Loading)
+    private val _movieCredit = MutableStateFlow<UiState<Artist>>(UiState.Loading)
     val movieCredit get() = _movieCredit.asStateFlow()
 
     fun movieDetail(movieId: Int) {

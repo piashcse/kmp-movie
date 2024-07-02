@@ -5,9 +5,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,41 +17,42 @@ import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
 import ui.component.MovieList
 import ui.component.ProgressIndicator
-import utils.network.DataState
+import utils.network.UiState
 
 @Composable
 fun Upcoming(
     navigator: Navigator,
-    upcomingViewModel: UpcomingViewModel = viewModel { UpcomingViewModel() }
+    viewModel: UpcomingViewModel = viewModel { UpcomingViewModel() }
 ) {
-    val isLoading = remember { mutableStateOf(false) }
-    val movies = remember { mutableStateListOf<MovieItem>() }
+    var isLoading by remember { mutableStateOf(false) }
+    var movies by remember { mutableStateOf<List<MovieItem>?>(null) }
 
     LaunchedEffect(Unit) {
-        upcomingViewModel.upComing(1)
+        viewModel.upComing(1)
     }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        MovieList(movies) { movieId ->
-            navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
+        movies?.let {
+            MovieList(it) { movieId ->
+                navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
+            }
         }
-        if (isLoading.value) {
+        if (isLoading) {
             ProgressIndicator()
         }
     }
-    upcomingViewModel.upComingMovieResponse.collectAsState().value.let {
+    viewModel.upComingMovieResponse.collectAsState().value.let {
         when (it) {
-            is DataState.Loading -> {
-                isLoading.value = true
+            is UiState.Loading -> {
+                isLoading = true
             }
 
-            is DataState.Success<List<MovieItem>> -> {
-                movies.clear()
-                movies.addAll(it.data)
-                isLoading.value = false
+            is UiState.Success<List<MovieItem>> -> {
+                movies = it.data
+                isLoading = false
             }
 
-            is DataState.Error -> {
-                isLoading.value = false
+            is UiState.Error -> {
+                isLoading = false
             }
         }
     }

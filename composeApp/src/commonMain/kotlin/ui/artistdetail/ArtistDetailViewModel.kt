@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import utils.network.DataState
+import utils.network.UiState
 
 class ArtistDetailViewModel : ViewModel() {
     private val repo = MovieRepository()
     private val _artistDetailResponse =
-        MutableStateFlow<DataState<ArtistDetail>>(DataState.Loading)
+        MutableStateFlow<UiState<ArtistDetail>>(UiState.Loading)
     val nowPlayingResponse get() = _artistDetailResponse.asStateFlow()
 
     fun artistDetail(personId: Int) {

@@ -8,5 +8,4 @@ object AppString {
     const val RELEASE_DATE = "Release Date"
     const val DESCRIPTION = "Description"
     const val RATING_SEARCH = "Rating :"
-    const val ERROR_TEXT = "Error :"
 }

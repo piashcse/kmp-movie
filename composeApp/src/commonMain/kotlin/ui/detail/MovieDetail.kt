@@ -14,6 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ui.component.text.SubtitlePrimary
 import ui.component.text.SubtitleSecondary
@@ -26,7 +28,6 @@ import data.model.artist.Artist
 import data.model.artist.Cast
 import data.model.moviedetail.MovieDetail
 import kmp_movie.composeapp.generated.resources.Res
-import kmp_movie.composeapp.generated.resources.biography
 import kmp_movie.composeapp.generated.resources.cast
 import kmp_movie.composeapp.generated.resources.similar_movie
 import moe.tlaster.precompose.navigation.Navigator
@@ -39,25 +40,25 @@ import ui.component.shimmerBackground
 import utils.AppConstant
 import utils.AppString
 import utils.hourMinutes
-import utils.network.DataState
+import utils.network.UiState
 import utils.roundTo
 
 @Composable
 fun MovieDetail(
     navigator: Navigator,
     movieId: Int,
-    movieDetailViewModel: MovieDetailViewModel = viewModel { MovieDetailViewModel() }
+    viewModel: MovieDetailViewModel = viewModel { MovieDetailViewModel() }
 ) {
-    val isLoading = remember { mutableStateOf(false) }
-    val movieDetail = remember { mutableStateOf<MovieDetail?>(null) }
-    val recommendMovie = remember { mutableStateOf<List<MovieItem>?>(null) }
-    val movieCredit = remember { mutableStateOf<Artist?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
+    var movieDetail by remember { mutableStateOf<MovieDetail?>(null) }
+    var recommendMovie by remember { mutableStateOf<List<MovieItem>?>(null) }
+    var movieCredit by remember { mutableStateOf<Artist?>(null) }
 
 
     LaunchedEffect(Unit) {
-        movieDetailViewModel.movieDetail(movieId)
-        movieDetailViewModel.recommendedMovie(movieId)
-        movieDetailViewModel.movieCredit(movieId)
+        viewModel.movieDetail(movieId)
+        viewModel.recommendedMovie(movieId)
+        viewModel.movieCredit(movieId)
     }
 
     Column(
@@ -65,7 +66,7 @@ fun MovieDetail(
             DefaultBackgroundColor
         ), horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        movieDetail.value?.let {
+        movieDetail?.let {
             UiDetail(it)
         }
         Column(
@@ -73,59 +74,59 @@ fun MovieDetail(
                 start = 8.dp, end = 8.dp, top = 5.dp, bottom = 5.dp
             )
         ) {
-            recommendMovie.value?.let {
+            recommendMovie?.let {
                 RecommendedMovie(navigator, it)
             }
-            movieCredit.value?.let {
+            movieCredit?.let {
                 ArtistAndCrew(navigator, it.cast)
             }
         }
     }
-    movieDetailViewModel.movieDetail.collectAsState().value.let {
+    viewModel.movieDetail.collectAsState().value.let {
         when (it) {
-            is DataState.Loading -> {
-                isLoading.value = true
+            is UiState.Loading -> {
+                isLoading = true
             }
 
-            is DataState.Success<MovieDetail> -> {
-                movieDetail.value = it.data
-                isLoading.value = false
+            is UiState.Success<MovieDetail> -> {
+                movieDetail = it.data
+                isLoading = false
             }
 
-            is DataState.Error -> {
-                isLoading.value = false
+            is UiState.Error -> {
+                isLoading = false
             }
         }
     }
-    movieDetailViewModel.recommendedMovie.collectAsState().value.let {
+    viewModel.recommendedMovie.collectAsState().value.let {
         when (it) {
-            is DataState.Loading -> {
-                isLoading.value = true
+            is UiState.Loading -> {
+                isLoading = true
             }
 
-            is DataState.Success -> {
-                recommendMovie.value = it.data
-                isLoading.value = false
+            is UiState.Success -> {
+                recommendMovie = it.data
+                isLoading = false
             }
 
-            is DataState.Error -> {
-                isLoading.value = false
+            is UiState.Error -> {
+                isLoading = false
             }
         }
     }
-    movieDetailViewModel.movieCredit.collectAsState().value.let {
+    viewModel.movieCredit.collectAsState().value.let {
         when (it) {
-            is DataState.Loading -> {
-                isLoading.value = true
+            is UiState.Loading -> {
+                isLoading = true
             }
 
-            is DataState.Success -> {
-                movieCredit.value = it.data
-                isLoading.value = false
+            is UiState.Success -> {
+                movieCredit = it.data
+                isLoading = false
             }
 
-            is DataState.Error -> {
-                isLoading.value = false
+            is UiState.Error -> {
+                isLoading = false
             }
         }
     }
@@ -220,7 +221,7 @@ fun UiDetail(data: MovieDetail) {
 fun RecommendedMovie(navigator: Navigator, recommendedMovie: List<MovieItem>) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
-            text =  stringResource(Res.string.similar_movie),
+            text = stringResource(Res.string.similar_movie),
             color = FontColor,
             fontSize = 17.sp,
             fontWeight = FontWeight.SemiBold
@@ -261,7 +262,10 @@ fun RecommendedMovie(navigator: Navigator, recommendedMovie: List<MovieItem>) {
 fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
-            text = stringResource(Res.string.cast), color = FontColor, fontSize = 17.sp, fontWeight = FontWeight.SemiBold
+            text = stringResource(Res.string.cast),
+            color = FontColor,
+            fontSize = 17.sp,
+            fontWeight = FontWeight.SemiBold
         )
         LazyRow(modifier = Modifier.fillMaxHeight()) {
             items(cast, itemContent = { item ->

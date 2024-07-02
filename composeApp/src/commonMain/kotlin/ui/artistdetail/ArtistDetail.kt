@@ -16,6 +16,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
@@ -34,27 +36,27 @@ import theme.SecondaryFontColor
 import theme.cornerRadius
 import ui.component.ProgressIndicator
 import utils.AppConstant
-import utils.network.DataState
+import utils.network.UiState
 
 @Composable
 fun ArtistDetail(
     personId: Int,
-    artistDetailViewModel: ArtistDetailViewModel = viewModel { ArtistDetailViewModel() }
+    viewModel: ArtistDetailViewModel = viewModel { ArtistDetailViewModel() }
 ) {
-    val artistDetailData = remember { mutableStateOf<ArtistDetail?>(null) }
-    val progressBar = remember { mutableStateOf(false) }
+    var artistDetailData by remember { mutableStateOf<ArtistDetail?>(null) }
+    var progressBar by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
-        artistDetailViewModel.artistDetail(personId)
+        viewModel.artistDetail(personId)
     }
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).background(
             DefaultBackgroundColor
         ).padding(start = 8.dp, top = 8.dp, end = 8.dp)
     ) {
-        if (progressBar.value) {
+        if (progressBar) {
             ProgressIndicator()
         }
-        artistDetailData.value?.let {
+        artistDetailData?.let {
             Row {
                 CoilImage(
                     modifier = Modifier.padding(bottom = 8.dp).height(250.dp).width(190.dp)
@@ -77,7 +79,7 @@ fun ArtistDetail(
                 Column {
                     Text(
                         modifier = Modifier.padding(start = 8.dp),
-                        text = artistDetailData.value?.name ?: "",
+                        text = artistDetailData?.name ?: "",
                         color = FontColor,
                         fontSize = 26.sp,
                         fontWeight = FontWeight.Medium
@@ -113,19 +115,19 @@ fun ArtistDetail(
     }
 
 
-    artistDetailViewModel.nowPlayingResponse.collectAsState().value.let {
+    viewModel.nowPlayingResponse.collectAsState().value.let {
         when (it) {
-            is DataState.Loading -> {
-                progressBar.value = true
+            is UiState.Loading -> {
+                progressBar = true
             }
 
-            is DataState.Success -> {
-                artistDetailData.value = it.data
-                progressBar.value = false
+            is UiState.Success -> {
+                artistDetailData = it.data
+                progressBar = false
             }
 
-            is DataState.Error -> {
-                progressBar.value = false
+            is UiState.Error -> {
+                progressBar = false
             }
         }
     }

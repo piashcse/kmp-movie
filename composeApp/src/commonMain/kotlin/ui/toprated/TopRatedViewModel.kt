@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import utils.network.DataState
+import utils.network.UiState
 
 class TopRatedViewModel : ViewModel() {
     private val repo = MovieRepository()
     private val _topRatedMovieResponse =
-        MutableStateFlow<DataState<List<MovieItem>>>(DataState.Loading)
+        MutableStateFlow<UiState<List<MovieItem>>>(UiState.Loading)
     val topRatedMovieResponse get() = _topRatedMovieResponse.asStateFlow()
 
     fun topRated(page: Int) {

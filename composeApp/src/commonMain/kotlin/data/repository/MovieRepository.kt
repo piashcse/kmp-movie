@@ -2,95 +2,95 @@ package data.repository
 
 import data.remote.ApiImpl
 import kotlinx.coroutines.flow.flow
-import utils.network.DataState
+import utils.network.UiState
 
 class MovieRepository {
     private val api = ApiImpl()
     suspend fun nowPlayingMovie(page: Int) = flow {
         try {
-            emit(DataState.Loading)
+            emit(UiState.Loading)
             val result = api.nowPlayingMovieList(page)
-            emit(DataState.Success(result.results))
+            emit(UiState.Success(result.results))
         } catch (e: Exception) {
-            emit(DataState.Error(e))
+            emit(UiState.Error(e))
         }
     }
 
     suspend fun popularMovie(page: Int) = flow {
         try {
-            emit(DataState.Loading)
+            emit(UiState.Loading)
             val result = api.popularMovieList(page)
-            emit(DataState.Success(result.results))
+            emit(UiState.Success(result.results))
         } catch (e: Exception) {
-            emit(DataState.Error(e))
+            emit(UiState.Error(e))
         }
     }
 
     suspend fun topRatedMovie(page: Int) = flow {
-        emit(DataState.Loading)
+        emit(UiState.Loading)
         try {
             val result = api.topRatedMovieList(page)
-            emit(DataState.Success(result.results))
+            emit(UiState.Success(result.results))
         } catch (e: Exception) {
-            emit(DataState.Error(e))
+            emit(UiState.Error(e))
         }
     }
 
     suspend fun upComingMovie(page: Int) = flow {
         try {
-            emit(DataState.Loading)
+            emit(UiState.Loading)
             val result = api.upcomingMovieList(page)
-            emit(DataState.Success(result.results))
+            emit(UiState.Success(result.results))
         } catch (e: Exception) {
-            emit(DataState.Error(e))
+            emit(UiState.Error(e))
         }
     }
 
     suspend fun movieDetail(movieId: Int) = flow {
         try {
-            emit(DataState.Loading)
+            emit(UiState.Loading)
             val result = api.movieDetail(movieId)
-            emit(DataState.Success(result))
+            emit(UiState.Success(result))
         } catch (e: Exception) {
-            emit(DataState.Error(e))
+            emit(UiState.Error(e))
         }
     }
 
     suspend fun searchMovie(searchKey: String) = flow {
         try {
-            emit(DataState.Loading)
+            emit(UiState.Loading)
             val result = api.movieSearch(searchKey)
-            emit(DataState.Success(result))
+            emit(UiState.Success(result))
         } catch (e: Exception) {
-            emit(DataState.Error(e))
+            emit(UiState.Error(e))
         }
     }
 
     suspend fun recommendedMovie(movieId: Int) = flow {
         try {
-            emit(DataState.Loading)
+            emit(UiState.Loading)
             val result = api.recommendedMovie(movieId)
-            emit(DataState.Success(result.results))
+            emit(UiState.Success(result.results))
         } catch (e: Exception) {
-            emit(DataState.Error(e))
+            emit(UiState.Error(e))
         }
     }
     suspend fun movieCredit(movieId: Int) = flow {
         try {
-            emit(DataState.Loading)
+            emit(UiState.Loading)
             val result = api.movieCredit(movieId)
-            emit(DataState.Success(result))
+            emit(UiState.Success(result))
         } catch (e: Exception) {
-            emit(DataState.Error(e))
+            emit(UiState.Error(e))
         }
     }
     suspend fun artistDetail(personId: Int) = flow {
         try {
-            emit(DataState.Loading)
+            emit(UiState.Loading)
             val result = api.artistDetail(personId)
-            emit(DataState.Success(result))
+            emit(UiState.Success(result))
         } catch (e: Exception) {
-            emit(DataState.Error(e))
+            emit(UiState.Error(e))
         }
     }
 }

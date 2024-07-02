@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import utils.network.DataState
+import utils.network.UiState
 
 @ExperimentalCoroutinesApi
 class AppViewModel: ViewModel() {
     private val repo = MovieRepository()
-    val searchData: MutableState<DataState<BaseModelV2>?> = mutableStateOf(null)
+    val searchData: MutableState<UiState<BaseModelV2>?> = mutableStateOf(null)
     @ExperimentalCoroutinesApi
     @FlowPreview
     fun searchApi(searchKey: String) {
@@ -32,7 +32,7 @@ class AppViewModel: ViewModel() {
                 .flatMapLatest {
                     repo.searchMovie(it)
                 }.collect {
-                    if (it is DataState.Success){
+                    if (it is UiState.Success){
                         it.data
                     }
                     searchData.value = it

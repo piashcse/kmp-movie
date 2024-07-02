@@ -9,22 +9,22 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import utils.network.DataState
+import utils.network.UiState
 
 fun Modifier.cornerRadius(radius: Int) =
     graphicsLayer(shape = RoundedCornerShape(radius.dp), clip = true)
 
-fun <T : Any> MutableState<DataState<T>?>.pagingLoadingState(isLoaded: (pagingState: Boolean) -> Unit) {
+fun <T : Any> MutableState<UiState<T>?>.pagingLoadingState(isLoaded: (pagingState: Boolean) -> Unit) {
     when (this.value) {
-        is DataState.Success<T> -> {
+        is UiState.Success<*> -> {
             isLoaded(false)
         }
 
-        is DataState.Loading -> {
+        is UiState.Loading -> {
             isLoaded(true)
         }
 
-        is DataState.Error -> {
+        is UiState.Error -> {
             isLoaded(false)
         }
 

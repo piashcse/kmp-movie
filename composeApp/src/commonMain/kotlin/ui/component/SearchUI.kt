@@ -29,13 +29,13 @@ import theme.SecondaryFontColor
 import utils.AppConstant
 import utils.AppString
 import utils.cornerRadius
-import utils.network.DataState
+import utils.network.UiState
 import utils.roundTo
 
 @Composable
 fun SearchUI(
     navController: Navigator,
-    searchData: MutableState<DataState<BaseModelV2>?>,
+    searchData: MutableState<UiState<BaseModelV2>?>,
     itemClick: () -> Unit
 ) {
     LazyColumn(
@@ -48,7 +48,7 @@ fun SearchUI(
 
     ) {
         searchData.value?.let {
-            if (it is DataState.Success<BaseModelV2>) {
+            if (it is UiState.Success<BaseModelV2>) {
                 items(items = it.data.results, itemContent = { item ->
                     Row(modifier = Modifier
                         .padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
