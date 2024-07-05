@@ -75,7 +75,8 @@ fun MovieDetail(
             )
         ) {
             recommendMovie?.let {
-                RecommendedMovie(navigator, it)
+                if (it.isNotEmpty())
+                    RecommendedMovie(navigator, it)
             }
             movieCredit?.let {
                 ArtistAndCrew(navigator, it.cast)
