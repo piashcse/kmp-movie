@@ -21,6 +21,9 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
 <p float="left" style="padding-top: 200px;">
   <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024_06_19_detail.PNG" />
 </p>
+<p float="left" style="padding-top: 200px;">
+  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024_07_07.PNG" />
+</p>
 
 
 # Main Features
