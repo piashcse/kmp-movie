@@ -13,18 +13,29 @@ import utils.network.UiState
 
 class UpcomingViewModel : ViewModel() {
     private val repo = MovieRepository()
-    private val _upComingMovieResponse =
-        MutableStateFlow<UiState<List<MovieItem>>>(UiState.Loading)
+    private val _upComingMovieResponse = MutableStateFlow<List<MovieItem>>(arrayListOf())
     val upComingMovieResponse get() = _upComingMovieResponse.asStateFlow()
 
-    init {
-        upComing(1)
-    }
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    val isLoading get() = _isLoading.asStateFlow()
 
     fun upComing(page: Int) {
         viewModelScope.launch {
-            repo.upComingMovie(page).onEach {
-                _upComingMovieResponse.value = it
+            repo.topRatedMovie(page).onEach {
+                when (it) {
+                    is UiState.Loading -> {
+                        _isLoading.value = true
+                    }
+
+                    is UiState.Success -> {
+                        _upComingMovieResponse.value = it.data
+                        _isLoading.value = false
+                    }
+
+                    is UiState.Error -> {
+                        _isLoading.value = false
+                    }
+                }
             }.launchIn(viewModelScope)
         }
     }

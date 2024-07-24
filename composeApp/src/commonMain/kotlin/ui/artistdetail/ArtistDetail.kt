@@ -1,29 +1,30 @@
 package ui.artistdetail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
-import data.model.artist.ArtistDetail
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.artist_detail
 import kmp_movie.composeapp.generated.resources.biography
@@ -36,15 +37,15 @@ import theme.SecondaryFontColor
 import theme.cornerRadius
 import ui.component.ProgressIndicator
 import utils.AppConstant
-import utils.network.UiState
 
 @Composable
 fun ArtistDetail(
     personId: Int,
     viewModel: ArtistDetailViewModel = viewModel { ArtistDetailViewModel() }
 ) {
-    var artistDetailData by remember { mutableStateOf<ArtistDetail?>(null) }
-    var progressBar by remember { mutableStateOf(false) }
+    val artistDetailData by viewModel.artistDetailResponse.collectAsState()
+    val progressBar by viewModel.isLoading.collectAsState()
+
     LaunchedEffect(true) {
         viewModel.artistDetail(personId)
     }
@@ -111,24 +112,6 @@ fun ArtistDetail(
             Text(
                 text = it.biography
             )
-        }
-    }
-
-
-    viewModel.nowPlayingResponse.collectAsState().value.let {
-        when (it) {
-            is UiState.Loading -> {
-                progressBar = true
-            }
-
-            is UiState.Success -> {
-                artistDetailData = it.data
-                progressBar = false
-            }
-
-            is UiState.Error -> {
-                progressBar = false
-            }
         }
     }
 }

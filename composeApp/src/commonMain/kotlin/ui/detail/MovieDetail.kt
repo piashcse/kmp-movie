@@ -1,12 +1,26 @@
 package ui.detail
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -14,21 +28,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ui.component.text.SubtitlePrimary
-import ui.component.text.SubtitleSecondary
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
 import data.model.MovieItem
-import data.model.artist.Artist
 import data.model.artist.Cast
 import data.model.moviedetail.MovieDetail
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.cast
+import kmp_movie.composeapp.generated.resources.description
+import kmp_movie.composeapp.generated.resources.duration
+import kmp_movie.composeapp.generated.resources.language
+import kmp_movie.composeapp.generated.resources.rating
+import kmp_movie.composeapp.generated.resources.release_date
 import kmp_movie.composeapp.generated.resources.similar_movie
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
@@ -36,11 +50,12 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.cornerRadius
+import ui.component.ProgressIndicator
 import ui.component.shimmerBackground
+import ui.component.text.SubtitlePrimary
+import ui.component.text.SubtitleSecondary
 import utils.AppConstant
-import utils.AppString
 import utils.hourMinutes
-import utils.network.UiState
 import utils.roundTo
 
 @Composable
@@ -49,10 +64,10 @@ fun MovieDetail(
     movieId: Int,
     viewModel: MovieDetailViewModel = viewModel { MovieDetailViewModel() }
 ) {
-    var isLoading by remember { mutableStateOf(false) }
-    var movieDetail by remember { mutableStateOf<MovieDetail?>(null) }
-    var recommendMovie by remember { mutableStateOf<List<MovieItem>?>(null) }
-    var movieCredit by remember { mutableStateOf<Artist?>(null) }
+    val isLoading by viewModel.isLoading.collectAsState()
+    val movieDetail by viewModel.movieDetail.collectAsState()
+    val recommendMovie by viewModel.recommendedMovie.collectAsState()
+    val movieCredit by viewModel.movieCredit.collectAsState()
 
 
     LaunchedEffect(Unit) {
@@ -66,68 +81,25 @@ fun MovieDetail(
             DefaultBackgroundColor
         ), horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        movieDetail?.let {
-            UiDetail(it)
-        }
-        Column(
-            modifier = Modifier.padding(
-                start = 8.dp, end = 8.dp, top = 5.dp, bottom = 5.dp
-            )
-        ) {
-            recommendMovie?.let {
-                if (it.isNotEmpty())
-                    RecommendedMovie(navigator, it)
-            }
-            movieCredit?.let {
-                ArtistAndCrew(navigator, it.cast)
-            }
-        }
-    }
-    viewModel.movieDetail.collectAsState().value.let {
-        when (it) {
-            is UiState.Loading -> {
-                isLoading = true
-            }
+        if (isLoading) {
+            ProgressIndicator()
+        } else {
 
-            is UiState.Success<MovieDetail> -> {
-                movieDetail = it.data
-                isLoading = false
+            movieDetail?.let {
+                UiDetail(it)
             }
-
-            is UiState.Error -> {
-                isLoading = false
-            }
-        }
-    }
-    viewModel.recommendedMovie.collectAsState().value.let {
-        when (it) {
-            is UiState.Loading -> {
-                isLoading = true
-            }
-
-            is UiState.Success -> {
-                recommendMovie = it.data
-                isLoading = false
-            }
-
-            is UiState.Error -> {
-                isLoading = false
-            }
-        }
-    }
-    viewModel.movieCredit.collectAsState().value.let {
-        when (it) {
-            is UiState.Loading -> {
-                isLoading = true
-            }
-
-            is UiState.Success -> {
-                movieCredit = it.data
-                isLoading = false
-            }
-
-            is UiState.Error -> {
-                isLoading = false
+            Column(
+                modifier = Modifier.padding(
+                    start = 8.dp, end = 8.dp, top = 5.dp, bottom = 5.dp
+                )
+            ) {
+                recommendMovie.let {
+                    if (it.isNotEmpty())
+                        RecommendedMovie(navigator, it)
+                }
+                movieCredit?.let {
+                    ArtistAndCrew(navigator, it.cast)
+                }
             }
         }
     }
@@ -178,7 +150,7 @@ fun UiDetail(data: MovieDetail) {
                         text = data.original_language,
                     )
                     SubtitleSecondary(
-                        text = AppString.LANGUAGE
+                        text =  stringResource(Res.string.language)
                     )
                 }
                 Column(Modifier.weight(1f)) {
@@ -186,7 +158,7 @@ fun UiDetail(data: MovieDetail) {
                         text = data.vote_average.roundTo(1).toString(),
                     )
                     SubtitleSecondary(
-                        text = AppString.RATING
+                        text =  stringResource(Res.string.rating)
                     )
                 }
                 Column(Modifier.weight(1f)) {
@@ -194,7 +166,7 @@ fun UiDetail(data: MovieDetail) {
                         text = data.runtime.hourMinutes()
                     )
                     SubtitleSecondary(
-                        text = AppString.DURATION
+                        text =  stringResource(Res.string.duration)
                     )
                 }
                 Column(Modifier.weight(1f)) {
@@ -202,12 +174,12 @@ fun UiDetail(data: MovieDetail) {
                         text = data.release_date
                     )
                     SubtitleSecondary(
-                        text = AppString.RELEASE_DATE
+                        text =  stringResource(Res.string.release_date)
                     )
                 }
             }
             Text(
-                text = AppString.DESCRIPTION,
+                text = stringResource(Res.string.description),
                 color = FontColor,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold

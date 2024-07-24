@@ -11,10 +11,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.app_title
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.navigation.BackHandler
@@ -24,15 +30,14 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 import navigation.Navigation
 import navigation.NavigationScreen
 import navigation.currentRoute
+import org.jetbrains.compose.resources.stringResource
 import theme.FloatingActionBackground
 import ui.AppViewModel
 import ui.component.AppBarWithArrow
 import ui.component.ProgressIndicator
 import ui.component.SearchBar
 import ui.component.SearchUI
-import utils.AppString
 import utils.isCompactSize
-import utils.pagingLoadingState
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -40,7 +45,7 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
     PreComposeApp {
         val navigator = rememberNavigator()
         val isAppBarVisible = remember { mutableStateOf(true) }
-        val searchProgressBar = remember { mutableStateOf(false) }
+        val isLoading by appViewModel.isLoading.collectAsState()
 
         BackHandler(isAppBarVisible.value.not()) {
             isAppBarVisible.value = true
@@ -54,7 +59,7 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
 
                 } else {
                     AppBarWithArrow(
-                        AppString.APP_TITLE, isBackEnable = isBackButtonEnable(navigator)
+                        stringResource(Res.string.app_title),  isBackEnable = isBackButtonEnable(navigator)
                     ) {
                         navigator.popBackStack()
                     }
@@ -88,13 +93,10 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
                 if (currentRoute(navigator) !== NavigationScreen.MovieDetail.route) {
                     Column {
                         if (isAppBarVisible.value.not()) {
-                            SearchUI(navigator, appViewModel.searchData) {
+                            SearchUI(navigator, appViewModel.searchData.value) {
                                 isAppBarVisible.value = true
                             }
-                            ProgressIndicator(searchProgressBar.value)
-                        }
-                        appViewModel.searchData.pagingLoadingState {
-                            searchProgressBar.value = it
+                            ProgressIndicator(isLoading)
                         }
                     }
                 }

@@ -14,14 +14,32 @@ import utils.network.UiState
 class ArtistDetailViewModel : ViewModel() {
     private val repo = MovieRepository()
     private val _artistDetailResponse =
-        MutableStateFlow<UiState<ArtistDetail>>(UiState.Loading)
-    val nowPlayingResponse get() = _artistDetailResponse.asStateFlow()
+        MutableStateFlow<ArtistDetail?>(null)
+    val artistDetailResponse get() = _artistDetailResponse.asStateFlow()
+
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    val isLoading get() = _isLoading.asStateFlow()
 
     fun artistDetail(personId: Int) {
         viewModelScope.launch {
-            repo.artistDetail(personId).onEach {
-                _artistDetailResponse.value = it
-            }.launchIn(viewModelScope)
+            viewModelScope.launch {
+                repo.artistDetail(personId).onEach {
+                    when (it) {
+                        is UiState.Loading -> {
+                            _isLoading.value = true
+                        }
+
+                        is UiState.Success -> {
+                            _artistDetailResponse.value = it.data
+                            _isLoading.value = false
+                        }
+
+                        is UiState.Error -> {
+                            _isLoading.value = false
+                        }
+                    }
+                }.launchIn(viewModelScope)
+            }
         }
     }
 }

@@ -13,14 +13,29 @@ import utils.network.UiState
 
 class PopularViewModel : ViewModel() {
     private val repo = MovieRepository()
-    private val _popularMovieResponse =
-        MutableStateFlow<UiState<List<MovieItem>>>(UiState.Loading)
+    private val _popularMovieResponse = MutableStateFlow<List<MovieItem>>(arrayListOf())
     val popularMovieResponse get() = _popularMovieResponse.asStateFlow()
+
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    val isLoading get() = _isLoading.asStateFlow()
 
     fun popularMovie(page: Int) {
         viewModelScope.launch {
             repo.popularMovie(page).onEach {
-                _popularMovieResponse.value = it
+                when (it) {
+                    is UiState.Loading -> {
+                        _isLoading.value = true
+                    }
+
+                    is UiState.Success -> {
+                        _popularMovieResponse.value = it.data
+                        _isLoading.value = false
+                    }
+
+                    is UiState.Error -> {
+                        _isLoading.value = false
+                    }
+                }
             }.launchIn(viewModelScope)
         }
     }

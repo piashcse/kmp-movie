@@ -6,9 +6,9 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
 import ui.artistdetail.ArtistDetail
-import ui.popular.Popular
 import ui.detail.MovieDetail
 import ui.home.HomeScreen
+import ui.popular.Popular
 import ui.toprated.TopRated
 import ui.upcoming.Upcoming
 

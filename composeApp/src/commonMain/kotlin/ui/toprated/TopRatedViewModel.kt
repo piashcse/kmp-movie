@@ -13,14 +13,30 @@ import utils.network.UiState
 
 class TopRatedViewModel : ViewModel() {
     private val repo = MovieRepository()
-    private val _topRatedMovieResponse =
-        MutableStateFlow<UiState<List<MovieItem>>>(UiState.Loading)
+
+    private val _topRatedMovieResponse = MutableStateFlow<List<MovieItem>>(arrayListOf())
     val topRatedMovieResponse get() = _topRatedMovieResponse.asStateFlow()
+
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    val isLoading get() = _isLoading.asStateFlow()
 
     fun topRated(page: Int) {
         viewModelScope.launch {
             repo.topRatedMovie(page).onEach {
-                _topRatedMovieResponse.value = it
+                when (it) {
+                    is UiState.Loading -> {
+                        _isLoading.value = true
+                    }
+
+                    is UiState.Success -> {
+                        _topRatedMovieResponse.value = it.data
+                        _isLoading.value = false
+                    }
+
+                    is UiState.Error -> {
+                        _isLoading.value = false
+                    }
+                }
             }.launchIn(viewModelScope)
         }
     }

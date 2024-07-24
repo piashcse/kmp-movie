@@ -45,9 +45,11 @@ internal fun MovieList(listItems: List<MovieItem>, onclick: (id: Int) -> Unit) {
                     )
                 ) {
                     CoilImage(
-                        imageModel = { AppConstant.IMAGE_URL.plus(
-                            it.poster_path
-                        ) },
+                        imageModel = {
+                            AppConstant.IMAGE_URL.plus(
+                                it.poster_path
+                            )
+                        },
                         imageOptions = ImageOptions(
                             contentScale = ContentScale.Crop,
                             alignment = Alignment.Center,
@@ -59,11 +61,12 @@ internal fun MovieList(listItems: List<MovieItem>, onclick: (id: Int) -> Unit) {
                                 duration = 800
                             )
                         },
-                        modifier = Modifier.height(250.dp).fillMaxWidth().cornerRadius(10).shimmerBackground(
-                            RoundedCornerShape(5.dp)
-                        ).clickable {
-                            onclick(it.id)
-                        },
+                        modifier = Modifier.height(250.dp).fillMaxWidth().cornerRadius(10)
+                            .shimmerBackground(
+                                RoundedCornerShape(5.dp)
+                            ).clickable {
+                                onclick(it.id)
+                            },
                     )
                 }
             }

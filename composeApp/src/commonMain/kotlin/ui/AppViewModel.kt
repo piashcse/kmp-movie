@@ -1,13 +1,13 @@
 package ui
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.BaseModelV2
+import data.model.MovieItem
 import data.repository.MovieRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -17,26 +17,38 @@ import kotlinx.coroutines.launch
 import utils.network.UiState
 
 @ExperimentalCoroutinesApi
-class AppViewModel: ViewModel() {
+class AppViewModel : ViewModel() {
     private val repo = MovieRepository()
-    val searchData: MutableState<UiState<BaseModelV2>?> = mutableStateOf(null)
+    private val _searchData = MutableStateFlow<List<MovieItem>>(arrayListOf())
+    val searchData get() = _searchData.asStateFlow()
+
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    val isLoading get() = _isLoading.asStateFlow()
+
     @ExperimentalCoroutinesApi
     @FlowPreview
     fun searchApi(searchKey: String) {
         viewModelScope.launch {
-            flowOf(searchKey).debounce(300)
-                .filter {
-                    it.trim().isEmpty().not()
-                }
-                .distinctUntilChanged()
-                .flatMapLatest {
-                    repo.searchMovie(it)
-                }.collect {
-                    if (it is UiState.Success){
-                        it.data
+            flowOf(searchKey).debounce(300).filter {
+                it.trim().isEmpty().not()
+            }.distinctUntilChanged().flatMapLatest {
+                repo.searchMovie(it)
+            }.collect {
+                when (it) {
+                    is UiState.Loading -> {
+                        _isLoading.value = true
                     }
-                    searchData.value = it
+
+                    is UiState.Success -> {
+                        _searchData.value = it.data.results
+                        _isLoading.value = false
+                    }
+
+                    is UiState.Error -> {
+                        _isLoading.value = false
+                    }
                 }
+            }
         }
     }
 }
