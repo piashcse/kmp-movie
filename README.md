@@ -14,7 +14,9 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
 - Android
 - Desktop
 - ~~Web~~
-  
+<p float="left">
+  <img width="100%" height="100%" src="https://github.com/piashcse/kmp-movie/blob/master/screenshots/kmp_movie_v2.gif" />
+ </p> 
 <p float="left">
   <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024_06_19.PNG" />
 </p>
