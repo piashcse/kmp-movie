@@ -50,6 +50,7 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.cornerRadius
+import ui.component.ExpandableText
 import ui.component.ProgressIndicator
 import ui.component.shimmerBackground
 import ui.component.text.SubtitlePrimary
@@ -184,7 +185,7 @@ fun UiDetail(data: MovieDetail) {
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Text(text = data.overview)
+            ExpandableText(text = data.overview)
         }
     }
 }
@@ -277,4 +278,3 @@ fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
         }
     }
 }
-
