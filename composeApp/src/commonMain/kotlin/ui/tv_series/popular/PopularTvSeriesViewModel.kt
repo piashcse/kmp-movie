@@ -1,8 +1,8 @@
-package ui.popular
+package ui.tv_series.popular
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.MovieItem
+import data.model.TvItem
 import data.repository.MovieRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,24 +11,24 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import utils.network.UiState
 
-class PopularViewModel : ViewModel() {
+class PopularTvSeriesViewModel : ViewModel() {
     private val repo = MovieRepository()
-    private val _popularMovieResponse = MutableStateFlow<List<MovieItem>>(arrayListOf())
-    val popularMovieResponse get() = _popularMovieResponse.asStateFlow()
+    private val _popularTvSeriesResponse = MutableStateFlow<List<TvItem>>(arrayListOf())
+    val popularTvSeriesResponse get() = _popularTvSeriesResponse.asStateFlow()
 
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading get() = _isLoading.asStateFlow()
 
-    fun popularMovie(page: Int) {
+    fun popularTvSeries(page: Int) {
         viewModelScope.launch {
-            repo.popularMovie(page).onEach {
+            repo.topRatedTvSeries(page).onEach {
                 when (it) {
                     is UiState.Loading -> {
                         _isLoading.value = true
                     }
 
                     is UiState.Success -> {
-                        _popularMovieResponse.value = it.data
+                        _popularTvSeriesResponse.value = it.data
                         _isLoading.value = false
                     }
 

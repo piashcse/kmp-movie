@@ -1,4 +1,4 @@
-package ui.upcoming
+package ui.tv_series.popular
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,22 +11,23 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
-import ui.component.MovieList
 import ui.component.ProgressIndicator
+import ui.component.TvItemList
 
 @Composable
-fun Upcoming(
+fun PopularTvSeries(
     navigator: Navigator,
-    viewModel: UpcomingViewModel = viewModel { UpcomingViewModel() }
+    viewModel: PopularTvSeriesViewModel = viewModel { PopularTvSeriesViewModel() }
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
-    val movies by viewModel.upComingMovieResponse.collectAsState()
+    val tvItems by viewModel.popularTvSeriesResponse.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.upComing(1)
+        viewModel.popularTvSeries(1)
     }
+
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        MovieList(movies) { movieId ->
+        TvItemList(tvItems) { movieId ->
             navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
         }
         if (isLoading) {

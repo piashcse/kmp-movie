@@ -23,49 +23,89 @@ sealed class NavigationScreen(
     val objectName: String = "",
     val objectPath: String = ""
 ) {
-    data object Home : NavigationScreen("home_screen")
-    data object Popular : NavigationScreen("popular_screen")
-    data object TopRated : NavigationScreen("top_rated_screen")
-    data object Upcoming : NavigationScreen("upcoming_screen")
+    data object NowPlayingMovie : NavigationScreen("now_playing_movie_screen")
+    data object PopularMovie : NavigationScreen("popular_movie_screen")
+    data object TopRatedMovie : NavigationScreen("top_rated_movie_screen")
+    data object UpcomingMovie : NavigationScreen("upcoming_movie_screen")
+    data object AiringTodayTvSeries : NavigationScreen("airing_today_tv_series")
+    data object OnTheAirTvSeries : NavigationScreen("on_the_air_tv_series")
+    data object PopularTvSeries : NavigationScreen("popular_tv_series")
+    data object TopRatedTvSeries : NavigationScreen("top_rated_tv_series")
     data object MovieDetail :
         NavigationScreen("movie_detail_screen",  objectName = "artistId", objectPath = "/{artistId}")
     data object ArtistDetail :
         NavigationScreen("artist_detail_screen", objectName = "id", objectPath = "/{id}")
 
-    data object HomeNav : NavigationScreen("home_screen", title = "Home", navIcon = {
+    data object NowPlayingMovieNav : NavigationScreen("now_playing_movie_screen", title = "Home", navIcon = {
         Icon(
             Icons.Filled.Home,
-            contentDescription = "search",
+            contentDescription = "Home",
             modifier = Modifier
                 .padding(end = 16.dp)
                 .offset(x = 10.dp)
         )
     })
 
-    data object PopularNav : NavigationScreen("popular_screen", title = "Popular", navIcon = {
+    data object PopularMovieNav : NavigationScreen("popular_movie_screen", title = "Popular", navIcon = {
         Icon(
             Icons.Filled.Timeline,
-            contentDescription = "search",
+            contentDescription = "Timeline",
             modifier = Modifier
                 .padding(end = 16.dp)
                 .offset(x = 10.dp)
         )
     })
 
-    data object TopRatedNav : NavigationScreen("top_rated_screen", title = "Top rated", navIcon = {
+    data object TopRatedMovieNav : NavigationScreen("top_rated_movie_screen", title = "Top rated", navIcon = {
         Icon(
             Icons.Filled.Star,
-            contentDescription = "search",
+            contentDescription = "Star",
             modifier = Modifier
                 .padding(end = 16.dp)
                 .offset(x = 10.dp)
         )
     })
 
-    data object UpcomingNav : NavigationScreen("upcoming_screen", title = "Upcoming", navIcon = {
+    data object UpcomingMovieNav : NavigationScreen("upcoming_movie_screen", title = "Upcoming", navIcon = {
         Icon(
             Icons.Filled.KeyboardArrowDown,
-            contentDescription = "search",
+            contentDescription = "KeyboardArrowDown",
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .offset(x = 10.dp)
+        )
+    })
+    data object AiringTodayTvSeriesNav : NavigationScreen("airing_today_tv_series", title = "Airing today", navIcon = {
+        Icon(
+            Icons.Filled.Home,
+            contentDescription = "Home",
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .offset(x = 10.dp)
+        )
+    })
+    data object OnTheAirTvSeriesNav : NavigationScreen("on_the_air_tv_series", title = "On the air", navIcon = {
+        Icon(
+            Icons.Filled.Timeline,
+            contentDescription = "Timeline",
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .offset(x = 10.dp)
+        )
+    })
+    data object PopularTvSeriesNav : NavigationScreen("popular_tv_series", title = "Popular", navIcon = {
+        Icon(
+            Icons.Filled.Star,
+            contentDescription = "Star",
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .offset(x = 10.dp)
+        )
+    })
+    data object TopRatedTvSeriesNav : NavigationScreen("top_rated_tv_series", title = "Top rated", navIcon = {
+        Icon(
+            Icons.Filled.KeyboardArrowDown,
+            contentDescription = "KeyboardArrowDown",
             modifier = Modifier
                 .padding(end = 16.dp)
                 .offset(x = 10.dp)

@@ -4,8 +4,7 @@ import data.remote.ApiImpl
 import kotlinx.coroutines.flow.flow
 import utils.network.UiState
 
-class MovieRepository {
-    private val api = ApiImpl()
+class MovieRepository(private val api:ApiImpl =  ApiImpl()) {
     suspend fun nowPlayingMovie(page: Int) = flow {
         try {
             emit(UiState.Loading)
@@ -89,6 +88,46 @@ class MovieRepository {
             emit(UiState.Loading)
             val result = api.artistDetail(personId)
             emit(UiState.Success(result))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
+
+    suspend fun airingTodayTvSeries(page: Int) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.airingTodayTvSeries(page)
+            emit(UiState.Success(result.results))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
+
+    suspend fun onTheAirTvSeries(page: Int) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.onTheAirTvSeries(page)
+            emit(UiState.Success(result.results))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
+
+    suspend fun topRatedTvSeries(page: Int) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.popularTvSeries(page)
+            emit(UiState.Success(result.results))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
+
+    suspend fun upcomingTvSeries(page: Int) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.topRatedTvSeries(page)
+            emit(UiState.Success(result.results))
         } catch (e: Exception) {
             emit(UiState.Error(e))
         }

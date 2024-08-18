@@ -1,4 +1,4 @@
-package ui.home
+package ui.movie.popular
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,24 +11,24 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import utils.network.UiState
 
-class NowPlayingViewModel : ViewModel() {
+class PopularMovieViewModel : ViewModel() {
     private val repo = MovieRepository()
-    private val _nowPlayingResponse = MutableStateFlow<List<MovieItem>>(arrayListOf())
-    val nowPlayingResponse get() = _nowPlayingResponse.asStateFlow()
+    private val _popularMovieResponse = MutableStateFlow<List<MovieItem>>(arrayListOf())
+    val popularMovieResponse get() = _popularMovieResponse.asStateFlow()
 
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading get() = _isLoading.asStateFlow()
 
-    fun nowPlaying(page: Int) {
+    fun popularMovie(page: Int) {
         viewModelScope.launch {
-            repo.nowPlayingMovie(page).onEach {
+            repo.popularMovie(page).onEach {
                 when (it) {
                     is UiState.Loading -> {
                         _isLoading.value = true
                     }
 
                     is UiState.Success -> {
-                        _nowPlayingResponse.value = it.data
+                        _popularMovieResponse.value = it.data
                         _isLoading.value = false
                     }
 

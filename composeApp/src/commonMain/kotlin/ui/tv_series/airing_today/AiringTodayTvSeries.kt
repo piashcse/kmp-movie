@@ -1,4 +1,4 @@
-package ui.popular
+package ui.tv_series.airing_today
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,22 +11,23 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
-import ui.component.MovieList
 import ui.component.ProgressIndicator
+import ui.component.TvItemList
 
 @Composable
-fun Popular(
-    navigator: Navigator, viewModel: PopularViewModel = viewModel { PopularViewModel() }
+fun AiringTodayTvSeries(
+    navigator: Navigator,
+    viewModel: AiringTodayTvSeriesViewModel = viewModel { AiringTodayTvSeriesViewModel() }
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
-    val movies by viewModel.popularMovieResponse.collectAsState()
+    val tvItems by viewModel.airingTodayTvSeriesResponse.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.popularMovie(1)
+        viewModel.airingTodayTvSeries(1)
     }
 
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        MovieList(movies.toList()) { movieId ->
+        TvItemList(tvItems) { movieId ->
             navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
         }
         if (isLoading) {
@@ -34,3 +35,4 @@ fun Popular(
         }
     }
 }
+

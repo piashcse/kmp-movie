@@ -1,6 +1,7 @@
 package data.remote
 
 import data.model.BaseModel
+import data.model.BaseModelTV
 import data.model.BaseModelV2
 import data.model.artist.Artist
 import data.model.artist.ArtistDetail
@@ -40,4 +41,21 @@ interface ApiInterface {
     suspend fun artistDetail(
         personId: Int
     ): ArtistDetail
+
+    suspend fun airingTodayTvSeries(
+        page: Int
+    ): BaseModelTV
+
+    suspend fun onTheAirTvSeries(
+        page: Int
+    ): BaseModelTV
+
+    suspend fun popularTvSeries(
+        page: Int
+    ): BaseModelTV
+
+    suspend fun topRatedTvSeries(
+        page: Int
+    ): BaseModelTV
+
 }

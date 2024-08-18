@@ -1,6 +1,7 @@
 package data.remote
 
 import data.model.BaseModel
+import data.model.BaseModelTV
 import data.model.BaseModelV2
 import data.model.artist.Artist
 import data.model.artist.ArtistDetail
@@ -98,4 +99,35 @@ class ApiImpl : ApiInterface {
         }.body()
     }
 
+    override suspend fun airingTodayTvSeries(page: Int): BaseModelTV {
+        return client.get {
+            url {
+                encodedPath = "3/tv/airing_today"
+            }
+        }.body()
+    }
+
+    override suspend fun onTheAirTvSeries(page: Int): BaseModelTV {
+        return client.get {
+            url {
+                encodedPath = "3/tv/on_the_air"
+            }
+        }.body()
+    }
+
+    override suspend fun popularTvSeries(page: Int): BaseModelTV {
+        return client.get {
+            url {
+                encodedPath = "3/tv/popular"
+            }
+        }.body()
+    }
+
+    override suspend fun topRatedTvSeries(page: Int): BaseModelTV {
+        return client.get {
+            url {
+                encodedPath = "3/tv/top_rated"
+            }
+        }.body()
+    }
 }

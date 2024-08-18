@@ -1,4 +1,4 @@
-package ui.toprated
+package ui.movie.now_playing
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,16 +15,17 @@ import ui.component.MovieList
 import ui.component.ProgressIndicator
 
 @Composable
-fun TopRated(
+fun NowPlayingScreen(
     navigator: Navigator,
-    viewModel: TopRatedViewModel = viewModel { TopRatedViewModel() }
+    viewModel: NowPlayingViewModel = viewModel { NowPlayingViewModel() }
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
-    val movies by viewModel.topRatedMovieResponse.collectAsState()
+    val movies by viewModel.nowPlayingResponse.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.topRated(1)
+        viewModel.nowPlaying(1)
     }
+
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         MovieList(movies) { movieId ->
             navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
@@ -34,3 +35,5 @@ fun TopRated(
         }
     }
 }
+
+

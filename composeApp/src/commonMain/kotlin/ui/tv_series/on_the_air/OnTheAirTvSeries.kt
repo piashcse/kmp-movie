@@ -1,4 +1,4 @@
-package ui.home
+package ui.tv_series.on_the_air
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,23 +11,23 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
-import ui.component.MovieList
 import ui.component.ProgressIndicator
+import ui.component.TvItemList
 
 @Composable
-fun HomeScreen(
+fun OnTheAirTvSeries(
     navigator: Navigator,
-    viewModel: NowPlayingViewModel = viewModel { NowPlayingViewModel() }
+    viewModel: OnTheAirTvSeriesViewModel = viewModel { OnTheAirTvSeriesViewModel() }
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
-    val movies by viewModel.nowPlayingResponse.collectAsState()
+    val tvItems by viewModel.onTheAirTvSeriesResponse.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.nowPlaying(1)
+        viewModel.onTheAirTvSeries(1)
     }
 
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        MovieList(movies) { movieId ->
+        TvItemList(tvItems) { movieId ->
             navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
         }
         if (isLoading) {
@@ -35,5 +35,3 @@ fun HomeScreen(
         }
     }
 }
-
-
