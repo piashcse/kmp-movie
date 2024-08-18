@@ -9,7 +9,7 @@ data class TvItem(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerialName("first_air_date")
     val firstAirDate: String,
     @SerialName("genre_ids")

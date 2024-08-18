@@ -1,4 +1,4 @@
-package ui.movie.detail
+package ui.tv_series.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,14 +33,14 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
-import data.model.MovieItem
-import data.model.artist.Cast
-import data.model.movie_detail.MovieDetail
+import data.model.TvItem
+import data.model.tv_detail.TvSeriesDetail
+import data.model.tv_detail.credit.Cast
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.cast
 import kmp_movie.composeapp.generated.resources.description
-import kmp_movie.composeapp.generated.resources.duration
 import kmp_movie.composeapp.generated.resources.language
+import kmp_movie.composeapp.generated.resources.number_of_episode
 import kmp_movie.composeapp.generated.resources.rating
 import kmp_movie.composeapp.generated.resources.release_date
 import kmp_movie.composeapp.generated.resources.similar_movie
@@ -56,25 +56,23 @@ import ui.component.shimmerBackground
 import ui.component.text.SubtitlePrimary
 import ui.component.text.SubtitleSecondary
 import utils.AppConstant
-import utils.hourMinutes
-import utils.roundTo
 
 @Composable
-fun MovieDetail(
+fun TvSeriesDetail(
     navigator: Navigator,
-    movieId: Int,
-    viewModel: MovieDetailViewModel = viewModel { MovieDetailViewModel() }
+    seriesId: Int,
+    viewModel: TvSeriesDetailViewModel = viewModel { TvSeriesDetailViewModel() }
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
-    val movieDetail by viewModel.movieDetail.collectAsState()
-    val recommendMovie by viewModel.recommendedMovie.collectAsState()
-    val movieCredit by viewModel.movieCredit.collectAsState()
+    val movieDetail by viewModel.tvSeriesDetail.collectAsState()
+    val recommendedTvSeries by viewModel.recommendedTvSeries.collectAsState()
+    val creditTvSeries by viewModel.creditTvSeries.collectAsState()
 
 
     LaunchedEffect(Unit) {
-        viewModel.movieDetail(movieId)
-        viewModel.recommendedMovie(movieId)
-        viewModel.movieCredit(movieId)
+        viewModel.tvSeriesDetail(seriesId)
+        viewModel.recommendedTvSeries(seriesId)
+        viewModel.creditTvSeries(seriesId)
     }
 
     Column(
@@ -94,12 +92,12 @@ fun MovieDetail(
                     start = 8.dp, end = 8.dp, top = 5.dp, bottom = 5.dp
                 )
             ) {
-                recommendMovie.let {
+                recommendedTvSeries.let {
                     if (it.isNotEmpty())
-                        RecommendedMovie(navigator, it)
+                        RecommendedTvSeries(navigator, it)
                 }
-                movieCredit?.let {
-                    ArtistAndCrew(navigator, it.cast)
+                creditTvSeries?.let {
+                    credit(navigator, it.cast)
                 }
             }
         }
@@ -107,12 +105,12 @@ fun MovieDetail(
 }
 
 @Composable
-fun UiDetail(data: MovieDetail) {
+fun UiDetail(data: TvSeriesDetail) {
     Column {
         CoilImage(
             imageModel = {
                 AppConstant.IMAGE_URL.plus(
-                    data.poster_path
+                    data.posterPath
                 )
             },
             imageOptions = ImageOptions(
@@ -134,7 +132,7 @@ fun UiDetail(data: MovieDetail) {
             modifier = Modifier.fillMaxSize().padding(start = 10.dp, end = 10.dp)
         ) {
             Text(
-                text = data.title,
+                text = data.name,
                 modifier = Modifier.padding(top = 10.dp),
                 color = FontColor,
                 fontSize = 30.sp,
@@ -148,7 +146,7 @@ fun UiDetail(data: MovieDetail) {
 
                 Column(Modifier.weight(1f)) {
                     SubtitlePrimary(
-                        text = data.original_language,
+                        text = data.originalLanguage,
                     )
                     SubtitleSecondary(
                         text =  stringResource(Res.string.language)
@@ -156,7 +154,7 @@ fun UiDetail(data: MovieDetail) {
                 }
                 Column(Modifier.weight(1f)) {
                     SubtitlePrimary(
-                        text = data.vote_average.roundTo(1).toString(),
+                        text = data.voteAverage.toString(),
                     )
                     SubtitleSecondary(
                         text =  stringResource(Res.string.rating)
@@ -164,15 +162,15 @@ fun UiDetail(data: MovieDetail) {
                 }
                 Column(Modifier.weight(1f)) {
                     SubtitlePrimary(
-                        text = data.runtime.hourMinutes()
+                        text = data.numberOfEpisodes.toString()
                     )
                     SubtitleSecondary(
-                        text =  stringResource(Res.string.duration)
+                        text =  stringResource(Res.string.number_of_episode)
                     )
                 }
                 Column(Modifier.weight(1f)) {
                     SubtitlePrimary(
-                        text = data.release_date
+                        text = data.firstAirDate
                     )
                     SubtitleSecondary(
                         text =  stringResource(Res.string.release_date)
@@ -192,7 +190,7 @@ fun UiDetail(data: MovieDetail) {
 
 
 @Composable
-fun RecommendedMovie(navigator: Navigator, recommendedMovie: List<MovieItem>) {
+fun RecommendedTvSeries(navigator: Navigator, recommendedMovie: List<TvItem>) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
             text = stringResource(Res.string.similar_movie),
@@ -201,7 +199,7 @@ fun RecommendedMovie(navigator: Navigator, recommendedMovie: List<MovieItem>) {
             fontWeight = FontWeight.SemiBold
         )
         LazyRow(modifier = Modifier.fillMaxHeight()) {
-            items(recommendedMovie, itemContent = { item: MovieItem ->
+            items(recommendedMovie, itemContent = { item: TvItem ->
                 Column(
                     modifier = Modifier.padding(
                         start = 0.dp, end = 8.dp, top = 5.dp, bottom = 5.dp
@@ -210,9 +208,9 @@ fun RecommendedMovie(navigator: Navigator, recommendedMovie: List<MovieItem>) {
                     CoilImage(
                         modifier = Modifier.height(190.dp).width(140.dp).cornerRadius(10)
                             .clickable {
-                                navigator.navigate(NavigationScreen.MovieDetail.route.plus("/${item.id}"))
+                                navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/${item.id}"))
                             },
-                        imageModel = { AppConstant.IMAGE_URL.plus(item.poster_path) },
+                        imageModel = { AppConstant.IMAGE_URL.plus(item.posterPath) },
                         imageOptions = ImageOptions(
                             contentScale = ContentScale.Crop,
                             alignment = Alignment.Center,
@@ -233,7 +231,7 @@ fun RecommendedMovie(navigator: Navigator, recommendedMovie: List<MovieItem>) {
 }
 
 @Composable
-fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
+fun credit(navigator: Navigator?, cast: List<Cast>) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
             text = stringResource(Res.string.cast),
@@ -253,13 +251,13 @@ fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
                     CoilImage(
                         modifier = Modifier.padding(bottom = 5.dp).height(80.dp).width(80.dp)
                             .cornerRadius(40).clickable {
-                                navigator?.navigate(
+                               /* navigator?.navigate(
                                     NavigationScreen.ArtistDetail.route.plus(
                                         "/${item.id}"
                                     )
-                                )
+                                )*/
                             },
-                        imageModel = { AppConstant.IMAGE_URL.plus(item.profile_path) },
+                        imageModel = { AppConstant.IMAGE_URL.plus(item.profilePath) },
                         imageOptions = ImageOptions(
                             contentScale = ContentScale.Crop,
                             alignment = Alignment.Center,

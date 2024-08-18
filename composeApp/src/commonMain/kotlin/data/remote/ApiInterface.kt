@@ -5,7 +5,9 @@ import data.model.BaseModelTV
 import data.model.BaseModelV2
 import data.model.artist.Artist
 import data.model.artist.ArtistDetail
-import data.model.moviedetail.MovieDetail
+import data.model.movie_detail.MovieDetail
+import data.model.tv_detail.TvSeriesDetail
+import data.model.tv_detail.credit.Credit
 
 interface ApiInterface {
     suspend fun nowPlayingMovieList(
@@ -57,5 +59,17 @@ interface ApiInterface {
     suspend fun topRatedTvSeries(
         page: Int
     ): BaseModelTV
+
+    suspend fun tvSeriesDetail(
+        seriesId: Int
+    ): TvSeriesDetail
+
+    suspend fun recommendedTvSeries(
+        seriesId: Int
+    ): BaseModelTV
+
+    suspend fun creditTvSeries(
+        seriesId: Int
+    ): Credit
 
 }

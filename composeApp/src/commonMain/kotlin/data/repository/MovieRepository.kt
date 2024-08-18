@@ -132,4 +132,34 @@ class MovieRepository(private val api:ApiImpl =  ApiImpl()) {
             emit(UiState.Error(e))
         }
     }
+
+    suspend fun tvSeriesDetail(seriesId: Int) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.tvSeriesDetail(seriesId)
+            emit(UiState.Success(result))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
+
+    suspend fun recommendedTvSeries(seriesId: Int) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.recommendedTvSeries(seriesId)
+            emit(UiState.Success(result.results))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
+
+    suspend fun creditTvSeries(seriesId: Int) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.creditTvSeries(seriesId)
+            emit(UiState.Success(result))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
 }

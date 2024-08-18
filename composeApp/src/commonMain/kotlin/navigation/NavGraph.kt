@@ -14,6 +14,7 @@ import ui.movie.popular.PopularMovie
 import ui.movie.top_rated.TopRatedMovie
 import ui.movie.upcoming.UpcomingMovie
 import ui.tv_series.airing_today.AiringTodayTvSeries
+import ui.tv_series.detail.TvSeriesDetail
 import ui.tv_series.on_the_air.OnTheAirTvSeries
 import ui.tv_series.popular.PopularTvSeries
 import ui.tv_series.top_rated.TopRatedTvSeries
@@ -60,6 +61,12 @@ fun Navigation(navigator: Navigator, pagerState: PagerState) {
         }
         scene(route = NavigationScreen.TopRatedTvSeries.route) {
             TopRatedTvSeries(navigator)
+        }
+        scene(route = NavigationScreen.TvSeriesDetail.route.plus(NavigationScreen.TvSeriesDetail.objectPath)) { backStackEntry ->
+            val id: Int? = backStackEntry.path<Int>(NavigationScreen.TvSeriesDetail.objectName)
+            id?.let {
+                TvSeriesDetail(navigator, it)
+            }
         }
     }
 }

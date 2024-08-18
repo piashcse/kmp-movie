@@ -1,4 +1,4 @@
-package data.model.moviedetail
+package data.model.movie_detail
 
 import kotlinx.serialization.Serializable
 

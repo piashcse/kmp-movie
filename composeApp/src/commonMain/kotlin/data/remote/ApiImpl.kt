@@ -5,7 +5,9 @@ import data.model.BaseModelTV
 import data.model.BaseModelV2
 import data.model.artist.Artist
 import data.model.artist.ArtistDetail
-import data.model.moviedetail.MovieDetail
+import data.model.movie_detail.MovieDetail
+import data.model.tv_detail.TvSeriesDetail
+import data.model.tv_detail.credit.Credit
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.encodedPath
@@ -127,6 +129,30 @@ class ApiImpl : ApiInterface {
         return client.get {
             url {
                 encodedPath = "3/tv/top_rated"
+            }
+        }.body()
+    }
+
+    override suspend fun tvSeriesDetail(seriesId: Int): TvSeriesDetail {
+        return client.get {
+            url {
+                encodedPath = "3/tv/${seriesId}"
+            }
+        }.body()
+    }
+
+    override suspend fun recommendedTvSeries(seriesId: Int): BaseModelTV {
+        return client.get {
+            url {
+                encodedPath = "3/tv/${seriesId}/recommendations"
+            }
+        }.body()
+    }
+
+    override suspend fun creditTvSeries(seriesId: Int): Credit {
+        return client.get {
+            url {
+                encodedPath = "3/tv/${seriesId}/credits"
             }
         }.body()
     }

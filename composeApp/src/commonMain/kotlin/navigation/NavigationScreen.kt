@@ -36,6 +36,9 @@ sealed class NavigationScreen(
     data object ArtistDetail :
         NavigationScreen("artist_detail_screen", objectName = "id", objectPath = "/{id}")
 
+    data object TvSeriesDetail :
+        NavigationScreen("tv_series_detail_screen",  objectName = "id", objectPath = "/{id}")
+
     data object NowPlayingMovieNav : NavigationScreen("now_playing_movie_screen", title = "Home", navIcon = {
         Icon(
             Icons.Filled.Home,

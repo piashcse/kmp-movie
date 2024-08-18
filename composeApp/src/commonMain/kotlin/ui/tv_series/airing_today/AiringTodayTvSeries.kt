@@ -27,8 +27,8 @@ fun AiringTodayTvSeries(
     }
 
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        TvItemList(tvItems) { movieId ->
-            navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
+        TvItemList(tvItems) { seriesId ->
+            navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))
         }
         if (isLoading) {
             ProgressIndicator()
