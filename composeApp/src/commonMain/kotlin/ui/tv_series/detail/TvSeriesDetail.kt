@@ -39,6 +39,7 @@ import data.model.tv_detail.credit.Cast
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.cast
 import kmp_movie.composeapp.generated.resources.description
+import kmp_movie.composeapp.generated.resources.first_air
 import kmp_movie.composeapp.generated.resources.language
 import kmp_movie.composeapp.generated.resources.number_of_episode
 import kmp_movie.composeapp.generated.resources.rating
@@ -173,7 +174,7 @@ fun UiDetail(data: TvSeriesDetail) {
                         text = data.firstAirDate
                     )
                     SubtitleSecondary(
-                        text =  stringResource(Res.string.release_date)
+                        text =  stringResource(Res.string.first_air)
                     )
                 }
             }

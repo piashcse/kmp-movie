@@ -14,5 +14,6 @@
     <string name="release_date">Release Date</string>
     <string name="duration">DURATION</string>
     <string name="language">Language</string>
-    <string name="number_of_episode">Number of episode</string>
+    <string name="number_of_episode">Number of Episode</string>
+    <string name="first_air">First Air</string>
 </resources>
