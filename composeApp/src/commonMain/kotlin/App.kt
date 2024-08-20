@@ -12,12 +12,14 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -223,13 +225,19 @@ fun TabScreen(navigator: Navigator, pagerState: PagerState) {
     Column(Modifier.padding(bottom = 56.dp)) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
+            indicator = { tabPositions ->
+                TabRowDefaults.PrimaryIndicator(
+                    Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                    color = MaterialTheme.colors.primary,
+                )
+            }
         ) {
             tabs.forEachIndexed { index, title ->
                 Tab(selected = pagerState.currentPage == index, onClick = {
                     coroutineScope.launch {
                         pagerState.animateScrollToPage(index)
                     }
-                }, text = { Text(title) })
+                }, text = { Text(title, color = if (pagerState.currentPage == index) MaterialTheme.colors.primary else Color.Gray ) })
             }
         }
         HorizontalPager(
