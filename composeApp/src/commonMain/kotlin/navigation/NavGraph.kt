@@ -73,14 +73,19 @@ fun Navigation(navigator: Navigator, pagerState: PagerState) {
 
 @Composable
 fun currentRoute(navigator: Navigator): String? {
-    return navigator.currentEntry.collectAsState(null).value?.route?.route
-
+    val routeName = navigator.currentEntry.collectAsState(null).value?.route?.route
+    routeName?.let {
+        return it.substringBefore("/")
+    } ?: run {
+        return ""
+    }
 }
+
 @OptIn(ExperimentalFoundationApi::class)
 fun initialScreen(pagerState: PagerState): String {
-    return if (pagerState.currentPage == 0){
+    return if (pagerState.currentPage == 0) {
         NavigationScreen.NowPlayingMovie.route
-    }else{
+    } else {
         NavigationScreen.AiringTodayTvSeries.route
     }
 }
