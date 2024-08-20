@@ -1,4 +1,4 @@
-package ui.movie.artistdetail
+package ui.movie.artist_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -2,6 +2,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -26,10 +27,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.app_title
+import kmp_movie.composeapp.generated.resources.movies
+import kmp_movie.composeapp.generated.resources.tv_series
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.PreComposeApp
@@ -200,7 +204,7 @@ fun NavigationRailUI(navigator: Navigator, pagerState: PagerState) {
 @Composable
 fun isBackButtonEnable(navigator: Navigator): Boolean {
     return when (currentRoute(navigator)) {
-        NavigationScreen.ArtistDetail.route, NavigationScreen.MovieDetail.route-> {
+        NavigationScreen.ArtistDetail.route, NavigationScreen.MovieDetail.route,  NavigationScreen.TvSeriesDetail.route-> {
             true
         }
 
@@ -214,9 +218,9 @@ fun isBackButtonEnable(navigator: Navigator): Boolean {
 @Composable
 fun TabScreen(navigator: Navigator, pagerState: PagerState) {
     val coroutineScope = rememberCoroutineScope()
-    val tabs = listOf("Movies", "TV Series")
+    val tabs = listOf(stringResource(Res.string.movies), stringResource(Res.string.tv_series))
 
-    Column {
+    Column(Modifier.padding(bottom = 56.dp)) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
         ) {

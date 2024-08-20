@@ -34,7 +34,7 @@ fun ExpandableText(
         )
 
         Text(
-            text = if (isExpanded) "less" else "more",
+            text = if (isExpanded) "Show less" else "Show more",
             color = Teal200,
             modifier = Modifier.padding(top = 4.dp)
         )

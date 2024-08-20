@@ -7,7 +7,7 @@ import androidx.compose.runtime.collectAsState
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
-import ui.movie.artistdetail.ArtistDetail
+import ui.movie.artist_detail.ArtistDetail
 import ui.movie.detail.MovieDetail
 import ui.movie.now_playing.NowPlayingScreen
 import ui.movie.popular.PopularMovie

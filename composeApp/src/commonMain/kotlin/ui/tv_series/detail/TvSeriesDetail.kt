@@ -69,7 +69,6 @@ fun TvSeriesDetail(
     val recommendedTvSeries by viewModel.recommendedTvSeries.collectAsState()
     val creditTvSeries by viewModel.creditTvSeries.collectAsState()
 
-
     LaunchedEffect(Unit) {
         viewModel.tvSeriesDetail(seriesId)
         viewModel.recommendedTvSeries(seriesId)
@@ -84,7 +83,6 @@ fun TvSeriesDetail(
         if (isLoading) {
             ProgressIndicator()
         } else {
-
             movieDetail?.let {
                 UiDetail(it)
             }
@@ -252,11 +250,11 @@ fun credit(navigator: Navigator?, cast: List<Cast>) {
                     CoilImage(
                         modifier = Modifier.padding(bottom = 5.dp).height(80.dp).width(80.dp)
                             .cornerRadius(40).clickable {
-                               /* navigator?.navigate(
+                                navigator?.navigate(
                                     NavigationScreen.ArtistDetail.route.plus(
                                         "/${item.id}"
                                     )
-                                )*/
+                                )
                             },
                         imageModel = { AppConstant.IMAGE_URL.plus(item.profilePath) },
                         imageOptions = ImageOptions(

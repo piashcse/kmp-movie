@@ -4,8 +4,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.LiveTv
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.runtime.Composable
@@ -17,7 +18,7 @@ sealed class NavigationScreen(
     val title: String = "",
     val navIcon: (@Composable () -> Unit) = {
         Icon(
-            Icons.Filled.Home, contentDescription = "home"
+            Icons.Filled.LiveTv, contentDescription = "tv"
         )
     },
     val objectName: String = "",
@@ -39,9 +40,9 @@ sealed class NavigationScreen(
     data object TvSeriesDetail :
         NavigationScreen("tv_series_detail_screen",  objectName = "id", objectPath = "/{id}")
 
-    data object NowPlayingMovieNav : NavigationScreen("now_playing_movie_screen", title = "Home", navIcon = {
+    data object NowPlayingMovieNav : NavigationScreen("now_playing_movie_screen", title = "Now Playing", navIcon = {
         Icon(
-            Icons.Filled.Home,
+            Icons.Filled.LiveTv,
             contentDescription = "Home",
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -80,7 +81,7 @@ sealed class NavigationScreen(
     })
     data object AiringTodayTvSeriesNav : NavigationScreen("airing_today_tv_series", title = "Airing today", navIcon = {
         Icon(
-            Icons.Filled.Home,
+            Icons.Filled.LiveTv,
             contentDescription = "Home",
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -98,7 +99,7 @@ sealed class NavigationScreen(
     })
     data object PopularTvSeriesNav : NavigationScreen("popular_tv_series", title = "Popular", navIcon = {
         Icon(
-            Icons.Filled.Star,
+            Icons.Filled.Favorite,
             contentDescription = "Star",
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -107,7 +108,7 @@ sealed class NavigationScreen(
     })
     data object TopRatedTvSeriesNav : NavigationScreen("top_rated_tv_series", title = "Top rated", navIcon = {
         Icon(
-            Icons.Filled.KeyboardArrowDown,
+            Icons.Filled.Star,
             contentDescription = "KeyboardArrowDown",
             modifier = Modifier
                 .padding(end = 16.dp)
