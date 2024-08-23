@@ -25,7 +25,6 @@ class AppViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading get() = _isLoading.asStateFlow()
 
-    @ExperimentalCoroutinesApi
     @FlowPreview
     fun searchApi(searchKey: String) {
         viewModelScope.launch {

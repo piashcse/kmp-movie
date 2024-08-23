@@ -61,10 +61,10 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
     PreComposeApp {
         val navigator = rememberNavigator()
         val isAppBarVisible = remember { mutableStateOf(true) }
+        val isLoading by appViewModel.isLoading.collectAsState()
         val pagerState = rememberPagerState {
             2
         }
-        val isLoading by appViewModel.isLoading.collectAsState()
 
         BackHandler(isAppBarVisible.value.not()) {
             isAppBarVisible.value = true
@@ -97,16 +97,9 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
                     }
                 }
             }, bottomBar = {
-                if (pagerState.currentPage == 0) {
-                    if (isCompactSize()) {
-                        BottomNavigationMovies(navigator)
-                    }
-                } else {
-                    if (isCompactSize()) {
-                        BottomNavigationTvSeries(navigator)
-                    }
+                if (isCompactSize()) {
+                    BottomNavigationMovies(navigator, pagerState)
                 }
-
             }) {
                 TabScreen(navigator, pagerState)
                 if (currentRoute(navigator) !== NavigationScreen.MovieDetail.route) {
@@ -124,15 +117,25 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BottomNavigationMovies(navigator: Navigator) {
+fun BottomNavigationMovies(navigator: Navigator, pagerState: PagerState) {
     BottomNavigation {
-        val items = listOf(
-            NavigationScreen.NowPlayingMovieNav,
-            NavigationScreen.PopularMovieNav,
-            NavigationScreen.TopRatedMovieNav,
-            NavigationScreen.UpcomingMovieNav,
-        )
+        val items = if (pagerState.currentPage == 0) {
+            listOf(
+                NavigationScreen.NowPlayingMovieNav,
+                NavigationScreen.PopularMovieNav,
+                NavigationScreen.TopRatedMovieNav,
+                NavigationScreen.UpcomingMovieNav,
+            )
+        } else {
+            listOf(
+                NavigationScreen.AiringTodayTvSeriesNav,
+                NavigationScreen.OnTheAirTvSeriesNav,
+                NavigationScreen.PopularTvSeriesNav,
+                NavigationScreen.TopRatedTvSeriesNav,
+            )
+        }
         items.forEach {
             BottomNavigationItem(label = { Text(text = it.title) },
                 selected = it.route == currentRoute(navigator),
@@ -149,42 +152,27 @@ fun BottomNavigationMovies(navigator: Navigator) {
     }
 }
 
-@Composable
-fun BottomNavigationTvSeries(navigator: Navigator) {
-    BottomNavigation {
-        val items = listOf(
-            NavigationScreen.AiringTodayTvSeriesNav,
-            NavigationScreen.OnTheAirTvSeriesNav,
-            NavigationScreen.PopularTvSeriesNav,
-            NavigationScreen.TopRatedTvSeriesNav,
-        )
-        items.forEach {
-            BottomNavigationItem(label = { Text(text = it.title) },
-                selected = it.route == currentRoute(navigator),
-                icon = it.navIcon,
-                onClick = {
-                    navigator.navigate(
-                        it.route,
-                        NavOptions(
-                            launchSingleTop = true,
-                        ),
-                    )
-                })
-        }
-    }
-}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NavigationRailUI(navigator: Navigator, pagerState: PagerState) {
     Row {
         NavigationRail {
-            val items = listOf(
-                NavigationScreen.NowPlayingMovieNav,
-                NavigationScreen.PopularMovieNav,
-                NavigationScreen.TopRatedMovieNav,
-                NavigationScreen.UpcomingMovieNav,
-            )
+            val items = if (pagerState.currentPage == 0) {
+                listOf(
+                    NavigationScreen.NowPlayingMovieNav,
+                    NavigationScreen.PopularMovieNav,
+                    NavigationScreen.TopRatedMovieNav,
+                    NavigationScreen.UpcomingMovieNav,
+                )
+            } else {
+                listOf(
+                    NavigationScreen.AiringTodayTvSeriesNav,
+                    NavigationScreen.OnTheAirTvSeriesNav,
+                    NavigationScreen.PopularTvSeriesNav,
+                    NavigationScreen.TopRatedTvSeriesNav,
+                )
+            }
             items.forEach {
                 NavigationRailItem(label = { Text(text = it.title, fontSize = 12.sp) },
                     selected = it.route == currentRoute(navigator),
@@ -206,7 +194,7 @@ fun NavigationRailUI(navigator: Navigator, pagerState: PagerState) {
 @Composable
 fun isBackButtonEnable(navigator: Navigator): Boolean {
     return when (currentRoute(navigator)) {
-        NavigationScreen.ArtistDetail.route, NavigationScreen.MovieDetail.route,  NavigationScreen.TvSeriesDetail.route-> {
+        NavigationScreen.ArtistDetail.route, NavigationScreen.MovieDetail.route, NavigationScreen.TvSeriesDetail.route -> {
             true
         }
 
@@ -233,11 +221,19 @@ fun TabScreen(navigator: Navigator, pagerState: PagerState) {
             }
         ) {
             tabs.forEachIndexed { index, title ->
-                Tab(selected = pagerState.currentPage == index, onClick = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(index)
-                    }
-                }, text = { Text(title, color = if (pagerState.currentPage == index) MaterialTheme.colors.primary else Color.Gray ) })
+                Tab(
+                    selected = pagerState.currentPage == index,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
+                    text = {
+                        Text(
+                            title,
+                            color = if (pagerState.currentPage == index) MaterialTheme.colors.primary else Color.Gray
+                        )
+                    })
             }
         }
         HorizontalPager(
