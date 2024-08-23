@@ -98,7 +98,7 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
                 }
             }, bottomBar = {
                 if (isCompactSize()) {
-                    BottomNavigationMovies(navigator, pagerState)
+                    BottomNavigation(navigator, pagerState)
                 }
             }) {
                 TabScreen(navigator, pagerState)
@@ -119,7 +119,7 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BottomNavigationMovies(navigator: Navigator, pagerState: PagerState) {
+fun BottomNavigation(navigator: Navigator, pagerState: PagerState) {
     BottomNavigation {
         val items = if (pagerState.currentPage == 0) {
             listOf(
@@ -155,7 +155,7 @@ fun BottomNavigationMovies(navigator: Navigator, pagerState: PagerState) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NavigationRailUI(navigator: Navigator, pagerState: PagerState) {
+fun NavigationRail(navigator: Navigator, pagerState: PagerState) {
     Row {
         NavigationRail {
             val items = if (pagerState.currentPage == 0) {
@@ -253,6 +253,6 @@ fun Content(navigator: Navigator, pagerState: PagerState) {
     if (isCompactSize()) {
         Navigation(navigator, pagerState)
     } else {
-        NavigationRailUI(navigator, pagerState)
+        NavigationRail(navigator, pagerState)
     }
 }
