@@ -21,10 +21,10 @@ import ui.tv_series.top_rated.TopRatedTvSeries
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Navigation(navigator: Navigator, pagerState: PagerState) {
+fun Navigation(navigator: Navigator, page:Int) {
     NavHost(
         navigator = navigator,
-        initialRoute = initialScreen(pagerState),
+        initialRoute = initialScreen(page),
     ) {
         scene(route = NavigationScreen.NowPlayingMovie.route) {
             NowPlayingScreen(navigator)
@@ -82,8 +82,8 @@ fun currentRoute(navigator: Navigator): String? {
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-fun initialScreen(pagerState: PagerState): String {
-    return if (pagerState.currentPage == 0) {
+fun initialScreen(page:Int): String {
+    return if (page == 0) {
         NavigationScreen.NowPlayingMovie.route
     } else {
         NavigationScreen.AiringTodayTvSeries.route

@@ -153,12 +153,11 @@ fun BottomNavigation(navigator: Navigator, pagerState: PagerState) {
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NavigationRail(navigator: Navigator, pagerState: PagerState) {
+fun NavigationRail(navigator: Navigator, page:Int) {
     Row {
         NavigationRail {
-            val items = if (pagerState.currentPage == 0) {
+            val items = if (page == 0) {
                 listOf(
                     NavigationScreen.NowPlayingMovieNav,
                     NavigationScreen.PopularMovieNav,
@@ -187,7 +186,7 @@ fun NavigationRail(navigator: Navigator, pagerState: PagerState) {
                     })
             }
         }
-        Navigation(navigator, pagerState)
+        Navigation(navigator, page)
     }
 }
 
@@ -239,20 +238,11 @@ fun TabScreen(navigator: Navigator, pagerState: PagerState) {
         HorizontalPager(
             state = pagerState, modifier = Modifier.fillMaxSize()
         ) { page ->
-            when (page) {
-                0 -> Content(navigator, pagerState)
-                1 -> Content(navigator, pagerState)
+            if (isCompactSize()) {
+                Navigation(navigator, page)
+            } else {
+                NavigationRail(navigator, page)
             }
         }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun Content(navigator: Navigator, pagerState: PagerState) {
-    if (isCompactSize()) {
-        Navigation(navigator, pagerState)
-    } else {
-        NavigationRail(navigator, pagerState)
     }
 }
