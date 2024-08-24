@@ -3,7 +3,7 @@
 ![badge-Android](https://img.shields.io/badge/Platform-Android-brightgreen)
 ![badge-iOS](https://img.shields.io/badge/Platform-iOS-lightgray)
 ![badge-desktop](http://img.shields.io/badge/Platform-Desktop-4D76CD.svg?style=flat)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.10-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.20-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 <a href="https://github.com/piashcse"><img alt="License" src="https://img.shields.io/static/v1?label=GitHub&message=piashcse&color=C51162"/></a>
 
@@ -15,16 +15,16 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
 - Desktop
 - ~~Web~~
 <p float="left">
-  <img width="100%" height="100%" src="https://github.com/piashcse/kmp-movie/blob/master/screenshots/kmp_movie_v2.gif" />
+  <img width="100%" height="100%" src="https://github.com/piashcse/kmp-movie/blob/master/screenshots/Screen Recording 2024-08-24 at 7.31.48 PM.gif" />
  </p> 
 <p float="left">
-  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024_06_19.PNG" />
+  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-08-24 at 7.24.41 PM.PNG" />
 </p>
 <p float="left" style="padding-top: 200px;">
-  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024_06_19_detail.PNG" />
+  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-08-24 at 7.27.23 PM.PNG" />
 </p>
 <p float="left" style="padding-top: 200px;">
-  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024_07_07.PNG" />
+  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-08-24 at 7.30.34 PM.PNG" />
 </p>
 
 
