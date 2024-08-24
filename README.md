@@ -29,9 +29,15 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
 
 
 # Main Features
-- Movie List 
-- Movie Search
-- Movie Detail
+- Movie
+  - Movie List  
+  - Movie Search
+  - Movie Detail
+  - Recommended Movie
+- TV Series
+  - TV Series List
+  - TV Series Detail
+  - Recommended TV Series 
 - Artist Detail
 - Bottom Navigation
 - Navigation Rail
@@ -61,8 +67,8 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
  - add `local.properties` file to the project root and set a path to Android SDK there
 
 ### Android
-To run the application on android device/emulator:  
- - open project in Android Studio and run imported android run configuration
+To run the application on Android device/emulator:  
+ - open the project in Android Studio and run the imported android run configuration
 
 To build the application bundle:
  - run `./gradlew :composeApp:assembleDebug`
@@ -74,7 +80,7 @@ Run the desktop application: `./gradlew :composeApp:run`
 Run desktop UI tests: `./gradlew :composeApp:jvmTest`
 
 ### iOS
-To run the application on iPhone device/simulator:
+To run the application on an iPhone device/simulator:
  - Open `iosApp/iosApp.xcproject` in Xcode and run standard configuration
  - Or use [Kotlin Multiplatform Mobile plugin](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile) for Android Studio
 Run iOS simulator UI tests: `./gradlew :composeApp:iosSimulatorArm64Test`
