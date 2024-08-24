@@ -72,4 +72,8 @@ interface ApiInterface {
         seriesId: Int
     ): Credit
 
+    suspend fun tvSeriesSearch(
+        searchKey: String
+    ): BaseModelTV
+
 }

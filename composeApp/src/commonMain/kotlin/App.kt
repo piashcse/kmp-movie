@@ -52,7 +52,8 @@ import ui.AppViewModel
 import ui.component.AppBarWithArrow
 import ui.component.ProgressIndicator
 import ui.component.SearchBar
-import ui.component.SearchUI
+import ui.component.SearchForMovie
+import ui.component.SearchForTVSeries
 import utils.isCompactSize
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalFoundationApi::class)
@@ -72,7 +73,7 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
         MaterialTheme {
             Scaffold(topBar = {
                 if (isAppBarVisible.value.not()) {
-                    SearchBar(appViewModel) {
+                    SearchBar(appViewModel, pagerState) {
                         isAppBarVisible.value = true
                     }
 
@@ -85,8 +86,9 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
                     }
                 }
             }, floatingActionButton = {
-                when (currentRoute(navigator)) {
-                    NavigationScreen.NowPlayingMovie.route, NavigationScreen.PopularMovie.route, NavigationScreen.TopRatedMovie.route, NavigationScreen.UpcomingMovie.route -> {
+                val route = currentRoute(navigator)
+                when {
+                    route != NavigationScreen.MovieDetail.route && route != NavigationScreen.ArtistDetail.route && route != NavigationScreen.TvSeriesDetail.route -> {
                         FloatingActionButton(
                             onClick = {
                                 isAppBarVisible.value = false
@@ -105,8 +107,17 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
                 if (currentRoute(navigator) !== NavigationScreen.MovieDetail.route) {
                     Column {
                         if (isAppBarVisible.value.not()) {
-                            SearchUI(navigator, appViewModel.searchData.value) {
-                                isAppBarVisible.value = true
+                            if (pagerState.currentPage == 0) {
+                                SearchForMovie(navigator, appViewModel.movieSearchData.value) {
+                                    isAppBarVisible.value = true
+                                }
+                            } else {
+                                SearchForTVSeries(
+                                    navigator,
+                                    appViewModel.tvSeriesSearchData.value
+                                ) {
+                                    isAppBarVisible.value = true
+                                }
                             }
                             ProgressIndicator(isLoading)
                         }
@@ -154,7 +165,7 @@ fun BottomNavigation(navigator: Navigator, pagerState: PagerState) {
 
 
 @Composable
-fun NavigationRail(navigator: Navigator, page:Int) {
+fun NavigationRail(navigator: Navigator, page: Int) {
     Row {
         NavigationRail {
             val items = if (page == 0) {

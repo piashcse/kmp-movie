@@ -156,4 +156,13 @@ class ApiImpl : ApiInterface {
             }
         }.body()
     }
+
+    override suspend fun tvSeriesSearch(searchKey: String): BaseModelTV {
+        return client.get {
+            url {
+                encodedPath = "3/search/tv"
+                parameters.append("query", searchKey)
+            }
+        }.body()
+    }
 }

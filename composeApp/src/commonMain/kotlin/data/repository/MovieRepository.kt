@@ -162,4 +162,14 @@ class MovieRepository(private val api:ApiImpl =  ApiImpl()) {
             emit(UiState.Error(e))
         }
     }
+
+    suspend fun searchTvSeries(searchKey: String) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.tvSeriesSearch(searchKey)
+            emit(UiState.Success(result))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
 }

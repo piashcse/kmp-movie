@@ -1,5 +1,6 @@
 package ui.component
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.Icon
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -34,10 +36,9 @@ import kotlinx.coroutines.FlowPreview
 import theme.Blue
 import ui.AppViewModel
 
-@OptIn(FlowPreview::class)
-@ExperimentalCoroutinesApi
+@OptIn(FlowPreview::class, ExperimentalFoundationApi::class, ExperimentalCoroutinesApi::class)
 @Composable
-fun SearchBar(viewModel: AppViewModel, pressOnBack: () -> Unit) {
+fun SearchBar(viewModel: AppViewModel, pagerState: PagerState, pressOnBack: () -> Unit) {
     var text by remember { mutableStateOf("") }
     val focusRequester = FocusRequester()
     LaunchedEffect(Unit) {
@@ -67,7 +68,11 @@ fun SearchBar(viewModel: AppViewModel, pressOnBack: () -> Unit) {
             ),
             onValueChange = {
                 text = it
-                viewModel.searchApi(it)
+                if (pagerState.currentPage == 0) {
+                    viewModel.movieSearch(it)
+                }else{
+                    viewModel.tvSeriesSearch(it)
+                }
             },
             singleLine = true,
             trailingIcon = {
