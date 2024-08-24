@@ -1,7 +1,6 @@
 package navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import moe.tlaster.precompose.navigation.NavHost

@@ -43,7 +43,6 @@ import kmp_movie.composeapp.generated.resources.first_air
 import kmp_movie.composeapp.generated.resources.language
 import kmp_movie.composeapp.generated.resources.number_of_episode
 import kmp_movie.composeapp.generated.resources.rating
-import kmp_movie.composeapp.generated.resources.release_date
 import kmp_movie.composeapp.generated.resources.similar_movie
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
