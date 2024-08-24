@@ -1,5 +1,7 @@
 <resources>
     <string name="app_title">Kmp Movie</string>
+    <string name="movies">Movies</string>
+    <string name="tv_series">TV Series</string>
     <string name="artist_detail">Artist Detail</string>
     <string name="know_for">Known for</string>
     <string name="biography">Biography</string>
@@ -14,4 +16,6 @@
     <string name="release_date">Release Date</string>
     <string name="duration">DURATION</string>
     <string name="language">Language</string>
+    <string name="number_of_episode">Number of Episode</string>
+    <string name="first_air">First Air</string>
 </resources>
