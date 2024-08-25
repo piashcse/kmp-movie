@@ -36,6 +36,7 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
   - Recommended Movie
 - TV Series
   - TV Series List
+  - TV Series Search
   - TV Series Detail
   - Recommended TV Series 
 - Artist Detail
