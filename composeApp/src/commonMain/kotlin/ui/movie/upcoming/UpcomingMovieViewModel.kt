@@ -21,7 +21,7 @@ class UpcomingMovieViewModel : ViewModel() {
 
     fun upComing(page: Int) {
         viewModelScope.launch {
-            repo.topRatedMovie(page).onEach {
+            repo.upComingMovie(page).onEach {
                 when (it) {
                     is UiState.Loading -> {
                         _isLoading.value = true
