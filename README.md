@@ -13,7 +13,7 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
 - iOS
 - Android
 - Desktop
-- ~~Web~~
+- Web
 <p float="left">
   <img width="100%" height="100%" src="https://github.com/piashcse/kmp-movie/blob/master/screenshots/Screen Recording 2024-08-24 at 7.31.48 PM.gif" />
  </p> 
