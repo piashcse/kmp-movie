@@ -80,6 +80,10 @@ Run android simulator UI tests: `./gradlew :composeApp:pixel5Check`
 Run the desktop application: `./gradlew :composeApp:run`
 Run desktop UI tests: `./gradlew :composeApp:jvmTest`
 
+### Web
+- Before running make sure you have yarn 1.22.22
+- Run the web application: `./gradlew wasmJsBrowserRun`
+
 ### iOS
 To run the application on an iPhone device/simulator:
  - Open `iosApp/iosApp.xcproject` in Xcode and run standard configuration
