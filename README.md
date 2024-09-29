@@ -77,7 +77,7 @@ defaultConfig {
 
 ## Before running!
  - check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
- - install JDK 17 or higher on your machine
+ - install JDK 11 or higher on your machine
  - add `local.properties` file to the project root and set a path to Android SDK there
 
 ### Android
