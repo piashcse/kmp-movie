@@ -50,6 +50,19 @@ KMP Movie app using [The Movie DB](https://www.themoviedb.org) built with Compos
   <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/mvvm_architecture.png" />
 </p>
 
+## API Key 🔑
+You will need to provide a developer key to fetch the data from TMDB API.
+* Generate a new key (v3 auth) from [here](https://www.themoviedb.org/settings/api). Copy the key and go back to the project.
+* Add the key to build config in `./composeApp/build.gradle.kts`:
+
+```kotlin
+defaultConfig {
+    ...
+    buildConfigField("API_KEY", TMDB_API_KEY)
+    ...
+}
+```
+
 ## Built With 🛠
 - [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform) - Compose Multiplatform, a modern UI framework for Kotlin that makes building performant and beautiful user interfaces.
 - [PreCompose](https://github.com/Tlaster/PreCompose) - Compose Multiplatform Navigation && State Management
