@@ -10,6 +10,7 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
+import kmp_movie.composeApp.BuildConfig
 import kotlinx.serialization.json.Json
 import utils.AppConstant
 
@@ -17,7 +18,7 @@ val client = HttpClient {
     defaultRequest {
         url {
             takeFrom(AppConstant.BASE_URL)
-            parameters.append("api_key", AppConstant.API_KEY)
+            parameters.append("api_key", BuildConfig.API_KEY)
         }
     }
     expectSuccess = true

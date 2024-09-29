@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.serialization)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.buildConfig)
 }
 
 kotlin {
@@ -130,4 +131,7 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+buildConfig{
+    buildConfigField( "API_KEY", "59cd6896d8432f9c69aed9b86b9c2931")
 }
