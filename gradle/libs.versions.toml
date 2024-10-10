@@ -14,7 +14,7 @@ compose = "1.7.3"
 compose-plugin = "1.7.0-rc01"
 junit = "4.13.2"
 kotlin = "2.0.20"
-ktorClientCore = "3.0.0-rc-2"
+ktor-client = "3.0.0"
 precompose = "1.6.2"
 landScapist = "2.4.0"
 napierVersion = "2.7.1"
@@ -36,12 +36,12 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 
-ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientCore" }
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
-ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientCore" }
-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCore" }
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientCore" }
-ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorClientCore" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor-client" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-client" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor-client" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor-client" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor-client" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor-client" }
 precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
 landscapist-coil = { module = "com.github.skydoves:landscapist-coil3", version.ref = "landScapist" }
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landScapist" }
