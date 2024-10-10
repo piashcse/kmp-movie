@@ -90,19 +90,20 @@ To build the application bundle:
  - find `.apk` file in `composeApp/build/outputs/apk/debug/composeApp-debug.apk`
 Run android simulator UI tests: `./gradlew :composeApp:pixel5Check`
 
-### Desktop
-Run the desktop application: `./gradlew :composeApp:run`
-Run desktop UI tests: `./gradlew :composeApp:jvmTest`
-
-### Web
-- Before running make sure you have yarn 1.22.22
-- Run the web application: `./gradlew wasmJsBrowserRun`
-
 ### iOS
 To run the application on an iPhone device/simulator:
  - Open `iosApp/iosApp.xcproject` in Xcode and run standard configuration
  - Or use [Kotlin Multiplatform Mobile plugin](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile) for Android Studio
 Run iOS simulator UI tests: `./gradlew :composeApp:iosSimulatorArm64Test`
+
+### Desktop
+- Run the desktop application: `./gradlew :composeApp:run`
+- Run desktop UI tests: `./gradlew :composeApp:jvmTest`
+
+### Web
+- Before running make sure you have `yarn 1.22.22`
+- Run the web application: `./gradlew wasmJsBrowserRun`
+
 ## Project structure 
 
 This Compose Multiplatform project includes three modules:
