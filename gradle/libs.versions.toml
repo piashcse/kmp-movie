@@ -17,9 +17,9 @@ kotlin = "2.0.20"
 ktor-client = "3.0.0"
 precompose = "1.6.2"
 landScapist = "2.4.0"
-napierVersion = "2.7.1"
-lifeCycleVersion ="2.8.0"
-windowSizeVersion ="0.5.0"
+napier = "2.7.1"
+androidx-lifecycle ="2.8.0"
+windowSize ="0.5.0"
 buildConfig = "5.5.0"
 
 [libraries]
@@ -45,9 +45,9 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
 landscapist-coil = { module = "com.github.skydoves:landscapist-coil3", version.ref = "landScapist" }
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landScapist" }
-napier = { module = "io.github.aakira:napier", version.ref = "napierVersion" }
-lifeCycle = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifeCycleVersion" }
-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "windowSizeVersion" }
+napier = { module = "io.github.aakira:napier", version.ref = "napier" }
+androidx-lifecycle = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "windowSize" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

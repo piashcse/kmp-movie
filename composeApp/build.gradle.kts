@@ -76,7 +76,7 @@ kotlin {
             implementation(libs.landscapist.coil)
             implementation(libs.landscapist.animation)
             implementation(libs.napier)
-            implementation(libs.lifeCycle)
+            implementation(libs.androidx.lifecycle)
             implementation(libs.windowsize)
         }
         desktopMain.dependencies {
