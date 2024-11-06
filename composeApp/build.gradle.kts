@@ -77,7 +77,11 @@ kotlin {
             implementation(libs.landscapist.animation)
             implementation(libs.napier)
             implementation(libs.androidx.lifecycle)
-            implementation(libs.windowsize)
+            implementation(libs.compose.material3.windowSizeClass)
+            implementation(libs.compose.material3.adaptive.navigation)
+            implementation(libs.compose.material3.adaptive)
+            implementation(libs.compose.material3.adaptive.layout)
+            implementation(libs.compose.material3.adaptive.navigation.suite)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

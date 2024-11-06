@@ -11,6 +11,7 @@ androidx-espresso-core = "3.6.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 compose = "1.7.5"
+compose-adaptive = "1.0.0"
 compose-plugin = "1.7.0"
 junit = "4.13.2"
 kotlin = "2.0.20"
@@ -19,7 +20,6 @@ precompose = "1.6.2"
 landScapist = "2.4.2"
 napier = "2.7.1"
 androidx-lifecycle ="2.8.0"
-windowSize ="0.5.0"
 buildConfig = "5.5.0"
 
 [libraries]
@@ -33,6 +33,11 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+compose-material3-adaptive = { group = "org.jetbrains.compose.material3.adaptive", name = "adaptive", version.ref = "compose-adaptive" }
+compose-material3-adaptive-layout = { group = "org.jetbrains.compose.material3.adaptive", name = "adaptive-layout", version.ref = "compose-adaptive" }
+compose-material3-adaptive-navigation = { group = "org.jetbrains.compose.material3.adaptive", name = "adaptive-navigation", version.ref = "compose-adaptive" }
+compose-material3-adaptive-navigation-suite = { group = "org.jetbrains.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "compose-plugin" }
+compose-material3-windowSizeClass = { group = "org.jetbrains.compose.material3", name = "material3-window-size-class", version.ref = "compose-plugin" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 
@@ -47,7 +52,6 @@ landscapist-coil = { module = "com.github.skydoves:landscapist-coil3", version.r
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landScapist" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 androidx-lifecycle = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "windowSize" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

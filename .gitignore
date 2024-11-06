@@ -9,6 +9,7 @@ local.properties
 captures
 .externalNativeBuild
 .cxx
+.kotlin
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
