@@ -17,9 +17,9 @@ KMP Movie app built with Compose Multiplatform, supporting Android, iOS, Desktop
 - Web
   
 <p float="center">
-  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-11-06-movie.png" />
-  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-11-06-detail.png" />
-  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screen Recording 2024-11-06.gif" />
+  <img width="100%" height="50%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-11-06-movie.png"/> </br></br>
+  <img width="100%" height="50%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-11-06-detail.png" /></br></br>
+  <img width="100%" height="50%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screen Recording 2024-11-06.gif" />
 </p>
 
 
