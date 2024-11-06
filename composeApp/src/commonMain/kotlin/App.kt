@@ -184,7 +184,7 @@ fun NavigationRail(navigator: Navigator, page: Int) {
                 )
             }
             items.forEach {
-                NavigationRailItem(label = { Text(text = it.title, fontSize = 12.sp, color = Color.White) },
+                NavigationRailItem(label = { Text(text = it.title, fontSize = 12.sp) },
                     selected = it.route == currentRoute(navigator),
                     icon = it.navIcon,
                     onClick = {
