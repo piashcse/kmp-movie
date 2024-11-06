@@ -1,6 +1,5 @@
 package navigation
 
-import BottomNavigation
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,7 +24,6 @@ import ui.tv_series.on_the_air.OnTheAirTvSeries
 import ui.tv_series.popular.PopularTvSeries
 import ui.tv_series.top_rated.TopRatedTvSeries
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Navigation(navigator: Navigator, page: Int) {
     NavHost(
