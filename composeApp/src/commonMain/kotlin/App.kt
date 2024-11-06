@@ -100,7 +100,7 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
                     }
                 }
             }, bottomBar = {
-                if (isBottomBarVisible(navigator)) {
+                if (isCompactSize() && isBottomBarVisible(navigator)) {
                     BottomNavigation(navigator, pagerState)
                 }
             }) {
