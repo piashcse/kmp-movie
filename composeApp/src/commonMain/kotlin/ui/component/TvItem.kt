@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +24,7 @@ import utils.cornerRadius
 
 @Composable
 internal fun TvItemList(listItems: List<TvItem>, onclick: (id: Int) -> Unit) {
-    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 200.dp),
+    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 180.dp),
         modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp),
         content = {
             items(listItems) {
