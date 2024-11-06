@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.LiveTv
+import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.runtime.Composable
@@ -40,9 +41,9 @@ sealed class NavigationScreen(
     data object TvSeriesDetail :
         NavigationScreen("tv_series_detail_screen",  objectName = "id", objectPath = "/{id}")
 
-    data object NowPlayingMovieNav : NavigationScreen("now_playing_movie_screen", title = "Now Playing", navIcon = {
+    data object NowPlayingMovieNav : NavigationScreen("now_playing_movie_screen", title = "Now playing", navIcon = {
         Icon(
-            Icons.Filled.LiveTv,
+            Icons.Filled.Movie,
             contentDescription = "Home",
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -81,7 +82,7 @@ sealed class NavigationScreen(
     })
     data object AiringTodayTvSeriesNav : NavigationScreen("airing_today_tv_series", title = "Airing today", navIcon = {
         Icon(
-            Icons.Filled.LiveTv,
+            Icons.Filled.Movie,
             contentDescription = "Home",
             modifier = Modifier
                 .padding(end = 16.dp)

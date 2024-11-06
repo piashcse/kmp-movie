@@ -148,7 +148,7 @@ fun BottomNavigation(navigator: Navigator, pagerState: PagerState) {
             )
         }
         items.forEach {
-            BottomNavigationItem(label = { Text(text = it.title) },
+            BottomNavigationItem( label = { Text(text = it.title, fontSize = 12.sp, color = Color.White) },
                 selected = it.route == currentRoute(navigator),
                 icon = it.navIcon,
                 onClick = {
@@ -184,7 +184,7 @@ fun NavigationRail(navigator: Navigator, page: Int) {
                 )
             }
             items.forEach {
-                NavigationRailItem(label = { Text(text = it.title, fontSize = 12.sp) },
+                NavigationRailItem(label = { Text(text = it.title, fontSize = 12.sp, color = Color.White) },
                     selected = it.route == currentRoute(navigator),
                     icon = it.navIcon,
                     onClick = {
