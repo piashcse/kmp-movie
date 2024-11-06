@@ -1,5 +1,6 @@
 package navigation
 
+import BottomNavigation
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,7 +27,7 @@ import ui.tv_series.top_rated.TopRatedTvSeries
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Navigation(navigator: Navigator, page:Int) {
+fun Navigation(navigator: Navigator, page: Int) {
     NavHost(
         navigator = navigator,
         initialRoute = initialScreen(page),
@@ -99,10 +100,26 @@ fun currentRoute(navigator: Navigator): String? {
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-fun initialScreen(page:Int): String {
+fun initialScreen(page: Int): String {
     return if (page == 0) {
         NavigationScreen.NowPlayingMovie.route
     } else {
         NavigationScreen.AiringTodayTvSeries.route
     }
+}
+
+@Composable
+fun isBottomBarVisible(navigator: Navigator): Boolean {
+    val visibleRoutes = setOf(
+        NavigationScreen.NowPlayingMovie.route,
+        NavigationScreen.PopularMovie.route,
+        NavigationScreen.TopRatedMovie.route,
+        NavigationScreen.UpcomingMovie.route,
+        NavigationScreen.AiringTodayTvSeries.route,
+        NavigationScreen.OnTheAirTvSeries.route,
+        NavigationScreen.PopularTvSeries.route,
+        NavigationScreen.TopRatedTvSeries.route
+    )
+
+    return currentRoute(navigator) in visibleRoutes
 }

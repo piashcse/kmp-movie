@@ -45,6 +45,7 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 import navigation.Navigation
 import navigation.NavigationScreen
 import navigation.currentRoute
+import navigation.isBottomBarVisible
 import navigation.navigationTitle
 import org.jetbrains.compose.resources.stringResource
 import theme.FloatingActionBackground
@@ -99,7 +100,7 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
                     }
                 }
             }, bottomBar = {
-                if (isCompactSize()) {
+                if (isCompactSize() && isBottomBarVisible(navigator)) {
                     BottomNavigation(navigator, pagerState)
                 }
             }) {
@@ -148,7 +149,13 @@ fun BottomNavigation(navigator: Navigator, pagerState: PagerState) {
             )
         }
         items.forEach {
-            BottomNavigationItem( label = { Text(text = it.title, fontSize = 12.sp, color = Color.White) },
+            BottomNavigationItem(label = {
+                Text(
+                    text = it.title,
+                    fontSize = 12.sp,
+                    color = Color.White
+                )
+            },
                 selected = it.route == currentRoute(navigator),
                 icon = it.navIcon,
                 onClick = {
@@ -219,8 +226,10 @@ fun isBackButtonEnable(navigator: Navigator): Boolean {
 fun TabScreen(navigator: Navigator, pagerState: PagerState) {
     val coroutineScope = rememberCoroutineScope()
     val tabs = listOf(stringResource(Res.string.movies), stringResource(Res.string.tv_series))
+    val bottomPadding =
+        if (isBottomBarVisible(navigator)) Modifier.padding(bottom = 56.dp) else Modifier
 
-    Column(Modifier.padding(bottom = 56.dp)) {
+    Column(modifier = bottomPadding) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
             indicator = { tabPositions ->
