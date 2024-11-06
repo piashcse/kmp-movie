@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kmp_movie.composeapp.generated.resources.Res
-import kmp_movie.composeapp.generated.resources.app_title
 import kmp_movie.composeapp.generated.resources.movies
 import kmp_movie.composeapp.generated.resources.tv_series
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -46,6 +45,7 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 import navigation.Navigation
 import navigation.NavigationScreen
 import navigation.currentRoute
+import navigation.navigationTitle
 import org.jetbrains.compose.resources.stringResource
 import theme.FloatingActionBackground
 import ui.AppViewModel
@@ -79,7 +79,7 @@ internal fun App(appViewModel: AppViewModel = viewModel { AppViewModel() }) {
 
                 } else {
                     AppBarWithArrow(
-                        stringResource(Res.string.app_title),
+                        navigationTitle(navigator),
                         isBackEnable = isBackButtonEnable(navigator)
                     ) {
                         navigator.popBackStack()
