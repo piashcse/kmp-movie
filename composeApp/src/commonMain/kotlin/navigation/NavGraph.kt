@@ -3,9 +3,15 @@ package navigation
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.app_title
+import kmp_movie.composeapp.generated.resources.artist_detail
+import kmp_movie.composeapp.generated.resources.movie_detail
+import kmp_movie.composeapp.generated.resources.tv_series_detail
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
+import org.jetbrains.compose.resources.stringResource
 import ui.movie.artist_detail.ArtistDetail
 import ui.movie.detail.MovieDetail
 import ui.movie.now_playing.NowPlayingScreen
@@ -66,6 +72,18 @@ fun Navigation(navigator: Navigator, page:Int) {
             id?.let {
                 TvSeriesDetail(navigator, it)
             }
+        }
+    }
+}
+
+@Composable
+fun navigationTitle(navController: Navigator): String {
+    return when (currentRoute(navController)) {
+        NavigationScreen.MovieDetail.route -> stringResource(Res.string.movie_detail)
+        NavigationScreen.ArtistDetail.route -> stringResource(Res.string.artist_detail)
+        NavigationScreen.TvSeriesDetail.route -> stringResource(Res.string.tv_series_detail)
+        else -> {
+            stringResource(Res.string.app_title)
         }
     }
 }

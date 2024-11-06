@@ -1,7 +1,9 @@
 <resources>
     <string name="app_title">Kmp Movie</string>
     <string name="movies">Movies</string>
+    <string name="movie_detail">Movie Detail</string>
     <string name="tv_series">TV Series</string>
+    <string name="tv_series_detail">TV Series Detail</string>
     <string name="artist_detail">Artist Detail</string>
     <string name="know_for">Known for</string>
     <string name="biography">Biography</string>
