@@ -15,17 +15,11 @@ KMP Movie app built with Compose Multiplatform, supporting Android, iOS, Desktop
 - Android
 - Desktop
 - Web
-<p float="left">
-  <img width="100%" height="100%" src="https://github.com/piashcse/kmp-movie/blob/master/screenshots/Screen Recording 2024-08-24 at 7.31.48 PM.gif" />
- </p> 
-<p float="left">
-  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-08-24 at 7.24.41 PM.PNG" />
-</p>
-<p float="left" style="padding-top: 200px;">
-  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-08-24 at 7.27.23 PM.PNG" />
-</p>
-<p float="left" style="padding-top: 200px;">
-  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-08-24 at 7.30.34 PM.PNG" />
+  
+<p float="center">
+  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-11-06-movie.png" />
+  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screenshot 2024-11-06-detail.png" />
+  <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/Screen Recording 2024-11-06.gif" />
 </p>
 
 
