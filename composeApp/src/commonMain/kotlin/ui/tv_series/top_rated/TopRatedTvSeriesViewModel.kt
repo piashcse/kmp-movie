@@ -3,7 +3,7 @@ package ui.tv_series.top_rated
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.model.TvItem
-import data.repository.MovieRepository
+import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -13,7 +13,7 @@ import utils.network.UiState
 
 
 class TopRatedTvSeriesViewModel : ViewModel() {
-    private val repo = MovieRepository()
+    private val repo = Repository()
     private val _topRatedTvSeriesResponse = MutableStateFlow<List<TvItem>>(arrayListOf())
     val topRatedTvSeriesResponse get() = _topRatedTvSeriesResponse.asStateFlow()
 
