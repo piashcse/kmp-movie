@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import data.model.MovieItem
 import data.model.artist.Artist
 import data.model.movie_detail.MovieDetail
-import data.repository.MovieRepository
+import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import utils.network.UiState
 
 class MovieDetailViewModel : ViewModel() {
-    private val repo = MovieRepository()
+    private val repo = Repository()
 
     private val _movieDetail = MutableStateFlow<MovieDetail?>(null)
     val movieDetail get() = _movieDetail.asStateFlow()
@@ -30,69 +30,64 @@ class MovieDetailViewModel : ViewModel() {
 
     fun movieDetail(movieId: Int) {
         viewModelScope.launch {
-            viewModelScope.launch {
-                repo.movieDetail(movieId).onEach {
-                    when (it) {
-                        is UiState.Loading -> {
-                            _isLoading.value = true
-                        }
-
-                        is UiState.Success -> {
-                            _movieDetail.value = it.data
-                            _isLoading.value = false
-                        }
-
-                        is UiState.Error -> {
-                            _isLoading.value = false
-                        }
+            repo.movieDetail(movieId).onEach {
+                when (it) {
+                    is UiState.Loading -> {
+                        _isLoading.value = true
                     }
-                }.launchIn(viewModelScope)
-            }
+
+                    is UiState.Success -> {
+                        _movieDetail.value = it.data
+                        _isLoading.value = false
+                    }
+
+                    is UiState.Error -> {
+                        _isLoading.value = false
+                    }
+                }
+            }.launchIn(viewModelScope)
         }
     }
 
     fun recommendedMovie(movieId: Int) {
         viewModelScope.launch {
-            viewModelScope.launch {
-                repo.recommendedMovie(movieId).onEach {
-                    when (it) {
-                        is UiState.Loading -> {
-                            _isLoading.value = true
-                        }
-
-                        is UiState.Success -> {
-                            _recommendedMovie.value = it.data
-                            _isLoading.value = false
-                        }
-
-                        is UiState.Error -> {
-                            _isLoading.value = false
-                        }
+            repo.recommendedMovie(movieId).onEach {
+                when (it) {
+                    is UiState.Loading -> {
+                        _isLoading.value = true
                     }
-                }.launchIn(viewModelScope)
-            }
+
+                    is UiState.Success -> {
+                        _recommendedMovie.value = it.data
+                        _isLoading.value = false
+                    }
+
+                    is UiState.Error -> {
+                        _isLoading.value = false
+                    }
+                }
+            }.launchIn(viewModelScope)
         }
     }
+
     fun movieCredit(movieId: Int) {
         viewModelScope.launch {
-            viewModelScope.launch {
-                repo.movieCredit(movieId).onEach {
-                    when (it) {
-                        is UiState.Loading -> {
-                            _isLoading.value = true
-                        }
-
-                        is UiState.Success -> {
-                            _movieCredit.value = it.data
-                            _isLoading.value = false
-                        }
-
-                        is UiState.Error -> {
-                            _isLoading.value = false
-                        }
+            repo.movieCredit(movieId).onEach {
+                when (it) {
+                    is UiState.Loading -> {
+                        _isLoading.value = true
                     }
-                }.launchIn(viewModelScope)
-            }
+
+                    is UiState.Success -> {
+                        _movieCredit.value = it.data
+                        _isLoading.value = false
+                    }
+
+                    is UiState.Error -> {
+                        _isLoading.value = false
+                    }
+                }
+            }.launchIn(viewModelScope)
         }
     }
 }

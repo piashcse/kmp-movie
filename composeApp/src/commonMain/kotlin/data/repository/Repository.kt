@@ -1,10 +1,10 @@
 package data.repository
 
-import data.remote.ApiImpl
+import data.remote.ApiService
 import kotlinx.coroutines.flow.flow
 import utils.network.UiState
 
-class MovieRepository(private val api:ApiImpl =  ApiImpl()) {
+class Repository(private val api:ApiService =  ApiService()) {
     suspend fun nowPlayingMovie(page: Int) = flow {
         try {
             emit(UiState.Loading)

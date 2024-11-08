@@ -3,7 +3,7 @@ package ui.tv_series.popular
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.model.TvItem
-import data.repository.MovieRepository
+import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import utils.network.UiState
 
 class PopularTvSeriesViewModel : ViewModel() {
-    private val repo = MovieRepository()
+    private val repo = Repository()
     private val _popularTvSeriesResponse = MutableStateFlow<List<TvItem>>(arrayListOf())
     val popularTvSeriesResponse get() = _popularTvSeriesResponse.asStateFlow()
 
