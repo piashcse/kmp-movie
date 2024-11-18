@@ -230,29 +230,36 @@ fun TabScreen(navigator: Navigator, pagerState: PagerState, padding: PaddingValu
             .fillMaxSize()
             .padding(padding)
     ) {
-        TabRow(
-            selectedTabIndex = pagerState.currentPage,
-            indicator = { tabPositions ->
-                TabRowDefaults.PrimaryIndicator(
-                    Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                    color = MaterialTheme.colors.primary,
-                )
-            }
+        if (currentRoute(navigator) !in listOf(
+                NavigationScreen.MovieDetail.route,
+                NavigationScreen.TvSeriesDetail.route,
+                NavigationScreen.ArtistDetail.route
+            )
         ) {
-            tabs.forEachIndexed { index, title ->
-                Tab(
-                    selected = pagerState.currentPage == index,
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
-                    },
-                    text = {
-                        Text(
-                            title,
-                            color = if (pagerState.currentPage == index) MaterialTheme.colors.primary else Color.Gray
-                        )
-                    })
+            TabRow(
+                selectedTabIndex = pagerState.currentPage,
+                indicator = { tabPositions ->
+                    TabRowDefaults.PrimaryIndicator(
+                        Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                        color = MaterialTheme.colors.primary,
+                    )
+                }
+            ) {
+                tabs.forEachIndexed { index, title ->
+                    Tab(
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        },
+                        text = {
+                            Text(
+                                title,
+                                color = if (pagerState.currentPage == index) MaterialTheme.colors.primary else Color.Gray
+                            )
+                        })
+                }
             }
         }
         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
