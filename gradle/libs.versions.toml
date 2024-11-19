@@ -20,7 +20,7 @@ precompose = "1.6.2"
 landScapist = "2.4.2"
 napier = "2.7.1"
 androidx-lifecycle ="2.8.0"
-buildConfig = "5.5.0"
+buildConfig = "5.5.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
