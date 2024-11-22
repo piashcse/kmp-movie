@@ -1,15 +1,21 @@
 package ui.movie.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -23,9 +29,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlurEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -109,76 +118,126 @@ fun MovieDetail(
 @Composable
 fun UiDetail(data: MovieDetail) {
     Column {
-        CoilImage(
-            imageModel = {
-                AppConstant.IMAGE_URL.plus(
-                    data.poster_path
-                )
-            },
-            imageOptions = ImageOptions(
-                contentScale = ContentScale.Crop,
-                alignment = Alignment.Center,
-                contentDescription = "Movie item",
-                colorFilter = null,
-            ),
-            component = rememberImageComponent {
-                +CircularRevealPlugin(
-                    duration = 800
-                )
-            },
-            modifier = Modifier.fillMaxWidth().height(300.dp).shimmerBackground(
-                RoundedCornerShape(5.dp)
-            ),
-        )
-        Column(
-            modifier = Modifier.fillMaxSize().padding(start = 10.dp, end = 10.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(16f / 9f)
         ) {
-            Text(
-                text = data.title,
-                modifier = Modifier.padding(top = 10.dp),
-                color = FontColor,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.W700,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+            CoilImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(16f / 9f)
+                    .shimmerBackground(
+                        RoundedCornerShape(5.dp)
+                    ).graphicsLayer {
+                        alpha = 0.9f
+                        scaleX = 1f
+                        scaleY = 1f
+                        translationX = 0f
+                        translationY = 0f
+                        shadowElevation = 10f
+                        renderEffect = BlurEffect(8f, 8f)
+                    },
+                imageModel = {
+                    AppConstant.IMAGE_URL.plus(
+                        data.backdrop_path
+                    )
+                },
+                imageOptions = ImageOptions(
+                    contentScale = ContentScale.Crop,
+                    contentDescription = "Backdrop Image",
+                ),
+                component = rememberImageComponent {
+                    +CircularRevealPlugin(
+                        duration = 800
+                    )
+                },
             )
             Row(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp, top = 10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(y = 180.dp)
+                    .padding(start = 10.dp)
             ) {
-
-                Column(Modifier.weight(1f)) {
-                    SubtitlePrimary(
-                        text = data.original_language,
+                CoilImage(
+                    modifier = Modifier
+                        .size(135.dp, 170.dp) // Poster size (width x height)
+                        .clip(RoundedCornerShape(10.dp))
+                        .shimmerBackground(
+                            RoundedCornerShape(5.dp)
+                        )
+                        .border(
+                            1.dp, Color.White, RoundedCornerShape(10.dp)
+                        ),
+                    imageModel = { AppConstant.IMAGE_URL.plus(data.poster_path) },
+                    imageOptions = ImageOptions(
+                        contentScale = ContentScale.Crop,
+                        contentDescription = "Poster Image",
+                    ),
+                    component = rememberImageComponent {
+                        +CircularRevealPlugin(
+                            duration = 800
+                        )
+                    },
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Column(
+                    modifier = Modifier
+                        .padding(bottom = 4.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.Bottom),
+                ) {
+                    Text(
+                        text = data.title, color = Color.Black, fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1
                     )
-                    SubtitleSecondary(
-                        text =  stringResource(Res.string.language)
-                    )
-                }
-                Column(Modifier.weight(1f)) {
-                    SubtitlePrimary(
-                        text = data.vote_average.roundTo(1).toString(),
-                    )
-                    SubtitleSecondary(
-                        text =  stringResource(Res.string.rating)
-                    )
-                }
-                Column(Modifier.weight(1f)) {
-                    SubtitlePrimary(
-                        text = data.runtime.hourMinutes()
-                    )
-                    SubtitleSecondary(
-                        text =  stringResource(Res.string.duration)
-                    )
-                }
-                Column(Modifier.weight(1f)) {
-                    SubtitlePrimary(
-                        text = data.release_date
-                    )
-                    SubtitleSecondary(
-                        text =  stringResource(Res.string.release_date)
-                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        Column(Modifier.weight(1f)) {
+                            SubtitlePrimary(
+                                text = stringResource(Res.string.duration)
+                            )
+                            SubtitleSecondary(
+                                text = data.runtime.hourMinutes()
+                            )
+                        }
+                        Column(Modifier.weight(1f)) {
+                            SubtitlePrimary(
+                                text = stringResource(Res.string.release_date)
+                            )
+                            SubtitleSecondary(
+                                text = data.release_date
+                            )
+                        }
+                    }
+                    Row(modifier = Modifier.padding(top = 4.dp)) {
+                        Column(Modifier.weight(1f)) {
+                            SubtitlePrimary(
+                                text = stringResource(Res.string.language)
+                            )
+                            SubtitleSecondary(
+                                text = data.original_language
+                            )
+                        }
+                        Column(Modifier.weight(1f)) {
+                            SubtitlePrimary(
+                                text = stringResource(Res.string.rating)
+                            )
+                            SubtitleSecondary(
+                                text = data.vote_average.roundTo(1).toString()
+                            )
+                        }
+                    }
                 }
             }
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 10.dp, end = 10.dp, top = 115.dp)
+        ) {
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(Res.string.description),
                 color = FontColor,
@@ -208,7 +267,7 @@ fun RecommendedMovie(navigator: Navigator, recommendedMovie: List<MovieItem>) {
                     )
                 ) {
                     CoilImage(
-                        modifier = Modifier.height(190.dp).width(140.dp).cornerRadius(10)
+                        modifier = Modifier.size(135.dp, 170.dp).cornerRadius(10)
                             .clickable {
                                 navigator.navigate(NavigationScreen.MovieDetail.route.plus("/${item.id}"))
                             },
