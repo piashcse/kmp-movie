@@ -108,7 +108,7 @@ fun UiDetail(data: TvSeriesDetail) {
         CoilImage(
             imageModel = {
                 AppConstant.IMAGE_URL.plus(
-                    data.posterPath
+                    data.backdropPath
                 )
             },
             imageOptions = ImageOptions(
