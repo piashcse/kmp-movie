@@ -1,5 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
@@ -32,7 +31,6 @@ kotlin {
         binaries.executable()
     }
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -75,7 +73,6 @@ kotlin {
             implementation(libs.precompose)
             implementation(libs.landscapist.coil)
             implementation(libs.landscapist.animation)
-            implementation(libs.napier)
             implementation(libs.androidx.lifecycle)
             implementation(libs.compose.material3.windowSizeClass)
             implementation(libs.compose.material3.adaptive.navigation)
