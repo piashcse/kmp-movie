@@ -72,9 +72,9 @@ fun TvSeriesDetail(
     viewModel: TvSeriesDetailViewModel = viewModel { TvSeriesDetailViewModel() }
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
-    val movieDetail by viewModel.tvSeriesDetail.collectAsState()
+    val tvSeriesDetail by viewModel.tvSeriesDetail.collectAsState()
     val recommendedTvSeries by viewModel.recommendedTvSeries.collectAsState()
-    val creditTvSeries by viewModel.creditTvSeries.collectAsState()
+    val tvSeriesArtist by viewModel.creditTvSeries.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.tvSeriesDetail(seriesId)
@@ -92,13 +92,13 @@ fun TvSeriesDetail(
         if (isLoading) {
             ProgressIndicator()
         } else {
-            movieDetail?.let { UiDetail(it) }
+            tvSeriesDetail?.let { UiDetail(it) }
             Spacer(modifier = Modifier.height(10.dp))
             Column(modifier = Modifier.padding(start = 10.dp, end = 10.dp)) {
                 recommendedTvSeries.takeIf { it.isNotEmpty() }?.let {
                     RecommendedTVSeries(navigator, it)
                 }
-                creditTvSeries?.cast?.let {
+                tvSeriesArtist?.cast?.let {
                     ArtistAndCrew(navigator, it)
                 }
             }
@@ -127,7 +127,7 @@ fun UiDetail(data: TvSeriesDetail) {
                     url = AppConstant.IMAGE_URL + data.posterPath,
                     modifier = Modifier
                         .size(135.dp, 180.dp)
-                        .clip(RoundedCornerShape(10.dp))
+                        .cornerRadius(10)
                         .border(1.dp, Color.White, RoundedCornerShape(10.dp))
                         .shimmerBackground(RoundedCornerShape(5.dp))
                 )
@@ -221,7 +221,7 @@ fun RecommendedTVSeries(navigator: Navigator, recommendedMovie: List<TvSeriesIte
                             .cornerRadius(10)
                             .clickable {
                                 navigator.navigate(
-                                    NavigationScreen.MovieDetail.route.plus(
+                                    NavigationScreen.TvSeriesDetail.route.plus(
                                         "/${item.id}"
                                     )
                                 )
@@ -255,7 +255,7 @@ fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
                         url = AppConstant.IMAGE_URL + item.profilePath,
                         modifier = Modifier.padding(bottom = 4.dp)
                             .size(80.dp)
-                            .clip(RoundedCornerShape(40.dp))
+                            .cornerRadius(40)
                             .clickable {
                                 navigator?.navigate(
                                     NavigationScreen.ArtistDetail.route.plus("/${item.id}")
