@@ -2,7 +2,7 @@ package ui.tv_series.on_the_air
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.TvItem
+import data.model.TvSeriesItem
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import utils.network.UiState
 
 class OnTheAirTvSeriesViewModel : ViewModel() {
     private val repo = Repository()
-    private val _onTheAirTvSeriesResponse = MutableStateFlow<List<TvItem>>(arrayListOf())
+    private val _onTheAirTvSeriesResponse = MutableStateFlow<List<TvSeriesItem>>(arrayListOf())
     val onTheAirTvSeriesResponse get() = _onTheAirTvSeriesResponse.asStateFlow()
 
     private val _isLoading = MutableStateFlow<Boolean>(false)

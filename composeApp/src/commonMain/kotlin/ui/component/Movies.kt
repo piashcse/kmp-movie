@@ -23,7 +23,7 @@ import utils.AppConstant
 import utils.cornerRadius
 
 @Composable
-internal fun MovieList(listItems: List<MovieItem>, onclick: (id: Int) -> Unit) {
+internal fun Movies(listItems: List<MovieItem>, onclick: (id: Int) -> Unit) {
     LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 180.dp),
         modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp),
         content = {
@@ -36,7 +36,7 @@ internal fun MovieList(listItems: List<MovieItem>, onclick: (id: Int) -> Unit) {
                     CoilImage(
                         imageModel = {
                             AppConstant.IMAGE_URL.plus(
-                                it.poster_path
+                                it.posterPath
                             )
                         },
                         imageOptions = ImageOptions(

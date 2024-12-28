@@ -3,7 +3,7 @@ package ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.model.MovieItem
-import data.model.TvItem
+import data.model.TvSeriesItem
 import data.repository.Repository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -22,7 +22,7 @@ class AppViewModel : ViewModel() {
     private val repo = Repository()
     private val _movieSearchData = MutableStateFlow<List<MovieItem>>(arrayListOf())
     val movieSearchData get() = _movieSearchData.asStateFlow()
-    private val _tvSeriesSearchData = MutableStateFlow<List<TvItem>>(arrayListOf())
+    private val _tvSeriesSearchData = MutableStateFlow<List<TvSeriesItem>>(arrayListOf())
     val tvSeriesSearchData get() = _tvSeriesSearchData.asStateFlow()
 
     private val _isLoading = MutableStateFlow<Boolean>(false)

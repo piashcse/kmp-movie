@@ -1,17 +1,32 @@
 package data.model.artist
+
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
 @Serializable
 data class Cast(
+    @SerialName("adult")
     val adult: Boolean,
-    val cast_id: Int,
+    @SerialName("cast_id")
+    val castId: Int,
+    @SerialName("character")
     val character: String,
-    val credit_id: String,
+    @SerialName("credit_id")
+    val creditId: String,
+    @SerialName("gender")
     val gender: Int,
+    @SerialName("id")
     val id: Int,
-    val known_for_department: String,
+    @SerialName("known_for_department")
+    val knownForDepartment: String,
+    @SerialName("name")
     val name: String,
+    @SerialName("order")
     val order: Int,
-    val original_name: String,
+    @SerialName("original_name")
+    val originalName: String,
+    @SerialName("popularity")
     val popularity: Double,
-    val profile_path: String?
+    @SerialName("profile_path")
+    val profilePath: String?
 )

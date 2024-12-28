@@ -2,7 +2,7 @@ package ui.tv_series.airing_today
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.TvItem
+import data.model.TvSeriesItem
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ import utils.network.UiState
 
 class AiringTodayTvSeriesViewModel : ViewModel() {
     private val repo = Repository()
-    private val _airingTodayTvSeriesResponse = MutableStateFlow<List<TvItem>>(arrayListOf())
+    private val _airingTodayTvSeriesResponse = MutableStateFlow<List<TvSeriesItem>>(arrayListOf())
     val airingTodayTvSeriesResponse get() = _airingTodayTvSeriesResponse.asStateFlow()
 
     private val _isLoading = MutableStateFlow<Boolean>(false)

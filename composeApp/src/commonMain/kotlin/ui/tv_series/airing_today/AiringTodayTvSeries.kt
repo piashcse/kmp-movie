@@ -12,7 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
 import ui.component.ProgressIndicator
-import ui.component.TvItemList
+import ui.component.TvSeries
 
 @Composable
 fun AiringTodayTvSeries(
@@ -27,7 +27,7 @@ fun AiringTodayTvSeries(
     }
 
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        TvItemList(tvItems) { seriesId ->
+        TvSeries(tvItems) { seriesId ->
             navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))
         }
         if (isLoading) {
