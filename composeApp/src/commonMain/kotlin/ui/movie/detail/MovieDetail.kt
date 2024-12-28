@@ -254,7 +254,7 @@ fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
                 ) {
                     ImageLoad(
                         url = AppConstant.IMAGE_URL + item.profilePath,
-                        modifier = Modifier
+                        modifier = Modifier.padding(bottom = 4.dp)
                             .size(80.dp)
                             .clip(RoundedCornerShape(40.dp))
                             .clickable {
@@ -263,7 +263,7 @@ fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
                                 )
                             }
                     )
-                    Text(text = item.name, fontSize = 12.sp, color = FontColor)
+                    SubtitleSecondary(text = item.name)
                 }
             }
         }
