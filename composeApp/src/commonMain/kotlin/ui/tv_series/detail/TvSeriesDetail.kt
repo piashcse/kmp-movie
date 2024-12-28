@@ -247,13 +247,13 @@ fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
             items(cast) { item ->
                 Column(
                     modifier = Modifier
-                        .padding(end = 10.dp)
+                        .padding(end = 10.dp, bottom = 4.dp)
                         .width(80.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     ImageLoad(
                         url = AppConstant.IMAGE_URL + item.profilePath,
-                        modifier = Modifier
+                        modifier = Modifier.padding(bottom = 4.dp)
                             .size(80.dp)
                             .clip(RoundedCornerShape(40.dp))
                             .clickable {
@@ -262,7 +262,7 @@ fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
                                 )
                             }
                     )
-                    Text(text = item.name, fontSize = 12.sp, color = FontColor)
+                    SubtitleSecondary(text = item.name)
                 }
             }
         }
