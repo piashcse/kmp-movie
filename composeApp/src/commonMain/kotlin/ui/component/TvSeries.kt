@@ -18,12 +18,12 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
-import data.model.TvItem
+import data.model.TvSeriesItem
 import utils.AppConstant
 import utils.cornerRadius
 
 @Composable
-internal fun TvItemList(listItems: List<TvItem>, onclick: (id: Int) -> Unit) {
+internal fun TvSeries(listItems: List<TvSeriesItem>, onclick: (id: Int) -> Unit) {
     LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 180.dp),
         modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp),
         content = {

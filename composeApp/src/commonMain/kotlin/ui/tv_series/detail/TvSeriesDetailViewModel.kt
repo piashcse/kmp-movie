@@ -2,7 +2,7 @@ package ui.tv_series.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.TvItem
+import data.model.TvSeriesItem
 import data.model.tv_detail.TvSeriesDetail
 import data.model.tv_detail.credit.Credit
 import data.repository.Repository
@@ -19,7 +19,7 @@ class TvSeriesDetailViewModel : ViewModel() {
     private val _tvSeriesDetail = MutableStateFlow<TvSeriesDetail?>(null)
     val tvSeriesDetail get() = _tvSeriesDetail.asStateFlow()
 
-    private val _recommendedTvSeries = MutableStateFlow<List<TvItem>>(arrayListOf())
+    private val _recommendedTvSeries = MutableStateFlow<List<TvSeriesItem>>(arrayListOf())
     val recommendedTvSeries get() = _recommendedTvSeries.asStateFlow()
 
     private val _creditTvSeries = MutableStateFlow<Credit?>(null)

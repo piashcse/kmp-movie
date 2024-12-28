@@ -16,7 +16,7 @@
     <string name="rating">Rating</string>
     <string name="description">Description</string>
     <string name="release_date">Release Date</string>
-    <string name="duration">DURATION</string>
+    <string name="duration">Duration</string>
     <string name="language">Language</string>
     <string name="number_of_episode">Number of Episode</string>
     <string name="first_air">First Air</string>

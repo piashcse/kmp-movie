@@ -63,7 +63,7 @@ fun ArtistDetail(
                     modifier = Modifier.padding(bottom = 8.dp).height(250.dp).width(190.dp)
                         .cornerRadius(10),
                     imageModel = {
-                        AppConstant.IMAGE_URL.plus(it.profile_path)
+                        AppConstant.IMAGE_URL.plus(it.profilePath)
                     },
                     imageOptions = ImageOptions(
                         contentScale = ContentScale.Crop,
@@ -87,7 +87,7 @@ fun ArtistDetail(
                     )
                     PersonalInfo(
                         stringResource(Res.string.artist_detail),
-                        it.known_for_department
+                        it.knownForDepartment
                     )
                     PersonalInfo(
                         stringResource(Res.string.artist_detail),
@@ -98,7 +98,7 @@ fun ArtistDetail(
                     )
                     PersonalInfo(
                         stringResource(Res.string.place_of_birth),
-                        it.place_of_birth ?: ""
+                        it.placeOfBirth ?: ""
                     )
                 }
             }

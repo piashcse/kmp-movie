@@ -1,15 +1,18 @@
 package ui.tv_series.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -23,6 +26,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlurEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,7 +40,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
-import data.model.TvItem
+import data.model.TvSeriesItem
 import data.model.tv_detail.TvSeriesDetail
 import data.model.tv_detail.credit.Cast
 import kmp_movie.composeapp.generated.resources.Res
@@ -56,6 +63,7 @@ import ui.component.shimmerBackground
 import ui.component.text.SubtitlePrimary
 import ui.component.text.SubtitleSecondary
 import utils.AppConstant
+import utils.roundTo
 
 @Composable
 fun TvSeriesDetail(
@@ -75,27 +83,23 @@ fun TvSeriesDetail(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).background(
-            DefaultBackgroundColor
-        ), horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .background(DefaultBackgroundColor),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (isLoading) {
             ProgressIndicator()
         } else {
-            movieDetail?.let {
-                UiDetail(it)
-            }
-            Column(
-                modifier = Modifier.padding(
-                    start = 8.dp, end = 8.dp, top = 5.dp, bottom = 5.dp
-                )
-            ) {
-                recommendedTvSeries.let {
-                    if (it.isNotEmpty())
-                        RecommendedTvSeries(navigator, it)
+            movieDetail?.let { UiDetail(it) }
+            Spacer(modifier = Modifier.height(10.dp))
+            Column(modifier = Modifier.padding(start = 10.dp, end = 10.dp)) {
+                recommendedTvSeries.takeIf { it.isNotEmpty() }?.let {
+                    RecommendedTVSeries(navigator, it)
                 }
-                creditTvSeries?.let {
-                    credit(navigator, it.cast)
+                creditTvSeries?.cast?.let {
+                    ArtistAndCrew(navigator, it)
                 }
             }
         }
@@ -104,91 +108,98 @@ fun TvSeriesDetail(
 
 @Composable
 fun UiDetail(data: TvSeriesDetail) {
-    Column {
-        CoilImage(
-            imageModel = {
-                AppConstant.IMAGE_URL.plus(
-                    data.backdropPath
-                )
-            },
-            imageOptions = ImageOptions(
-                contentScale = ContentScale.Crop,
-                alignment = Alignment.Center,
-                contentDescription = "Movie item",
-                colorFilter = null,
-            ),
-            component = rememberImageComponent {
-                +CircularRevealPlugin(
-                    duration = 800
-                )
-            },
-            modifier = Modifier.fillMaxWidth().height(300.dp).shimmerBackground(
-                RoundedCornerShape(5.dp)
-            ),
+    Box {
+        ImageLoad(
+            url = AppConstant.IMAGE_URL + data.backdropPath,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(270.dp)
+                .graphicsLayer {
+                    alpha = 0.8f
+                    shadowElevation = 10f
+                    renderEffect = BlurEffect(15f, 15f)
+                }
+                .shimmerBackground(RoundedCornerShape(5.dp))
         )
-        Column(
-            modifier = Modifier.fillMaxSize().padding(start = 10.dp, end = 10.dp)
-        ) {
-            Text(
-                text = data.name,
-                modifier = Modifier.padding(top = 10.dp),
-                color = FontColor,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.W700,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp, top = 10.dp)
-            ) {
+        Column(modifier = Modifier.padding(start = 10.dp, top = 200.dp, end = 10.dp)) {
+            Row {
+                ImageLoad(
+                    url = AppConstant.IMAGE_URL + data.posterPath,
+                    modifier = Modifier
+                        .size(135.dp, 180.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .border(1.dp, Color.White, RoundedCornerShape(10.dp))
+                        .shimmerBackground(RoundedCornerShape(5.dp))
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp)
+                        .padding(start = 10.dp),
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    Text(
+                        text = data.name,
+                        color = FontColor,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        Column(Modifier.weight(1f)) {
+                            SubtitlePrimary(
+                                text = stringResource(Res.string.number_of_episode)
+                            )
+                            SubtitleSecondary(
+                                text = data.numberOfEpisodes.toString()
+                            )
+                        }
+                        Column(Modifier.weight(1f)) {
+                            SubtitlePrimary(
+                                text = stringResource(Res.string.first_air)
+                            )
+                            SubtitleSecondary(
+                                text = data.firstAirDate
+                            )
+                        }
+                    }
+                    Row(modifier = Modifier.padding(top = 4.dp)) {
+                        Column(Modifier.weight(1f)) {
+                            SubtitlePrimary(
+                                text = stringResource(Res.string.language)
+                            )
+                            SubtitleSecondary(
+                                text = data.originalLanguage
+                            )
+                        }
+                        Column(Modifier.weight(1f)) {
+                            SubtitlePrimary(
+                                text = stringResource(Res.string.rating)
+                            )
+                            SubtitleSecondary(
+                                text = data.voteAverage.roundTo(1).toString()
+                            )
+                        }
+                    }
 
-                Column(Modifier.weight(1f)) {
-                    SubtitlePrimary(
-                        text = data.originalLanguage,
-                    )
-                    SubtitleSecondary(
-                        text =  stringResource(Res.string.language)
-                    )
-                }
-                Column(Modifier.weight(1f)) {
-                    SubtitlePrimary(
-                        text = data.voteAverage.toString(),
-                    )
-                    SubtitleSecondary(
-                        text =  stringResource(Res.string.rating)
-                    )
-                }
-                Column(Modifier.weight(1f)) {
-                    SubtitlePrimary(
-                        text = data.numberOfEpisodes.toString()
-                    )
-                    SubtitleSecondary(
-                        text =  stringResource(Res.string.number_of_episode)
-                    )
-                }
-                Column(Modifier.weight(1f)) {
-                    SubtitlePrimary(
-                        text = data.firstAirDate
-                    )
-                    SubtitleSecondary(
-                        text =  stringResource(Res.string.first_air)
-                    )
                 }
             }
             Text(
+                modifier = Modifier.padding(top = 8.dp),
                 text = stringResource(Res.string.description),
                 color = FontColor,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            ExpandableText(text = data.overview)
+            ExpandableText(text = data.overview, maxLines = 2)
         }
     }
 }
 
-
 @Composable
-fun RecommendedTvSeries(navigator: Navigator, recommendedMovie: List<TvItem>) {
+fun RecommendedTVSeries(navigator: Navigator, recommendedMovie: List<TvSeriesItem>) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
             text = stringResource(Res.string.similar_movie),
@@ -196,40 +207,35 @@ fun RecommendedTvSeries(navigator: Navigator, recommendedMovie: List<TvItem>) {
             fontSize = 17.sp,
             fontWeight = FontWeight.SemiBold
         )
-        LazyRow(modifier = Modifier.fillMaxHeight()) {
-            items(recommendedMovie, itemContent = { item: TvItem ->
+        LazyRow(modifier = Modifier.fillMaxWidth()) {
+            items(recommendedMovie) { item ->
                 Column(
                     modifier = Modifier.padding(
                         start = 0.dp, end = 8.dp, top = 5.dp, bottom = 5.dp
                     )
                 ) {
-                    CoilImage(
-                        modifier = Modifier.height(190.dp).width(140.dp).cornerRadius(10)
+                    ImageLoad(
+                        url = AppConstant.IMAGE_URL + item.posterPath,
+                        modifier = Modifier
+                            .size(135.dp, 180.dp)
+                            .cornerRadius(10)
                             .clickable {
-                                navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/${item.id}"))
-                            },
-                        imageModel = { AppConstant.IMAGE_URL.plus(item.posterPath) },
-                        imageOptions = ImageOptions(
-                            contentScale = ContentScale.Crop,
-                            alignment = Alignment.Center,
-                            contentDescription = "Similar movie",
-                            colorFilter = null,
-                        ),
-                        component = rememberImageComponent {
-                            +CircularRevealPlugin(
-                                duration = 800
-                            )
-                        },
+                                navigator.navigate(
+                                    NavigationScreen.MovieDetail.route.plus(
+                                        "/${item.id}"
+                                    )
+                                )
+                            }
+
                     )
                 }
-            })
-
+            }
         }
     }
 }
 
 @Composable
-fun credit(navigator: Navigator?, cast: List<Cast>) {
+fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
             text = stringResource(Res.string.cast),
@@ -237,40 +243,46 @@ fun credit(navigator: Navigator?, cast: List<Cast>) {
             fontSize = 17.sp,
             fontWeight = FontWeight.SemiBold
         )
-        LazyRow(modifier = Modifier.fillMaxHeight()) {
-            items(cast, itemContent = { item ->
+        LazyRow(modifier = Modifier.fillMaxWidth()) {
+            items(cast) { item ->
                 Column(
-                    modifier = Modifier.padding(
-                        start = 0.dp, end = 10.dp, top = 5.dp, bottom = 5.dp
-                    ),
-                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .padding(end = 10.dp)
+                        .width(80.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    CoilImage(
-                        modifier = Modifier.padding(bottom = 5.dp).height(80.dp).width(80.dp)
-                            .cornerRadius(40).clickable {
+                    ImageLoad(
+                        url = AppConstant.IMAGE_URL + item.profilePath,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(RoundedCornerShape(40.dp))
+                            .clickable {
                                 navigator?.navigate(
-                                    NavigationScreen.ArtistDetail.route.plus(
-                                        "/${item.id}"
-                                    )
+                                    NavigationScreen.ArtistDetail.route.plus("/${item.id}")
                                 )
-                            },
-                        imageModel = { AppConstant.IMAGE_URL.plus(item.profilePath) },
-                        imageOptions = ImageOptions(
-                            contentScale = ContentScale.Crop,
-                            alignment = Alignment.Center,
-                            contentDescription = "artist and crew",
-                            colorFilter = null,
-                        ),
-                        component = rememberImageComponent {
-                            +CircularRevealPlugin(
-                                duration = 800
-                            )
-                        },
+                            }
                     )
-                    SubtitleSecondary(text = item.name)
+                    Text(text = item.name, fontSize = 12.sp, color = FontColor)
                 }
-            })
+            }
         }
     }
+}
+
+@Composable
+fun ImageLoad(url: String, modifier: Modifier = Modifier) {
+    CoilImage(
+        imageModel = { url },
+        imageOptions = ImageOptions(
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.Center,
+            contentDescription = "Image"
+        ),
+        component = rememberImageComponent {
+            +CircularRevealPlugin(
+                duration = 800
+            )
+        },
+        modifier = modifier.shimmerBackground(RoundedCornerShape(5.dp)),
+    )
 }

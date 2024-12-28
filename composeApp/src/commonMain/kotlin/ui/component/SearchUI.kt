@@ -26,7 +26,7 @@ import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
 import data.model.MovieItem
-import data.model.TvItem
+import data.model.TvSeriesItem
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.rating_
 import moe.tlaster.precompose.navigation.Navigator
@@ -68,7 +68,7 @@ fun SearchForMovie(
                 CoilImage(
                     imageModel = {
                         AppConstant.IMAGE_URL.plus(
-                            item.backdrop_path
+                            item.backdropPath
                         )
                     },
                     imageOptions = ImageOptions(
@@ -97,14 +97,14 @@ fun SearchForMovie(
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = item.release_date,
+                        text = item.releaseDate,
                         color = FontColor,
                         fontSize = 16.sp,
                         modifier = Modifier.padding(start = 8.dp)
                     )
                     Text(
                         text = "${stringResource(Res.string.rating_)} ${
-                            item.vote_average.roundTo(
+                            item.voteAverage.roundTo(
                                 1
                             )
                         }",
@@ -121,7 +121,7 @@ fun SearchForMovie(
 @Composable
 fun SearchForTVSeries(
     navController: Navigator,
-    searchData: List<TvItem>,
+    searchData: List<TvSeriesItem>,
     itemClick: () -> Unit
 ) {
     LazyColumn(

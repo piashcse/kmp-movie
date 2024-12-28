@@ -18,7 +18,7 @@ import theme.Teal200
 @Composable
 fun ExpandableText(
     text: String,
-    minimizedMaxLines: Int = 3 // Default number of lines to show when collapsed
+    maxLines: Int = 3 // Default number of lines to show when collapsed
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -29,7 +29,7 @@ fun ExpandableText(
     ) {
         Text(
             text = text,
-            maxLines = if (isExpanded) Int.MAX_VALUE else minimizedMaxLines,
+            maxLines = if (isExpanded) Int.MAX_VALUE else maxLines,
             overflow = TextOverflow.Ellipsis,
         )
 
