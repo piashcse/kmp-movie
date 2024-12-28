@@ -75,7 +75,7 @@ fun MovieDetail(
     val isLoading by viewModel.isLoading.collectAsState()
     val movieDetail by viewModel.movieDetail.collectAsState()
     val recommendMovie by viewModel.recommendedMovie.collectAsState()
-    val movieCredit by viewModel.movieCredit.collectAsState()
+    val movieArtist by viewModel.movieCredit.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.movieDetail(movieId)
@@ -99,7 +99,7 @@ fun MovieDetail(
                 recommendMovie.takeIf { it.isNotEmpty() }?.let {
                     RecommendedMovie(navigator, it)
                 }
-                movieCredit?.cast?.let {
+                movieArtist?.cast?.let {
                     ArtistAndCrew(navigator, it)
                 }
             }
@@ -128,7 +128,7 @@ fun UiDetail(data: MovieDetail) {
                     url = AppConstant.IMAGE_URL + data.posterPath,
                     modifier = Modifier
                         .size(135.dp, 180.dp)
-                        .clip(RoundedCornerShape(10.dp))
+                        .cornerRadius(10)
                         .border(1.dp, Color.White, RoundedCornerShape(10.dp))
                         .shimmerBackground(RoundedCornerShape(5.dp))
                 )
@@ -256,7 +256,7 @@ fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
                         url = AppConstant.IMAGE_URL + item.profilePath,
                         modifier = Modifier.padding(bottom = 4.dp)
                             .size(80.dp)
-                            .clip(RoundedCornerShape(40.dp))
+                            .cornerRadius(40)
                             .clickable {
                                 navigator?.navigate(
                                     NavigationScreen.ArtistDetail.route.plus("/${item.id}")
