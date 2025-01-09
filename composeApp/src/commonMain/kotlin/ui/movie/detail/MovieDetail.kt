@@ -87,7 +87,8 @@ fun MovieDetail(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(DefaultBackgroundColor),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
         if (isLoading) {
             ProgressIndicator()
