@@ -43,62 +43,58 @@ fun ArtistDetail(
     personId: Int,
     viewModel: ArtistDetailViewModel = viewModel { ArtistDetailViewModel() }
 ) {
-    val artistDetailData by viewModel.artistDetailResponse.collectAsState()
-    val progressBar by viewModel.isLoading.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(true) {
-        viewModel.artistDetail(personId)
+    LaunchedEffect(personId) {
+        viewModel.fetchArtistDetail(personId)
     }
+
     Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).background(
-            DefaultBackgroundColor
-        ).padding(start = 8.dp, top = 8.dp, end = 8.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .background(DefaultBackgroundColor)
+            .padding(8.dp)
     ) {
-        if (progressBar) {
+        if (uiState.isLoading) {
             ProgressIndicator()
         }
-        artistDetailData?.let {
+
+        uiState.artistDetail?.let { artist ->
             Row {
                 CoilImage(
-                    modifier = Modifier.padding(bottom = 8.dp).height(250.dp).width(190.dp)
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .height(250.dp)
+                        .width(190.dp)
                         .cornerRadius(10),
-                    imageModel = {
-                        AppConstant.IMAGE_URL.plus(it.profilePath)
-                    },
+                    imageModel = { AppConstant.IMAGE_URL + artist.profilePath },
                     imageOptions = ImageOptions(
                         contentScale = ContentScale.Crop,
                         alignment = Alignment.Center,
-                        contentDescription = "artist image",
-                        colorFilter = null,
+                        contentDescription = "artist image"
                     ),
                     component = rememberImageComponent {
-                        +CircularRevealPlugin(
-                            duration = 800
-                        )
+                        +CircularRevealPlugin(duration = 800)
                     },
                 )
                 Column {
                     Text(
                         modifier = Modifier.padding(start = 8.dp),
-                        text = artistDetailData?.name ?: "",
+                        text = artist.name ?: "",
                         color = FontColor,
                         fontSize = 26.sp,
                         fontWeight = FontWeight.Medium
                     )
                     PersonalInfo(
                         stringResource(Res.string.artist_detail),
-                        it.knownForDepartment
+                        artist.knownForDepartment
                     )
-                    PersonalInfo(
-                        stringResource(Res.string.artist_detail),
-                        it.gender.toString()
-                    )
-                    PersonalInfo(
-                        stringResource(Res.string.birth_day), it.birthday ?: ""
-                    )
+                    PersonalInfo(stringResource(Res.string.artist_detail), artist.gender.toString())
+                    PersonalInfo(stringResource(Res.string.birth_day), artist.birthday ?: "")
                     PersonalInfo(
                         stringResource(Res.string.place_of_birth),
-                        it.placeOfBirth ?: ""
+                        artist.placeOfBirth ?: ""
                     )
                 }
             }
@@ -109,9 +105,7 @@ fun ArtistDetail(
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium
             )
-            Text(
-                text = it.biography
-            )
+            Text(text = artist.biography ?: "")
         }
     }
 }
@@ -125,8 +119,6 @@ fun PersonalInfo(title: String, info: String) {
             fontSize = 13.sp,
             fontWeight = FontWeight.SemiBold
         )
-        Text(
-            text = info, color = FontColor, fontSize = 16.sp
-        )
+        Text(text = info, color = FontColor, fontSize = 16.sp)
     }
 }

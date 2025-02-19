@@ -5,38 +5,42 @@ import androidx.lifecycle.viewModelScope
 import data.model.MovieItem
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import utils.network.UiState
 
 class UpcomingMovieViewModel : ViewModel() {
-    private val repo = Repository()
-    private val _upComingMovieResponse = MutableStateFlow<List<MovieItem>>(arrayListOf())
-    val upComingMovieResponse get() = _upComingMovieResponse.asStateFlow()
 
-    private val _isLoading = MutableStateFlow<Boolean>(false)
-    val isLoading get() = _isLoading.asStateFlow()
+    private val repo = Repository() // Ensure Singleton or pass manually
 
-    fun upComing(page: Int) {
+    private val _uiState = MutableStateFlow(MovieUiState())
+    val uiState: StateFlow<MovieUiState> get() = _uiState.asStateFlow()
+
+    fun fetchUpcomingMovie(page: Int) {
         viewModelScope.launch {
-            repo.upComingMovie(page).onEach {
-                when (it) {
-                    is UiState.Loading -> {
-                        _isLoading.value = true
-                    }
+            repo.upComingMovie(page).collect { result ->
+                handleStateUpdate(result) { state, data -> state.copy(movieList = data) }
+            }
+        }
+    }
 
-                    is UiState.Success -> {
-                        _upComingMovieResponse.value = it.data
-                        _isLoading.value = false
-                    }
-
-                    is UiState.Error -> {
-                        _isLoading.value = false
-                    }
-                }
-            }.launchIn(viewModelScope)
+    private fun <T> handleStateUpdate(
+        result: UiState<T>,
+        stateUpdater: (MovieUiState, T?) -> MovieUiState
+    ) {
+        _uiState.update { currentState ->
+            when (result) {
+                is UiState.Loading -> currentState.copy(isLoading = true)
+                is UiState.Success -> stateUpdater(currentState, result.data).copy(isLoading = false)
+                is UiState.Error -> currentState.copy(isLoading = false, errorMessage = result.exception.message)
+            }
         }
     }
 }
+data class MovieUiState(
+    val movieList: List<MovieItem>? = emptyList(),
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null
+)

@@ -18,18 +18,20 @@ fun TopRatedTvSeries(
     navigator: Navigator,
     viewModel: TopRatedTvSeriesViewModel = androidx.lifecycle.viewmodel.compose.viewModel { TopRatedTvSeriesViewModel() }
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val tvItems by viewModel.topRatedTvSeriesResponse.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.upComingTvSeries(1)
+        viewModel.fetchTopRatedTvSeries(1)
     }
 
+
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        TvSeries(tvItems) { seriesId ->
-            navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))
+        uiState.tvSeriesList?.let {
+            TvSeries(it) { seriesId ->
+                navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))
+            }
         }
-        if (isLoading) {
+        if (uiState.isLoading) {
             ProgressIndicator()
         }
     }

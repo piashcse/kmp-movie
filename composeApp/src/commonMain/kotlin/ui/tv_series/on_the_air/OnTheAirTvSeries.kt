@@ -19,18 +19,19 @@ fun OnTheAirTvSeries(
     navigator: Navigator,
     viewModel: OnTheAirTvSeriesViewModel = viewModel { OnTheAirTvSeriesViewModel() }
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val tvItems by viewModel.onTheAirTvSeriesResponse.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.onTheAirTvSeries(1)
+        viewModel.fetchOnTheAirTvSeries(1)
     }
 
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        TvSeries(tvItems) { seriesId ->
-            navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))
+        uiState.tvSeriesList?.let {
+            TvSeries(it) { seriesId ->
+                navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))
+            }
         }
-        if (isLoading) {
+        if (uiState.isLoading) {
             ProgressIndicator()
         }
     }

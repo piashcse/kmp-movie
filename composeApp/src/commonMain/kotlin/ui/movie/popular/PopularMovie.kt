@@ -18,18 +18,19 @@ import ui.component.ProgressIndicator
 fun PopularMovie(
     navigator: Navigator, viewModel: PopularMovieViewModel = viewModel { PopularMovieViewModel() }
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val movies by viewModel.popularMovieResponse.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.popularMovie(1)
+        viewModel.fetchPopularMovie(1)
     }
 
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Movies(movies.toList()) { movieId ->
-            navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
+        uiState.movieList?.let {
+            Movies(it) { movieId ->
+                navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
+            }
         }
-        if (isLoading) {
+        if (uiState.isLoading) {
             ProgressIndicator()
         }
     }

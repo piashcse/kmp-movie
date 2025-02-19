@@ -113,7 +113,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun topRatedTvSeries(page: Int) = flow {
+    suspend fun popularTvSeries(page: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.popularTvSeries(page)
@@ -123,7 +123,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun upcomingTvSeries(page: Int) = flow {
+    suspend fun topRatedTvSeries(page: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.topRatedTvSeries(page)
