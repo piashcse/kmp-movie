@@ -10,7 +10,7 @@ compose-plugin = "1.7.3"
 kotlin = "2.1.10"
 ktor-client = "3.1.0"
 precompose = "1.6.2"
-landScapist = "2.4.6"
+landScapist = "2.4.7"
 androidx-lifecycle ="2.8.0"
 buildConfig = "5.5.1"
 
