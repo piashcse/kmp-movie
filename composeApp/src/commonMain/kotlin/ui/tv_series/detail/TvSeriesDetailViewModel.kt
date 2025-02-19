@@ -7,88 +7,72 @@ import data.model.tv_detail.TvSeriesDetail
 import data.model.tv_detail.credit.Credit
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import utils.network.UiState
 
 class TvSeriesDetailViewModel : ViewModel() {
     private val repo = Repository()
 
-    private val _tvSeriesDetail = MutableStateFlow<TvSeriesDetail?>(null)
-    val tvSeriesDetail get() = _tvSeriesDetail.asStateFlow()
+    private val _uiState = MutableStateFlow(TvSeriesDetailUiState())
+    val uiState: StateFlow<TvSeriesDetailUiState> get() = _uiState.asStateFlow()
 
-    private val _recommendedTvSeries = MutableStateFlow<List<TvSeriesItem>>(arrayListOf())
-    val recommendedTvSeries get() = _recommendedTvSeries.asStateFlow()
-
-    private val _creditTvSeries = MutableStateFlow<Credit?>(null)
-    val creditTvSeries get() = _creditTvSeries.asStateFlow()
-
-
-    private val _isLoading = MutableStateFlow<Boolean>(false)
-    val isLoading get() = _isLoading.asStateFlow()
-
-    fun tvSeriesDetail(seriesId: Int) {
+    fun fetchTvSeriesDetails(seriesId: Int) {
         viewModelScope.launch {
-            repo.tvSeriesDetail(seriesId).onEach {
-                when (it) {
-                    is UiState.Loading -> {
-                        _isLoading.value = true
-                    }
+            _uiState.update { it.copy(isLoading = true) }
 
-                    is UiState.Success -> {
-                        _tvSeriesDetail.value = it.data
-                        _isLoading.value = false
-                    }
-
-                    is UiState.Error -> {
-                        _isLoading.value = false
-                    }
-                }
-            }.launchIn(viewModelScope)
+            launch { fetchTvSeriesDetail(seriesId) }
+            launch { fetchRecommendedTvSeries(seriesId) }
+            launch { fetchCreditTvSeries(seriesId) }
         }
     }
 
-    fun recommendedTvSeries(seriesId: Int) {
-        viewModelScope.launch {
-            repo.recommendedTvSeries(seriesId).onEach {
-                when (it) {
-                    is UiState.Loading -> {
-                        _isLoading.value = true
-                    }
-
-                    is UiState.Success -> {
-                        _recommendedTvSeries.value = it.data
-                        _isLoading.value = false
-                    }
-
-                    is UiState.Error -> {
-                        _isLoading.value = false
-                    }
+    private suspend fun fetchTvSeriesDetail(seriesId: Int) {
+        repo.tvSeriesDetail(seriesId).collect { result ->
+            _uiState.update {
+                when (result) {
+                    is UiState.Loading -> it.copy(isLoading = true)
+                    is UiState.Success -> it.copy(tvSeriesDetail = result.data, isLoading = false)
+                    is UiState.Error -> it.copy(isLoading = false)
                 }
-            }.launchIn(viewModelScope)
+            }
         }
     }
 
-    fun creditTvSeries(seriesId: Int) {
-        viewModelScope.launch {
-            repo.creditTvSeries(seriesId).onEach {
-                when (it) {
-                    is UiState.Loading -> {
-                        _isLoading.value = true
-                    }
+    private suspend fun fetchRecommendedTvSeries(seriesId: Int) {
+        repo.recommendedTvSeries(seriesId).collect { result ->
+            _uiState.update {
+                when (result) {
+                    is UiState.Loading -> it.copy(isLoading = true)
+                    is UiState.Success -> it.copy(
+                        recommendedTvSeries = result.data,
+                        isLoading = false
+                    )
 
-                    is UiState.Success -> {
-                        _creditTvSeries.value = it.data
-                        _isLoading.value = false
-                    }
-
-                    is UiState.Error -> {
-                        _isLoading.value = false
-                    }
+                    is UiState.Error -> it.copy(isLoading = false)
                 }
-            }.launchIn(viewModelScope)
+            }
+        }
+    }
+
+    private suspend fun fetchCreditTvSeries(seriesId: Int) {
+        repo.creditTvSeries(seriesId).collect { result ->
+            _uiState.update {
+                when (result) {
+                    is UiState.Loading -> it.copy(isLoading = true)
+                    is UiState.Success -> it.copy(creditTvSeries = result.data, isLoading = false)
+                    is UiState.Error -> it.copy(isLoading = false)
+                }
+            }
         }
     }
 }
+
+data class TvSeriesDetailUiState(
+    val isLoading: Boolean = false,
+    val tvSeriesDetail: TvSeriesDetail? = null,
+    val recommendedTvSeries: List<TvSeriesItem> = emptyList(),
+    val creditTvSeries: Credit? = null
+)

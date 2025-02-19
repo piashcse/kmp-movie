@@ -5,38 +5,42 @@ import androidx.lifecycle.viewModelScope
 import data.model.TvSeriesItem
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import utils.network.UiState
 
 class PopularTvSeriesViewModel : ViewModel() {
-    private val repo = Repository()
-    private val _popularTvSeriesResponse = MutableStateFlow<List<TvSeriesItem>>(arrayListOf())
-    val popularTvSeriesResponse get() = _popularTvSeriesResponse.asStateFlow()
 
-    private val _isLoading = MutableStateFlow<Boolean>(false)
-    val isLoading get() = _isLoading.asStateFlow()
+    private val repo = Repository() // Ensure Singleton or pass manually
 
-    fun popularTvSeries(page: Int) {
+    private val _uiState = MutableStateFlow(TvSeriesUiState())
+    val uiState: StateFlow<TvSeriesUiState> get() = _uiState.asStateFlow()
+
+    fun fetchPopularTvSeries(page: Int) {
         viewModelScope.launch {
-            repo.topRatedTvSeries(page).onEach {
-                when (it) {
-                    is UiState.Loading -> {
-                        _isLoading.value = true
-                    }
+            repo.popularTvSeries(page).collect { result ->
+                handleStateUpdate(result) { state, data -> state.copy(tvSeriesList = data) }
+            }
+        }
+    }
 
-                    is UiState.Success -> {
-                        _popularTvSeriesResponse.value = it.data
-                        _isLoading.value = false
-                    }
-
-                    is UiState.Error -> {
-                        _isLoading.value = false
-                    }
-                }
-            }.launchIn(viewModelScope)
+    private fun <T> handleStateUpdate(
+        result: UiState<T>,
+        stateUpdater: (TvSeriesUiState, T?) -> TvSeriesUiState
+    ) {
+        _uiState.update { currentState ->
+            when (result) {
+                is UiState.Loading -> currentState.copy(isLoading = true)
+                is UiState.Success -> stateUpdater(currentState, result.data).copy(isLoading = false)
+                is UiState.Error -> currentState.copy(isLoading = false, errorMessage = result.exception.message)
+            }
         }
     }
 }
+data class TvSeriesUiState(
+    val tvSeriesList: List<TvSeriesItem>? = emptyList(),
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null
+)

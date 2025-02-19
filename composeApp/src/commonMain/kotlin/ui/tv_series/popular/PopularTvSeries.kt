@@ -19,18 +19,20 @@ fun PopularTvSeries(
     navigator: Navigator,
     viewModel: PopularTvSeriesViewModel = viewModel { PopularTvSeriesViewModel() }
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val tvItems by viewModel.popularTvSeriesResponse.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.popularTvSeries(1)
+        viewModel.fetchPopularTvSeries(1)
     }
 
+
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        TvSeries(tvItems) { seriesId ->
-            navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))
+        uiState.tvSeriesList?.let {
+            TvSeries(it) { seriesId ->
+                navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))
+            }
         }
-        if (isLoading) {
+        if (uiState.isLoading) {
             ProgressIndicator()
         }
     }

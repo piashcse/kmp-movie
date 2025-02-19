@@ -71,15 +71,9 @@ fun MovieDetail(
     movieId: Int,
     viewModel: MovieDetailViewModel = viewModel { MovieDetailViewModel() }
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val movieDetail by viewModel.movieDetail.collectAsState()
-    val recommendMovie by viewModel.recommendedMovie.collectAsState()
-    val movieArtist by viewModel.movieCredit.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.movieDetail(movieId)
-        viewModel.recommendedMovie(movieId)
-        viewModel.movieCredit(movieId)
+    val uiState by viewModel.uiState.collectAsState()
+    LaunchedEffect(movieId) {
+        viewModel.fetchMovieDetails(movieId)
     }
 
     Column(
@@ -90,16 +84,16 @@ fun MovieDetail(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        if (isLoading) {
+        if (uiState.isLoading) {
             ProgressIndicator()
         } else {
-            movieDetail?.let { UiDetail(it) }
+            uiState.movieDetail?.let { UiDetail(it) }
             Spacer(modifier = Modifier.height(10.dp))
-            Column(modifier = Modifier.padding(start = 10.dp, end = 10.dp)) {
-                recommendMovie.takeIf { it.isNotEmpty() }?.let {
-                    RecommendedMovie(navigator, it)
+            Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+                if (uiState.recommendedMovies.isNotEmpty()) {
+                    RecommendedMovie(navigator, uiState.recommendedMovies)
                 }
-                movieArtist?.cast?.let {
+                uiState.movieCredit?.cast?.let {
                     ArtistAndCrew(navigator, it)
                 }
             }

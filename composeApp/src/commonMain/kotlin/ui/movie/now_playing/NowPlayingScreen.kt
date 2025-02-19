@@ -19,18 +19,19 @@ fun NowPlayingScreen(
     navigator: Navigator,
     viewModel: NowPlayingViewModel = viewModel { NowPlayingViewModel() }
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val movies by viewModel.nowPlayingResponse.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.nowPlaying(1)
+        viewModel.fetchNowPlayingMovie(1)
     }
 
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Movies(movies) { movieId ->
-            navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
+        uiState.movieList?.let {
+            Movies(it) { movieId ->
+                navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
+            }
         }
-        if (isLoading) {
+        if (uiState.isLoading) {
             ProgressIndicator()
         }
     }

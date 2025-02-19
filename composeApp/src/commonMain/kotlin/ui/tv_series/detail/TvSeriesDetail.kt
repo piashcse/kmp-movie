@@ -70,15 +70,10 @@ fun TvSeriesDetail(
     seriesId: Int,
     viewModel: TvSeriesDetailViewModel = viewModel { TvSeriesDetailViewModel() }
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val tvSeriesDetail by viewModel.tvSeriesDetail.collectAsState()
-    val recommendedTvSeries by viewModel.recommendedTvSeries.collectAsState()
-    val tvSeriesArtist by viewModel.creditTvSeries.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.tvSeriesDetail(seriesId)
-        viewModel.recommendedTvSeries(seriesId)
-        viewModel.creditTvSeries(seriesId)
+    LaunchedEffect(seriesId) {
+        viewModel.fetchTvSeriesDetails(seriesId)
     }
 
     Column(
@@ -89,23 +84,24 @@ fun TvSeriesDetail(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        if (isLoading) {
-            ProgressIndicator()
-        } else {
-            tvSeriesDetail?.let { UiDetail(it) }
-            Spacer(modifier = Modifier.height(10.dp))
-            Column(modifier = Modifier.padding(start = 10.dp, end = 10.dp)) {
-                recommendedTvSeries.takeIf { it.isNotEmpty() }?.let {
-                    RecommendedTVSeries(navigator, it)
-                }
-                tvSeriesArtist?.cast?.let {
-                    ArtistAndCrew(navigator, it)
+        when {
+            uiState.isLoading -> ProgressIndicator()
+            uiState.tvSeriesDetail != null -> {
+                uiState.tvSeriesDetail?.let { UiDetail(it) }
+                Spacer(modifier = Modifier.height(10.dp))
+                Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+                    uiState.recommendedTvSeries.takeIf { it.isNotEmpty() }?.let {
+                        RecommendedTVSeries(navigator, it)
+                    }
+                    uiState.creditTvSeries?.cast?.let {
+                        ArtistAndCrew(navigator, it)
+                    }
                 }
             }
+            else -> Text("Failed to load TV series details.", color = Color.Red)
         }
     }
 }
-
 @Composable
 fun UiDetail(data: TvSeriesDetail) {
     Box {
