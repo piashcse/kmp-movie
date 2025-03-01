@@ -1,12 +1,16 @@
 package ui.movie.artist_detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -25,21 +29,27 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
+import data.model.artist.ArtistMovie
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.artist_detail
+import kmp_movie.composeapp.generated.resources.artist_movies
 import kmp_movie.composeapp.generated.resources.biography
 import kmp_movie.composeapp.generated.resources.birth_day
 import kmp_movie.composeapp.generated.resources.place_of_birth
+import moe.tlaster.precompose.navigation.Navigator
+import navigation.NavigationScreen
 import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.SecondaryFontColor
 import theme.cornerRadius
+import ui.component.ExpandableText
 import ui.component.ProgressIndicator
 import utils.AppConstant
 
 @Composable
 fun ArtistDetail(
+    navigator: Navigator,
     personId: Int,
     viewModel: ArtistDetailViewModel = viewModel { ArtistDetailViewModel() }
 ) {
@@ -105,7 +115,16 @@ fun ArtistDetail(
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium
             )
-            Text(text = artist.biography ?: "")
+            ExpandableText(text = artist.biography, maxLines = 12)
+            uiState.artistMovies?.let {
+                ArtistMoviesAndTvShows(it) { item ->
+                    if (item.mediaType == "movie") {
+                        navigator.navigate(NavigationScreen.MovieDetail.route + "/${item.id}")
+                    } else {
+                        navigator.navigate(NavigationScreen.TvSeriesDetail.route + "/${item.id}")
+                    }
+                }
+            }
         }
     }
 }
@@ -120,5 +139,48 @@ fun PersonalInfo(title: String, info: String) {
             fontWeight = FontWeight.SemiBold
         )
         Text(text = info, color = FontColor, fontSize = 16.sp)
+    }
+}
+
+@Composable
+fun ArtistMoviesAndTvShows(artistMovies: List<ArtistMovie>, onMovieClick: (ArtistMovie) -> Unit) {
+    Column(modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)) {
+        if (artistMovies.isNotEmpty()) {
+            Text(
+                text = stringResource(Res.string.artist_movies),
+                color = FontColor,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+        LazyRow(modifier = Modifier.fillMaxHeight()) {
+            items(artistMovies, itemContent = { item ->
+                Column(
+                    modifier = Modifier.padding(
+                        start = 0.dp, end = 8.dp, top = 5.dp, bottom = 5.dp
+                    )
+                ) {
+                    CoilImage(
+                        modifier = Modifier
+                            .height(180.dp)
+                            .width(135.dp)
+                            .cornerRadius(10)
+                            .clickable {
+                                onMovieClick(item)
+                            },
+                        imageModel = { AppConstant.IMAGE_URL.plus(item.posterPath) },
+                        imageOptions = ImageOptions(
+                            contentScale = ContentScale.Crop,
+                            alignment = Alignment.Center,
+                        ),
+                        component = rememberImageComponent {
+                            +CircularRevealPlugin(
+                                duration = 800
+                            )
+                        },
+                    )
+                }
+            })
+        }
     }
 }

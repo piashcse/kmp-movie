@@ -2,9 +2,9 @@ package data.remote
 
 import data.model.BaseModel
 import data.model.BaseModelTV
-import data.model.BaseModelV2
 import data.model.artist.Artist
 import data.model.artist.ArtistDetail
+import data.model.artist.ArtistMovies
 import data.model.movie_detail.MovieDetail
 import data.model.tv_detail.TvSeriesDetail
 import data.model.tv_detail.credit.Credit
@@ -16,11 +16,11 @@ interface ApiInterface {
 
     suspend fun popularMovieList(
         page: Int
-    ): BaseModelV2
+    ): BaseModel
 
     suspend fun topRatedMovieList(
         page: Int
-    ): BaseModelV2
+    ): BaseModel
 
     suspend fun upcomingMovieList(
         page: Int
@@ -32,11 +32,11 @@ interface ApiInterface {
 
     suspend fun movieSearch(
         searchKey: String
-    ): BaseModelV2
+    ): BaseModel
 
     suspend fun recommendedMovie(
         movieId: Int
-    ): BaseModelV2
+    ): BaseModel
     suspend fun movieCredit(
         movieId: Int
     ): Artist
@@ -75,5 +75,9 @@ interface ApiInterface {
     suspend fun tvSeriesSearch(
         searchKey: String
     ): BaseModelTV
+
+    suspend fun artistMoviesAndTvSeries(
+        personId: Int
+    ): ArtistMovies
 
 }
