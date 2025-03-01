@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BaseModel(
+data class BaseModelMovie(
     @SerialName("dates")
     val dates: Dates?,
 
