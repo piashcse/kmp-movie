@@ -93,6 +93,16 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
+    suspend fun artistMoviesAndTvShows(personId: Int) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.artistMoviesAndTvSeries(personId)
+            emit(UiState.Success(result))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
+
     suspend fun airingTodayTvSeries(page: Int) = flow {
         try {
             emit(UiState.Loading)

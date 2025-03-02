@@ -51,7 +51,7 @@ fun Navigation(navigator: Navigator, page: Int) {
         scene(route = NavigationScreen.ArtistDetail.route.plus(NavigationScreen.ArtistDetail.objectPath)) { backStackEntry ->
             val id: Int? = backStackEntry.path<Int>(NavigationScreen.ArtistDetail.objectName)
             id?.let {
-                ArtistDetail(it)
+                ArtistDetail(navigator,it)
             }
         }
         scene(route = NavigationScreen.AiringTodayTvSeries.route) {

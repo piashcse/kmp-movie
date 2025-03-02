@@ -26,5 +26,7 @@ data class Crew(
     @SerialName("popularity")
     val popularity: Double,
     @SerialName("profile_path")
-    val profilePath: String?
+    val profilePath: String?,
+    @SerialName("media_type")
+    val media_type: String?
 )

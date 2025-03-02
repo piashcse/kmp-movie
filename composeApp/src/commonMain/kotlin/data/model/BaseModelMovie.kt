@@ -4,7 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BaseModelV2(
+data class BaseModelMovie(
+    @SerialName("dates")
+    val dates: Dates?,
+
     @SerialName("page")
     val page: Int,
 
@@ -16,4 +19,13 @@ data class BaseModelV2(
 
     @SerialName("total_results")
     val totalResults: Int
+)
+
+@Serializable
+data class Dates(
+    @SerialName("maximum")
+    val maximum: String,
+
+    @SerialName("minimum")
+    val minimum: String
 )

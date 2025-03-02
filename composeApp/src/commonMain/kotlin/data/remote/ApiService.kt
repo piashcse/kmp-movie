@@ -1,10 +1,10 @@
 package data.remote
 
-import data.model.BaseModel
-import data.model.BaseModelTV
-import data.model.BaseModelV2
+import data.model.BaseModelMovie
+import data.model.BaseModelTVSeries
 import data.model.artist.Artist
 import data.model.artist.ArtistDetail
+import data.model.artist.ArtistMovies
 import data.model.movie_detail.MovieDetail
 import data.model.tv_detail.TvSeriesDetail
 import data.model.tv_detail.credit.Credit
@@ -15,10 +15,10 @@ import io.ktor.http.encodedPath
 class ApiService : ApiInterface {
     override suspend fun nowPlayingMovieList(
         page: Int,
-    ): BaseModel {
+    ): BaseModelMovie {
         return client.get {
             url {
-                encodedPath = "3/movie/now_playing"
+                encodedPath = "movie/now_playing"
                 parameters.append("page", page.toString())
             }
         }.body()
@@ -27,10 +27,10 @@ class ApiService : ApiInterface {
 
     override suspend fun popularMovieList(
         page: Int,
-    ): BaseModelV2 {
+    ): BaseModelMovie {
         return client.get {
             url {
-                encodedPath = "3/movie/popular"
+                encodedPath = "movie/popular"
                 parameters.append("page", page.toString())
             }
         }.body()
@@ -39,10 +39,10 @@ class ApiService : ApiInterface {
 
     override suspend fun topRatedMovieList(
         page: Int,
-    ): BaseModelV2 {
+    ): BaseModelMovie {
         return client.get {
             url {
-                encodedPath = "3/movie/top_rated"
+                encodedPath = "movie/top_rated"
                 parameters.append("page", page.toString())
             }
         }.body()
@@ -51,10 +51,10 @@ class ApiService : ApiInterface {
 
     override suspend fun upcomingMovieList(
         page: Int,
-    ): BaseModel {
+    ): BaseModelMovie {
         return client.get {
             url {
-                encodedPath = "3/movie/upcoming"
+                encodedPath = "movie/upcoming"
                 parameters.append("page", page.toString())
             }
         }.body()
@@ -63,24 +63,24 @@ class ApiService : ApiInterface {
     override suspend fun movieDetail(movieId: Int): MovieDetail {
         return client.get {
             url {
-                encodedPath = "3/movie/$movieId"
+                encodedPath = "movie/$movieId"
             }
         }.body()
     }
 
-    override suspend fun movieSearch(searchKey: String): BaseModelV2 {
+    override suspend fun movieSearch(searchKey: String): BaseModelMovie {
         return client.get {
             url {
-                encodedPath = "3/search/movie"
+                encodedPath = "search/movie"
                 parameters.append("query", searchKey)
             }
         }.body()
     }
 
-    override suspend fun recommendedMovie(movieId: Int): BaseModelV2 {
+    override suspend fun recommendedMovie(movieId: Int): BaseModelMovie {
         return client.get {
             url {
-                encodedPath = "3/movie/$movieId/recommendations"
+                encodedPath = "movie/$movieId/recommendations"
             }
         }.body()
     }
@@ -88,7 +88,7 @@ class ApiService : ApiInterface {
     override suspend fun movieCredit(movieId: Int): Artist {
         return client.get {
             url {
-                encodedPath = "3/movie/$movieId/credits"
+                encodedPath = "movie/$movieId/credits"
             }
         }.body()
     }
@@ -96,39 +96,39 @@ class ApiService : ApiInterface {
     override suspend fun artistDetail(personId: Int): ArtistDetail {
         return client.get {
             url {
-                encodedPath = "3/person/$personId"
+                encodedPath = "person/$personId"
             }
         }.body()
     }
 
-    override suspend fun airingTodayTvSeries(page: Int): BaseModelTV {
+    override suspend fun airingTodayTvSeries(page: Int): BaseModelTVSeries {
         return client.get {
             url {
-                encodedPath = "3/tv/airing_today"
+                encodedPath = "tv/airing_today"
             }
         }.body()
     }
 
-    override suspend fun onTheAirTvSeries(page: Int): BaseModelTV {
+    override suspend fun onTheAirTvSeries(page: Int): BaseModelTVSeries {
         return client.get {
             url {
-                encodedPath = "3/tv/on_the_air"
+                encodedPath = "tv/on_the_air"
             }
         }.body()
     }
 
-    override suspend fun popularTvSeries(page: Int): BaseModelTV {
+    override suspend fun popularTvSeries(page: Int): BaseModelTVSeries {
         return client.get {
             url {
-                encodedPath = "3/tv/popular"
+                encodedPath = "tv/popular"
             }
         }.body()
     }
 
-    override suspend fun topRatedTvSeries(page: Int): BaseModelTV {
+    override suspend fun topRatedTvSeries(page: Int): BaseModelTVSeries {
         return client.get {
             url {
-                encodedPath = "3/tv/top_rated"
+                encodedPath = "tv/top_rated"
             }
         }.body()
     }
@@ -136,15 +136,15 @@ class ApiService : ApiInterface {
     override suspend fun tvSeriesDetail(seriesId: Int): TvSeriesDetail {
         return client.get {
             url {
-                encodedPath = "3/tv/${seriesId}"
+                encodedPath = "tv/${seriesId}"
             }
         }.body()
     }
 
-    override suspend fun recommendedTvSeries(seriesId: Int): BaseModelTV {
+    override suspend fun recommendedTvSeries(seriesId: Int): BaseModelTVSeries {
         return client.get {
             url {
-                encodedPath = "3/tv/${seriesId}/recommendations"
+                encodedPath = "tv/${seriesId}/recommendations"
             }
         }.body()
     }
@@ -152,16 +152,24 @@ class ApiService : ApiInterface {
     override suspend fun creditTvSeries(seriesId: Int): Credit {
         return client.get {
             url {
-                encodedPath = "3/tv/${seriesId}/credits"
+                encodedPath = "tv/${seriesId}/credits"
             }
         }.body()
     }
 
-    override suspend fun tvSeriesSearch(searchKey: String): BaseModelTV {
+    override suspend fun tvSeriesSearch(searchKey: String): BaseModelTVSeries {
         return client.get {
             url {
-                encodedPath = "3/search/tv"
+                encodedPath = "search/tv"
                 parameters.append("query", searchKey)
+            }
+        }.body()
+    }
+
+    override suspend fun artistMoviesAndTvSeries(personId: Int): ArtistMovies {
+        return client.get {
+            url {
+                encodedPath = "person/${personId}/combined_credits"
             }
         }.body()
     }

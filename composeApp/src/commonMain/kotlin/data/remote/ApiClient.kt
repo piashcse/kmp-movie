@@ -40,6 +40,7 @@ val client = HttpClient {
     install(ContentNegotiation) {
         json(Json {
             ignoreUnknownKeys = true
+            explicitNulls = false
         })
     }
 }
