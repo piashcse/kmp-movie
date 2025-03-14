@@ -22,8 +22,7 @@ fun TopRatedTvSeries(
 
     BaseColumn(
         loading = uiState.isLoading,
-        errorMessage = uiState.errorMessage,
-        onDismissError = {}) {
+        errorMessage = uiState.errorMessage) {
         uiState.tvSeriesList?.let {
             TvSeries(it) { seriesId ->
                 navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))

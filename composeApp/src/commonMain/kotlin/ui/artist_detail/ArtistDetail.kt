@@ -60,71 +60,76 @@ fun ArtistDetail(
     }
 
     BaseColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .background(DefaultBackgroundColor)
-            .padding(8.dp),
         loading = uiState.isLoading,
-        errorMessage = uiState.errorMessage,
-        onDismissError = {}
+        errorMessage = uiState.errorMessage
     ) {
-        uiState.artistDetail?.let { artist ->
-            Row {
-                CoilImage(
-                    modifier = Modifier
-                        .padding(bottom = 8.dp)
-                        .height(250.dp)
-                        .width(190.dp)
-                        .cornerRadius(10),
-                    imageModel = { AppConstant.IMAGE_URL + artist.profilePath },
-                    imageOptions = ImageOptions(
-                        contentScale = ContentScale.Crop,
-                        alignment = Alignment.Center,
-                        contentDescription = "artist image"
-                    ),
-                    component = rememberImageComponent {
-                        +CircularRevealPlugin(duration = 800)
-                    },
-                )
-                Column {
-                    Text(
-                        modifier = Modifier.padding(start = 8.dp),
-                        text = artist.name ?: "",
-                        color = FontColor,
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.Medium
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .background(DefaultBackgroundColor)
+                .padding(8.dp),
+        ) {
+            uiState.artistDetail?.let { artist ->
+                Row {
+                    CoilImage(
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
+                            .height(250.dp)
+                            .width(190.dp)
+                            .cornerRadius(10),
+                        imageModel = { AppConstant.IMAGE_URL + artist.profilePath },
+                        imageOptions = ImageOptions(
+                            contentScale = ContentScale.Crop,
+                            alignment = Alignment.Center,
+                        ),
+                        component = rememberImageComponent {
+                            +CircularRevealPlugin(duration = 800)
+                        },
                     )
-                    PersonalInfo(
-                        stringResource(Res.string.artist_detail),
-                        artist.knownForDepartment
-                    )
-                    PersonalInfo(stringResource(Res.string.artist_detail), artist.gender.toString())
-                    PersonalInfo(stringResource(Res.string.birth_day), artist.birthday ?: "")
-                    PersonalInfo(
-                        stringResource(Res.string.place_of_birth),
-                        artist.placeOfBirth ?: ""
-                    )
+                    Column {
+                        Text(
+                            modifier = Modifier.padding(start = 8.dp),
+                            text = artist.name ?: "",
+                            color = FontColor,
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                        PersonalInfo(
+                            stringResource(Res.string.artist_detail),
+                            artist.knownForDepartment
+                        )
+                        PersonalInfo(
+                            stringResource(Res.string.artist_detail),
+                            artist.gender.toString()
+                        )
+                        PersonalInfo(stringResource(Res.string.birth_day), artist.birthday ?: "")
+                        PersonalInfo(
+                            stringResource(Res.string.place_of_birth),
+                            artist.placeOfBirth ?: ""
+                        )
+                    }
                 }
-            }
-            Text(
-                modifier = Modifier.padding(bottom = 8.dp),
-                text = stringResource(Res.string.biography),
-                color = SecondaryFontColor,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Medium
-            )
-            ExpandableText(text = artist.biography, maxLines = 12)
-            uiState.artistMovies?.let {
-                ArtistMoviesAndTvShows(it) { item ->
-                    if (item.mediaType == "movie") {
-                        navigator.navigate(NavigationScreen.MovieDetail.route + "/${item.id}")
-                    } else {
-                        navigator.navigate(NavigationScreen.TvSeriesDetail.route + "/${item.id}")
+                Text(
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    text = stringResource(Res.string.biography),
+                    color = SecondaryFontColor,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                ExpandableText(text = artist.biography, maxLines = 12)
+                uiState.artistMovies?.let {
+                    ArtistMoviesAndTvShows(it) { item ->
+                        if (item.mediaType == "movie") {
+                            navigator.navigate(NavigationScreen.MovieDetail.route + "/${item.id}")
+                        } else {
+                            navigator.navigate(NavigationScreen.TvSeriesDetail.route + "/${item.id}")
+                        }
                     }
                 }
             }
         }
+
     }
 }
 

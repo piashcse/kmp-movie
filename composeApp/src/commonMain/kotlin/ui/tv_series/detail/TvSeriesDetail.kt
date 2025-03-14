@@ -82,8 +82,7 @@ fun TvSeriesDetail(
             .verticalScroll(rememberScrollState())
             .background(DefaultBackgroundColor),
         loading = uiState.isLoading,
-        errorMessage = uiState.errorMessage,
-        onDismissError = {}
+        errorMessage = uiState.errorMessage
     ) {
         uiState.tvSeriesDetail?.let { UiDetail(it) }
         Spacer(modifier = Modifier.height(10.dp))
