@@ -1,7 +1,8 @@
 package data.remote
 
 import data.model.BaseModelMovie
-import data.model.BaseModelTVSeries
+import data.model.MovieItem
+import data.model.TvSeriesItem
 import data.model.artist.Artist
 import data.model.artist.ArtistDetail
 import data.model.artist.ArtistMovies
@@ -10,21 +11,21 @@ import data.model.tv_detail.TvSeriesDetail
 import data.model.tv_detail.credit.Credit
 
 interface ApiInterface {
-    suspend fun nowPlayingMovieList(
+    suspend fun nowPlayingMovies(
         page: Int
-    ): BaseModelMovie
+    ): BaseModelMovie<MovieItem>
 
-    suspend fun popularMovieList(
+    suspend fun popularMovies(
         page: Int
-    ): BaseModelMovie
+    ): BaseModelMovie<MovieItem>
 
-    suspend fun topRatedMovieList(
+    suspend fun topRatedMovies(
         page: Int
-    ): BaseModelMovie
+    ): BaseModelMovie<MovieItem>
 
-    suspend fun upcomingMovieList(
+    suspend fun upcomingMovies(
         page: Int
-    ): BaseModelMovie
+    ): BaseModelMovie<MovieItem>
 
     suspend fun movieDetail(
         movieId: Int
@@ -32,11 +33,11 @@ interface ApiInterface {
 
     suspend fun movieSearch(
         searchKey: String
-    ): BaseModelMovie
+    ): BaseModelMovie<MovieItem>
 
-    suspend fun recommendedMovie(
+    suspend fun recommendedMovies(
         movieId: Int
-    ): BaseModelMovie
+    ): BaseModelMovie<MovieItem>
     suspend fun movieCredit(
         movieId: Int
     ): Artist
@@ -46,19 +47,19 @@ interface ApiInterface {
 
     suspend fun airingTodayTvSeries(
         page: Int
-    ): BaseModelTVSeries
+    ): BaseModelMovie<TvSeriesItem>
 
     suspend fun onTheAirTvSeries(
         page: Int
-    ): BaseModelTVSeries
+    ): BaseModelMovie<TvSeriesItem>
 
     suspend fun popularTvSeries(
         page: Int
-    ): BaseModelTVSeries
+    ): BaseModelMovie<TvSeriesItem>
 
     suspend fun topRatedTvSeries(
         page: Int
-    ): BaseModelTVSeries
+    ): BaseModelMovie<TvSeriesItem>
 
     suspend fun tvSeriesDetail(
         seriesId: Int
@@ -66,7 +67,7 @@ interface ApiInterface {
 
     suspend fun recommendedTvSeries(
         seriesId: Int
-    ): BaseModelTVSeries
+    ): BaseModelMovie<TvSeriesItem>
 
     suspend fun creditTvSeries(
         seriesId: Int
@@ -74,7 +75,7 @@ interface ApiInterface {
 
     suspend fun tvSeriesSearch(
         searchKey: String
-    ): BaseModelTVSeries
+    ): BaseModelMovie<TvSeriesItem>
 
     suspend fun artistMoviesAndTvSeries(
         personId: Int

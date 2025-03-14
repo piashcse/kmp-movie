@@ -1,6 +1,5 @@
 package navigation
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import kmp_movie.composeapp.generated.resources.Res
@@ -97,7 +96,6 @@ fun currentRoute(navigator: Navigator): String? {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 fun initialScreen(page: Int): String {
     return if (page == 0) {
         NavigationScreen.NowPlayingMovie.route
