@@ -1,6 +1,6 @@
 package data.remote
 
-import data.model.BaseModelMovie
+import data.model.BaseModel
 import data.model.MovieItem
 import data.model.TvSeriesItem
 import data.model.artist.Artist
@@ -13,19 +13,19 @@ import data.model.tv_detail.credit.Credit
 interface ApiInterface {
     suspend fun nowPlayingMovies(
         page: Int
-    ): BaseModelMovie<MovieItem>
+    ): BaseModel<MovieItem>
 
     suspend fun popularMovies(
         page: Int
-    ): BaseModelMovie<MovieItem>
+    ): BaseModel<MovieItem>
 
     suspend fun topRatedMovies(
         page: Int
-    ): BaseModelMovie<MovieItem>
+    ): BaseModel<MovieItem>
 
     suspend fun upcomingMovies(
         page: Int
-    ): BaseModelMovie<MovieItem>
+    ): BaseModel<MovieItem>
 
     suspend fun movieDetail(
         movieId: Int
@@ -33,11 +33,11 @@ interface ApiInterface {
 
     suspend fun movieSearch(
         searchKey: String
-    ): BaseModelMovie<MovieItem>
+    ): BaseModel<MovieItem>
 
     suspend fun recommendedMovies(
         movieId: Int
-    ): BaseModelMovie<MovieItem>
+    ): BaseModel<MovieItem>
     suspend fun movieCredit(
         movieId: Int
     ): Artist
@@ -47,19 +47,19 @@ interface ApiInterface {
 
     suspend fun airingTodayTvSeries(
         page: Int
-    ): BaseModelMovie<TvSeriesItem>
+    ): BaseModel<TvSeriesItem>
 
     suspend fun onTheAirTvSeries(
         page: Int
-    ): BaseModelMovie<TvSeriesItem>
+    ): BaseModel<TvSeriesItem>
 
     suspend fun popularTvSeries(
         page: Int
-    ): BaseModelMovie<TvSeriesItem>
+    ): BaseModel<TvSeriesItem>
 
     suspend fun topRatedTvSeries(
         page: Int
-    ): BaseModelMovie<TvSeriesItem>
+    ): BaseModel<TvSeriesItem>
 
     suspend fun tvSeriesDetail(
         seriesId: Int
@@ -67,7 +67,7 @@ interface ApiInterface {
 
     suspend fun recommendedTvSeries(
         seriesId: Int
-    ): BaseModelMovie<TvSeriesItem>
+    ): BaseModel<TvSeriesItem>
 
     suspend fun creditTvSeries(
         seriesId: Int
@@ -75,7 +75,7 @@ interface ApiInterface {
 
     suspend fun tvSeriesSearch(
         searchKey: String
-    ): BaseModelMovie<TvSeriesItem>
+    ): BaseModel<TvSeriesItem>
 
     suspend fun artistMoviesAndTvSeries(
         personId: Int
