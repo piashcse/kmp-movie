@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.2"
+agp = "8.9.0"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -12,7 +12,7 @@ ktor-client = "3.1.1"
 precompose = "1.6.2"
 landScapist = "2.4.7"
 androidx-lifecycle ="2.8.0"
-buildConfig = "5.5.1"
+buildConfig = "5.5.4"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }

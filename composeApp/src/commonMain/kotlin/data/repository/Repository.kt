@@ -4,48 +4,48 @@ import data.remote.ApiService
 import kotlinx.coroutines.flow.flow
 import utils.network.UiState
 
-class Repository(private val api:ApiService =  ApiService()) {
-    suspend fun nowPlayingMovie(page: Int) = flow {
+class Repository(private val api: ApiService = ApiService()) {
+    fun nowPlayingMovie(page: Int) = flow {
         try {
             emit(UiState.Loading)
-            val result = api.nowPlayingMovieList(page)
+            val result = api.nowPlayingMovies(page)
             emit(UiState.Success(result.results))
         } catch (e: Exception) {
             emit(UiState.Error(e))
         }
     }
 
-    suspend fun popularMovie(page: Int) = flow {
+    fun popularMovie(page: Int) = flow {
         try {
             emit(UiState.Loading)
-            val result = api.popularMovieList(page)
+            val result = api.popularMovies(page)
             emit(UiState.Success(result.results))
         } catch (e: Exception) {
             emit(UiState.Error(e))
         }
     }
 
-    suspend fun topRatedMovie(page: Int) = flow {
+    fun topRatedMovie(page: Int) = flow {
         emit(UiState.Loading)
         try {
-            val result = api.topRatedMovieList(page)
+            val result = api.topRatedMovies(page)
             emit(UiState.Success(result.results))
         } catch (e: Exception) {
             emit(UiState.Error(e))
         }
     }
 
-    suspend fun upComingMovie(page: Int) = flow {
+    fun upComingMovie(page: Int) = flow {
         try {
             emit(UiState.Loading)
-            val result = api.upcomingMovieList(page)
+            val result = api.upcomingMovies(page)
             emit(UiState.Success(result.results))
         } catch (e: Exception) {
             emit(UiState.Error(e))
         }
     }
 
-    suspend fun movieDetail(movieId: Int) = flow {
+    fun movieDetail(movieId: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.movieDetail(movieId)
@@ -55,7 +55,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun searchMovie(searchKey: String) = flow {
+    fun searchMovie(searchKey: String) = flow {
         try {
             emit(UiState.Loading)
             val result = api.movieSearch(searchKey)
@@ -65,16 +65,17 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun recommendedMovie(movieId: Int) = flow {
+    fun recommendedMovie(movieId: Int) = flow {
         try {
             emit(UiState.Loading)
-            val result = api.recommendedMovie(movieId)
+            val result = api.recommendedMovies(movieId)
             emit(UiState.Success(result.results))
         } catch (e: Exception) {
             emit(UiState.Error(e))
         }
     }
-    suspend fun movieCredit(movieId: Int) = flow {
+
+    fun movieCredit(movieId: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.movieCredit(movieId)
@@ -83,7 +84,8 @@ class Repository(private val api:ApiService =  ApiService()) {
             emit(UiState.Error(e))
         }
     }
-    suspend fun artistDetail(personId: Int) = flow {
+
+    fun artistDetail(personId: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.artistDetail(personId)
@@ -93,7 +95,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun artistMoviesAndTvShows(personId: Int) = flow {
+    fun artistMoviesAndTvShows(personId: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.artistMoviesAndTvSeries(personId)
@@ -103,7 +105,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun airingTodayTvSeries(page: Int) = flow {
+    fun airingTodayTvSeries(page: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.airingTodayTvSeries(page)
@@ -113,7 +115,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun onTheAirTvSeries(page: Int) = flow {
+    fun onTheAirTvSeries(page: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.onTheAirTvSeries(page)
@@ -123,7 +125,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun popularTvSeries(page: Int) = flow {
+    fun popularTvSeries(page: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.popularTvSeries(page)
@@ -133,7 +135,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun topRatedTvSeries(page: Int) = flow {
+    fun topRatedTvSeries(page: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.topRatedTvSeries(page)
@@ -143,7 +145,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun tvSeriesDetail(seriesId: Int) = flow {
+    fun tvSeriesDetail(seriesId: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.tvSeriesDetail(seriesId)
@@ -153,7 +155,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun recommendedTvSeries(seriesId: Int) = flow {
+    fun recommendedTvSeries(seriesId: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.recommendedTvSeries(seriesId)
@@ -163,7 +165,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun creditTvSeries(seriesId: Int) = flow {
+    fun creditTvSeries(seriesId: Int) = flow {
         try {
             emit(UiState.Loading)
             val result = api.creditTvSeries(seriesId)
@@ -173,7 +175,7 @@ class Repository(private val api:ApiService =  ApiService()) {
         }
     }
 
-    suspend fun searchTvSeries(searchKey: String) = flow {
+    fun searchTvSeries(searchKey: String) = flow {
         try {
             emit(UiState.Loading)
             val result = api.tvSeriesSearch(searchKey)

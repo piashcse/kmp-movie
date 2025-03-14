@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BaseModelMovie(
+data class BaseModelMovie<T>(
     @SerialName("dates")
     val dates: Dates?,
 
@@ -12,7 +12,7 @@ data class BaseModelMovie(
     val page: Int,
 
     @SerialName("results")
-    val results: List<MovieItem>,
+    val results: List<T>,
 
     @SerialName("total_pages")
     val totalPages: Int,
