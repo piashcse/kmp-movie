@@ -21,7 +21,7 @@ fun AiringTodayTvSeries(
         viewModel.fetchAiringTodayTvSeries(1)
     }
     BaseColumn(
-        loading = uiState.isLoading, errorMessage = uiState.errorMessage, onDismissError = {}) {
+        loading = uiState.isLoading, errorMessage = uiState.errorMessage) {
         uiState.tvSeriesList?.let {
             TvSeries(it) { seriesId ->
                 navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))

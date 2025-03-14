@@ -23,8 +23,7 @@ fun NowPlayingScreen(
 
     BaseColumn(
         loading = uiState.isLoading,
-        errorMessage = uiState.errorMessage,
-        onDismissError = {}){
+        errorMessage = uiState.errorMessage){
         uiState.movieList?.let {
             Movies(it) { movieId ->
                 navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))

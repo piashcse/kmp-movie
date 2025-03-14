@@ -82,8 +82,7 @@ fun MovieDetail(
             .verticalScroll(rememberScrollState())
             .background(DefaultBackgroundColor),
         loading = uiState.isLoading,
-        errorMessage = uiState.errorMessage,
-        onDismissError = {}) {
+        errorMessage = uiState.errorMessage) {
         uiState.movieDetail?.let { UiDetail(it) }
         Spacer(modifier = Modifier.height(10.dp))
         Column(modifier = Modifier.padding(horizontal = 10.dp)) {
