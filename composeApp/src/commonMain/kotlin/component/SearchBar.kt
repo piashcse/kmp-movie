@@ -1,4 +1,4 @@
-package ui.component
+package component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image

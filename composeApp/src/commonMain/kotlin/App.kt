@@ -52,12 +52,12 @@ import navigation.navigationTitle
 import org.jetbrains.compose.resources.stringResource
 import theme.FloatingActionBackground
 import ui.AppViewModel
-import ui.component.AppBarWithArrow
-import ui.component.KMPNavigationSuiteScaffold
-import ui.component.ProgressIndicator
-import ui.component.SearchBar
-import ui.component.SearchForMovie
-import ui.component.SearchForTVSeries
+import component.AppBarWithArrow
+import component.KMPNavigationSuiteScaffold
+import component.ProgressIndicator
+import component.SearchBar
+import component.SearchForMovie
+import component.SearchForTVSeries
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable

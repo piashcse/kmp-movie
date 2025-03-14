@@ -56,11 +56,11 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.cornerRadius
-import ui.component.ExpandableText
-import ui.component.ProgressIndicator
-import ui.component.shimmerBackground
-import ui.component.text.SubtitlePrimary
-import ui.component.text.SubtitleSecondary
+import component.ExpandableText
+import component.base.BaseColumn
+import component.shimmerBackground
+import component.text.SubtitlePrimary
+import component.text.SubtitleSecondary
 import utils.AppConstant
 import utils.hourMinutes
 import utils.roundTo
@@ -76,26 +76,22 @@ fun MovieDetail(
         viewModel.fetchMovieDetails(movieId)
     }
 
-    Column(
+    BaseColumn(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(DefaultBackgroundColor),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        if (uiState.isLoading) {
-            ProgressIndicator()
-        } else {
-            uiState.movieDetail?.let { UiDetail(it) }
-            Spacer(modifier = Modifier.height(10.dp))
-            Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-                if (uiState.recommendedMovies.isNotEmpty()) {
-                    RecommendedMovie(navigator, uiState.recommendedMovies)
-                }
-                uiState.movieCredit?.cast?.let {
-                    ArtistAndCrew(navigator, it)
-                }
+        loading = uiState.isLoading,
+        errorMessage = uiState.errorMessage,
+        onDismissError = {}) {
+        uiState.movieDetail?.let { UiDetail(it) }
+        Spacer(modifier = Modifier.height(10.dp))
+        Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+            if (uiState.recommendedMovies.isNotEmpty()) {
+                RecommendedMovie(navigator, uiState.recommendedMovies)
+            }
+            uiState.movieCredit?.cast?.let {
+                ArtistAndCrew(navigator, it)
             }
         }
     }

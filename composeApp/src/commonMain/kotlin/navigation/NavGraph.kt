@@ -11,7 +11,7 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
 import org.jetbrains.compose.resources.stringResource
-import ui.movie.artist_detail.ArtistDetail
+import ui.artist_detail.ArtistDetail
 import ui.movie.detail.MovieDetail
 import ui.movie.now_playing.NowPlayingScreen
 import ui.movie.popular.PopularMovie

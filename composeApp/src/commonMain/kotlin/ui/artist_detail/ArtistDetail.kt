@@ -1,4 +1,4 @@
-package ui.movie.artist_detail
+package ui.artist_detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,6 +29,8 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
+import component.ExpandableText
+import component.base.BaseColumn
 import data.model.artist.ArtistMovie
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.artist_detail
@@ -43,8 +45,6 @@ import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.SecondaryFontColor
 import theme.cornerRadius
-import ui.component.ExpandableText
-import ui.component.ProgressIndicator
 import utils.AppConstant
 
 @Composable
@@ -59,17 +59,16 @@ fun ArtistDetail(
         viewModel.fetchArtistDetail(personId)
     }
 
-    Column(
+    BaseColumn(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(DefaultBackgroundColor)
-            .padding(8.dp)
+            .padding(8.dp),
+        loading = uiState.isLoading,
+        errorMessage = uiState.errorMessage,
+        onDismissError = {}
     ) {
-        if (uiState.isLoading) {
-            ProgressIndicator()
-        }
-
         uiState.artistDetail?.let { artist ->
             Row {
                 CoilImage(
