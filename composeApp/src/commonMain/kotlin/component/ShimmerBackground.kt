@@ -1,4 +1,4 @@
-package ui.component
+package component
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode

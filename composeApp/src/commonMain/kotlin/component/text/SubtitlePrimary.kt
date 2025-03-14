@@ -1,4 +1,4 @@
-package ui.component.text
+package component.text
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text

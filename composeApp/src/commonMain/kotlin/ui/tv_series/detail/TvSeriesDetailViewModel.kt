@@ -63,7 +63,7 @@ class TvSeriesDetailViewModel : ViewModel() {
                 when (result) {
                     is UiState.Loading -> it.copy(isLoading = true)
                     is UiState.Success -> it.copy(creditTvSeries = result.data, isLoading = false)
-                    is UiState.Error -> it.copy(isLoading = false)
+                    is UiState.Error -> it.copy(isLoading = false, errorMessage = result.exception.message)
                 }
             }
         }
@@ -74,5 +74,6 @@ data class TvSeriesDetailUiState(
     val isLoading: Boolean = false,
     val tvSeriesDetail: TvSeriesDetail? = null,
     val recommendedTvSeries: List<TvSeriesItem> = emptyList(),
-    val creditTvSeries: Credit? = null
+    val creditTvSeries: Credit? = null,
+    val errorMessage: String? = null
 )

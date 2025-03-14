@@ -6,8 +6,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
-import ui.component.TvSeries
-import ui.component.base.BaseColumn
+import component.TvSeries
+import component.base.BaseColumn
 
 @Composable
 fun TopRatedTvSeries(

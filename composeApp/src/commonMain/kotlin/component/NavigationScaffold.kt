@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ui.component
+package component
 
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme

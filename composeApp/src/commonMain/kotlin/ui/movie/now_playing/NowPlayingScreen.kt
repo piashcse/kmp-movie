@@ -7,8 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
-import ui.component.Movies
-import ui.component.base.BaseColumn
+import component.Movies
+import component.base.BaseColumn
 
 @Composable
 fun NowPlayingScreen(

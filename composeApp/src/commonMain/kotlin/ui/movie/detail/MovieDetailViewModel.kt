@@ -54,7 +54,7 @@ class MovieDetailViewModel : ViewModel() {
             when (result) {
                 is UiState.Loading -> currentState.copy(isLoading = true)
                 is UiState.Success -> stateUpdater(currentState, result.data).copy(isLoading = false)
-                is UiState.Error -> currentState.copy(isLoading = false) // Log error if needed
+                is UiState.Error -> currentState.copy(isLoading = false, errorMessage = result.exception.message)
             }
         }
     }
@@ -64,5 +64,6 @@ data class MovieDetailUiState(
     val movieDetail: MovieDetail? = null,
     val recommendedMovies: List<MovieItem> = emptyList(),
     val movieCredit: Artist? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null
 )

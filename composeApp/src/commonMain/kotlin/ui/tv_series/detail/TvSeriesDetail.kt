@@ -56,11 +56,11 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.cornerRadius
-import ui.component.ExpandableText
-import ui.component.ProgressIndicator
-import ui.component.shimmerBackground
-import ui.component.text.SubtitlePrimary
-import ui.component.text.SubtitleSecondary
+import component.ExpandableText
+import component.base.BaseColumn
+import component.shimmerBackground
+import component.text.SubtitlePrimary
+import component.text.SubtitleSecondary
 import utils.AppConstant
 import utils.roundTo
 
@@ -76,32 +76,28 @@ fun TvSeriesDetail(
         viewModel.fetchTvSeriesDetails(seriesId)
     }
 
-    Column(
+    BaseColumn(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(DefaultBackgroundColor),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        loading = uiState.isLoading,
+        errorMessage = uiState.errorMessage,
+        onDismissError = {}
     ) {
-        when {
-            uiState.isLoading -> ProgressIndicator()
-            uiState.tvSeriesDetail != null -> {
-                uiState.tvSeriesDetail?.let { UiDetail(it) }
-                Spacer(modifier = Modifier.height(10.dp))
-                Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-                    uiState.recommendedTvSeries.takeIf { it.isNotEmpty() }?.let {
-                        RecommendedTVSeries(navigator, it)
-                    }
-                    uiState.creditTvSeries?.cast?.let {
-                        ArtistAndCrew(navigator, it)
-                    }
-                }
+        uiState.tvSeriesDetail?.let { UiDetail(it) }
+        Spacer(modifier = Modifier.height(10.dp))
+        Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+            uiState.recommendedTvSeries.takeIf { it.isNotEmpty() }?.let {
+                RecommendedTVSeries(navigator, it)
             }
-            else -> Text("Failed to load TV series details.", color = Color.Red)
+            uiState.creditTvSeries?.cast?.let {
+                ArtistAndCrew(navigator, it)
+            }
         }
     }
 }
+
 @Composable
 fun UiDetail(data: TvSeriesDetail) {
     Box {
