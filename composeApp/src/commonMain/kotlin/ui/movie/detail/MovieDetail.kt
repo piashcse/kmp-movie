@@ -125,7 +125,7 @@ fun UiDetail(data: MovieDetail) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(183.dp)
+                        .height(180.dp)
                         .padding(start = 10.dp),
                     verticalArrangement = Arrangement.Bottom
                 ) {
