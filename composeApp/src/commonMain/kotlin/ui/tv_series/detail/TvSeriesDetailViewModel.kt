@@ -63,7 +63,10 @@ class TvSeriesDetailViewModel : ViewModel() {
                 when (result) {
                     is UiState.Loading -> it.copy(isLoading = true)
                     is UiState.Success -> it.copy(creditTvSeries = result.data, isLoading = false)
-                    is UiState.Error -> it.copy(isLoading = false, errorMessage = result.exception.message)
+                    is UiState.Error -> it.copy(
+                        isLoading = false,
+                        errorMessage = result.exception.message
+                    )
                 }
             }
         }

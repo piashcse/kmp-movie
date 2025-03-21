@@ -35,9 +35,9 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     jvm("desktop")
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -48,10 +48,10 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
@@ -133,6 +133,6 @@ compose.desktop {
         }
     }
 }
-buildConfig{
-    buildConfigField( "API_KEY", "59cd6896d8432f9c69aed9b86b9c2931")
+buildConfig {
+    buildConfigField("API_KEY", "59cd6896d8432f9c69aed9b86b9c2931")
 }

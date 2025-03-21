@@ -12,6 +12,8 @@ import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
 import org.jetbrains.compose.resources.stringResource
 import ui.artist_detail.ArtistDetail
+import ui.celebrities.popular.PopularCelebrities
+import ui.celebrities.trending.TrendingCelebrities
 import ui.movie.detail.MovieDetail
 import ui.movie.now_playing.NowPlayingScreen
 import ui.movie.popular.PopularMovie
@@ -50,7 +52,7 @@ fun Navigation(navigator: Navigator, page: Int) {
         scene(route = NavigationScreen.ArtistDetail.route.plus(NavigationScreen.ArtistDetail.objectPath)) { backStackEntry ->
             val id: Int? = backStackEntry.path<Int>(NavigationScreen.ArtistDetail.objectName)
             id?.let {
-                ArtistDetail(navigator,it)
+                ArtistDetail(navigator, it)
             }
         }
         scene(route = NavigationScreen.AiringTodayTvSeries.route) {
@@ -70,6 +72,12 @@ fun Navigation(navigator: Navigator, page: Int) {
             id?.let {
                 TvSeriesDetail(navigator, it)
             }
+        }
+        scene(route = NavigationScreen.TrendingCelebrity.route) {
+            TrendingCelebrities(navigator)
+        }
+        scene(route = NavigationScreen.PopularCelebrity.route) {
+            PopularCelebrities(navigator)
         }
     }
 }
@@ -97,10 +105,18 @@ fun currentRoute(navigator: Navigator): String? {
 }
 
 fun initialScreen(page: Int): String {
-    return if (page == 0) {
-        NavigationScreen.NowPlayingMovie.route
-    } else {
-        NavigationScreen.AiringTodayTvSeries.route
+    return when (page) {
+        0 -> {
+            NavigationScreen.NowPlayingMovie.route
+        }
+
+        1 -> {
+            NavigationScreen.AiringTodayTvSeries.route
+        }
+
+        else -> {
+            NavigationScreen.TrendingCelebrity.route
+        }
     }
 }
 
@@ -114,7 +130,9 @@ fun isBottomBarVisible(navigator: Navigator): Boolean {
         NavigationScreen.AiringTodayTvSeries.route,
         NavigationScreen.OnTheAirTvSeries.route,
         NavigationScreen.PopularTvSeries.route,
-        NavigationScreen.TopRatedTvSeries.route
+        NavigationScreen.TopRatedTvSeries.route,
+        NavigationScreen.TrendingCelebrity.route,
+        NavigationScreen.PopularCelebrity.route
     )
 
     return currentRoute(navigator) in visibleRoutes

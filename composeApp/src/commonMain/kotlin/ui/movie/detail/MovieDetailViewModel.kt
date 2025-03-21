@@ -36,7 +36,11 @@ class MovieDetailViewModel : ViewModel() {
 
     private suspend fun updateRecommendedMovies(movieId: Int) {
         repo.recommendedMovie(movieId).collect { result ->
-            handleStateUpdate(result) { state, data -> state.copy(recommendedMovies = data ?: emptyList()) }
+            handleStateUpdate(result) { state, data ->
+                state.copy(
+                    recommendedMovies = data ?: emptyList()
+                )
+            }
         }
     }
 
@@ -53,8 +57,15 @@ class MovieDetailViewModel : ViewModel() {
         _uiState.update { currentState ->
             when (result) {
                 is UiState.Loading -> currentState.copy(isLoading = true)
-                is UiState.Success -> stateUpdater(currentState, result.data).copy(isLoading = false)
-                is UiState.Error -> currentState.copy(isLoading = false, errorMessage = result.exception.message)
+                is UiState.Success -> stateUpdater(
+                    currentState,
+                    result.data
+                ).copy(isLoading = false)
+
+                is UiState.Error -> currentState.copy(
+                    isLoading = false,
+                    errorMessage = result.exception.message
+                )
             }
         }
     }

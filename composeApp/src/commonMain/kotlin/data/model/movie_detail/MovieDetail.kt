@@ -27,7 +27,7 @@ data class MovieDetail(
     val id: Int,
 
     @SerialName("imdb_id")
-    val imdbId: String,
+    val imdbId: String?,
 
     @SerialName("original_language")
     val originalLanguage: String,

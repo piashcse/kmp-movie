@@ -184,4 +184,24 @@ class Repository(private val api: ApiService = ApiService()) {
             emit(UiState.Error(e))
         }
     }
+
+    fun popularCelebrities(page: Int) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.popularCelebrity(page)
+            emit(UiState.Success(result.results))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
+
+    fun trendingCelebrities(page: Int) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.trendingCelebrity(page)
+            emit(UiState.Success(result.results))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
 }

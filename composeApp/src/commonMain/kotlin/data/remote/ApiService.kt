@@ -6,6 +6,7 @@ import data.model.TvSeriesItem
 import data.model.artist.Artist
 import data.model.artist.ArtistDetail
 import data.model.artist.ArtistMovies
+import data.model.celebrities.Celebrity
 import data.model.movie_detail.MovieDetail
 import data.model.tv_detail.TvSeriesDetail
 import data.model.tv_detail.credit.Credit
@@ -16,7 +17,7 @@ import io.ktor.http.encodedPath
 class ApiService : ApiInterface {
     override suspend fun nowPlayingMovies(
         page: Int,
-    ):  BaseModel<MovieItem>  {
+    ): BaseModel<MovieItem> {
         return client.get {
             url {
                 encodedPath = "movie/now_playing"
@@ -28,7 +29,7 @@ class ApiService : ApiInterface {
 
     override suspend fun popularMovies(
         page: Int,
-    ):  BaseModel<MovieItem>  {
+    ): BaseModel<MovieItem> {
         return client.get {
             url {
                 encodedPath = "movie/popular"
@@ -40,7 +41,7 @@ class ApiService : ApiInterface {
 
     override suspend fun topRatedMovies(
         page: Int,
-    ):  BaseModel<MovieItem>  {
+    ): BaseModel<MovieItem> {
         return client.get {
             url {
                 encodedPath = "movie/top_rated"
@@ -52,7 +53,7 @@ class ApiService : ApiInterface {
 
     override suspend fun upcomingMovies(
         page: Int,
-    ):  BaseModel<MovieItem>  {
+    ): BaseModel<MovieItem> {
         return client.get {
             url {
                 encodedPath = "movie/upcoming"
@@ -69,7 +70,7 @@ class ApiService : ApiInterface {
         }.body()
     }
 
-    override suspend fun movieSearch(searchKey: String):  BaseModel<MovieItem>  {
+    override suspend fun movieSearch(searchKey: String): BaseModel<MovieItem> {
         return client.get {
             url {
                 encodedPath = "search/movie"
@@ -171,6 +172,24 @@ class ApiService : ApiInterface {
         return client.get {
             url {
                 encodedPath = "person/${personId}/combined_credits"
+            }
+        }.body()
+    }
+
+    override suspend fun popularCelebrity(page: Int): BaseModel<Celebrity> {
+        return client.get {
+            url {
+                encodedPath = "person/popular"
+                parameters.append("page", page.toString())
+            }
+        }.body()
+    }
+
+    override suspend fun trendingCelebrity(page: Int): BaseModel<Celebrity> {
+        return client.get {
+            url {
+                encodedPath = "trending/person/week"
+                parameters.append("page", page.toString())
             }
         }.body()
     }

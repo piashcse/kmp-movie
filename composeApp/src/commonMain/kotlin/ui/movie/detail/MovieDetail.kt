@@ -39,6 +39,11 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
+import component.ExpandableText
+import component.base.BaseColumn
+import component.shimmerBackground
+import component.text.SubtitlePrimary
+import component.text.SubtitleSecondary
 import data.model.MovieItem
 import data.model.artist.Cast
 import data.model.movie_detail.MovieDetail
@@ -56,11 +61,6 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.cornerRadius
-import component.ExpandableText
-import component.base.BaseColumn
-import component.shimmerBackground
-import component.text.SubtitlePrimary
-import component.text.SubtitleSecondary
 import utils.AppConstant
 import utils.hourMinutes
 import utils.roundTo
@@ -82,7 +82,8 @@ fun MovieDetail(
             .verticalScroll(rememberScrollState())
             .background(DefaultBackgroundColor),
         loading = uiState.isLoading,
-        errorMessage = uiState.errorMessage) {
+        errorMessage = uiState.errorMessage
+    ) {
         uiState.movieDetail?.let { UiDetail(it) }
         Spacer(modifier = Modifier.height(10.dp))
         Column(modifier = Modifier.padding(horizontal = 10.dp)) {

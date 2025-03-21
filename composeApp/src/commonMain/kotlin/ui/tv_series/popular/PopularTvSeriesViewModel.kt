@@ -33,12 +33,20 @@ class PopularTvSeriesViewModel : ViewModel() {
         _uiState.update { currentState ->
             when (result) {
                 is UiState.Loading -> currentState.copy(isLoading = true)
-                is UiState.Success -> stateUpdater(currentState, result.data).copy(isLoading = false)
-                is UiState.Error -> currentState.copy(isLoading = false, errorMessage = result.exception.message)
+                is UiState.Success -> stateUpdater(
+                    currentState,
+                    result.data
+                ).copy(isLoading = false)
+
+                is UiState.Error -> currentState.copy(
+                    isLoading = false,
+                    errorMessage = result.exception.message
+                )
             }
         }
     }
 }
+
 data class TvSeriesUiState(
     val tvSeriesList: List<TvSeriesItem>? = emptyList(),
     val isLoading: Boolean = false,
