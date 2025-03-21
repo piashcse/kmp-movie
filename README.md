@@ -39,6 +39,9 @@ UI experience across all platforms, leveraging [The Movie DB API](https://www.th
     - TV Series Search
     - TV Series Detail
     - Recommended TV Series
+- Celebrities
+  - Popular Celebrities
+  - Trending Celebrities
 - Artist Detail
 - Bottom Navigation
 - Navigation Rail
