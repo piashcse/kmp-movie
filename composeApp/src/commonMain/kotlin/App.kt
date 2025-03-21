@@ -34,7 +34,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import component.AppBarWithArrow
+import component.KMPNavigationSuiteScaffold
+import component.ProgressIndicator
+import component.SearchBar
+import component.SearchForMovie
+import component.SearchForTVSeries
 import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.celebrities
 import kmp_movie.composeapp.generated.resources.movies
 import kmp_movie.composeapp.generated.resources.tv_series
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -52,12 +59,6 @@ import navigation.navigationTitle
 import org.jetbrains.compose.resources.stringResource
 import theme.FloatingActionBackground
 import ui.AppViewModel
-import component.AppBarWithArrow
-import component.KMPNavigationSuiteScaffold
-import component.ProgressIndicator
-import component.SearchBar
-import component.SearchForMovie
-import component.SearchForTVSeries
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -70,7 +71,7 @@ internal fun App(
         var isAppBarVisible by remember { mutableStateOf(true) }
         val isLoading by appViewModel.isLoading.collectAsState()
         val pagerState = rememberPagerState {
-            2
+            3
         }
         val items = if (pagerState.currentPage == 0) {
             listOf(
@@ -79,12 +80,17 @@ internal fun App(
                 NavigationScreen.TopRatedMovieNav,
                 NavigationScreen.UpcomingMovieNav,
             )
-        } else {
+        } else if (pagerState.currentPage == 1) {
             listOf(
                 NavigationScreen.AiringTodayTvSeriesNav,
                 NavigationScreen.OnTheAirTvSeriesNav,
                 NavigationScreen.PopularTvSeriesNav,
                 NavigationScreen.TopRatedTvSeriesNav,
+            )
+        } else {
+            listOf(
+                NavigationScreen.TrendingCelebrityNav,
+                NavigationScreen.PopularCelebrityNav,
             )
         }
 
@@ -223,7 +229,11 @@ fun isBackButtonEnable(navigator: Navigator): Boolean {
 @Composable
 fun TabScreen(navigator: Navigator, pagerState: PagerState, padding: PaddingValues) {
     val coroutineScope = rememberCoroutineScope()
-    val tabs = listOf(stringResource(Res.string.movies), stringResource(Res.string.tv_series))
+    val tabs = listOf(
+        stringResource(Res.string.movies),
+        stringResource(Res.string.tv_series),
+        stringResource(Res.string.celebrities)
+    )
 
     Column(
         Modifier

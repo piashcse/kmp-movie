@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import component.TvSeries
 import component.base.BaseColumn
+import moe.tlaster.precompose.navigation.Navigator
+import navigation.NavigationScreen
 
 @Composable
 fun TopRatedTvSeries(
@@ -22,7 +22,8 @@ fun TopRatedTvSeries(
 
     BaseColumn(
         loading = uiState.isLoading,
-        errorMessage = uiState.errorMessage) {
+        errorMessage = uiState.errorMessage
+    ) {
         uiState.tvSeriesList?.let {
             TvSeries(it) { seriesId ->
                 navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))

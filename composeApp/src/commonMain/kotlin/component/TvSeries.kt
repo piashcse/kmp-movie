@@ -24,7 +24,8 @@ import utils.cornerRadius
 
 @Composable
 internal fun TvSeries(listItems: List<TvSeriesItem>, onclick: (id: Int) -> Unit) {
-    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 180.dp),
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 180.dp),
         modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp),
         content = {
             items(listItems) {

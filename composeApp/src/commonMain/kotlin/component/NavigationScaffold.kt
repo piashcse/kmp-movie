@@ -125,7 +125,8 @@ object KMPNavigationDefaults {
     fun navigationSelectedItemColor() = Color.White
 
     @Composable
-    fun navigationUnselectedItemColor() = navigationSelectedItemColor().copy(alpha = ContentAlpha.medium)
+    fun navigationUnselectedItemColor() =
+        navigationSelectedItemColor().copy(alpha = ContentAlpha.medium)
 
     @Composable
     fun navigationRailItemColor() = FontColor

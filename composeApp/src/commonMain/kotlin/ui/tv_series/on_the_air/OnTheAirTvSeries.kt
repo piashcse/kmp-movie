@@ -5,10 +5,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import component.TvSeries
 import component.base.BaseColumn
+import moe.tlaster.precompose.navigation.Navigator
+import navigation.NavigationScreen
 
 @Composable
 fun OnTheAirTvSeries(
@@ -23,7 +23,8 @@ fun OnTheAirTvSeries(
 
     BaseColumn(
         loading = uiState.isLoading,
-        errorMessage = uiState.errorMessage) {
+        errorMessage = uiState.errorMessage
+    ) {
         uiState.tvSeriesList?.let {
             TvSeries(it) { seriesId ->
                 navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))

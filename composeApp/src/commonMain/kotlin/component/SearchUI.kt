@@ -55,16 +55,17 @@ fun SearchForMovie(
 
     ) {
         items(items = searchData, itemContent = { item ->
-            Row(modifier = Modifier
-                .padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
-                .clickable {
-                    itemClick.invoke()
-                    navController.navigate(
-                        NavigationScreen.MovieDetail.route.plus(
-                            "/${item.id}"
+            Row(
+                modifier = Modifier
+                    .padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
+                    .clickable {
+                        itemClick.invoke()
+                        navController.navigate(
+                            NavigationScreen.MovieDetail.route.plus(
+                                "/${item.id}"
+                            )
                         )
-                    )
-                }) {
+                    }) {
                 CoilImage(
                     imageModel = {
                         AppConstant.IMAGE_URL.plus(
@@ -134,16 +135,17 @@ fun SearchForTVSeries(
 
     ) {
         items(items = searchData, itemContent = { item ->
-            Row(modifier = Modifier
-                .padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
-                .clickable {
-                    itemClick.invoke()
-                    navController.navigate(
-                        NavigationScreen.MovieDetail.route.plus(
-                            "/${item.id}"
+            Row(
+                modifier = Modifier
+                    .padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
+                    .clickable {
+                        itemClick.invoke()
+                        navController.navigate(
+                            NavigationScreen.MovieDetail.route.plus(
+                                "/${item.id}"
+                            )
                         )
-                    )
-                }) {
+                    }) {
                 CoilImage(
                     imageModel = {
                         AppConstant.IMAGE_URL.plus(

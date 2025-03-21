@@ -5,10 +5,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import component.Movies
 import component.base.BaseColumn
+import moe.tlaster.precompose.navigation.Navigator
+import navigation.NavigationScreen
 
 @Composable
 fun UpcomingMovie(
@@ -22,7 +22,8 @@ fun UpcomingMovie(
 
     BaseColumn(
         loading = uiState.isLoading,
-        errorMessage = uiState.errorMessage) {
+        errorMessage = uiState.errorMessage
+    ) {
         uiState.movieList?.let {
             Movies(it) { movieId ->
                 navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))

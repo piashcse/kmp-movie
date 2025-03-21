@@ -57,7 +57,8 @@ fun SearchBar(viewModel: AppViewModel, pagerState: PagerState, pressOnBack: () -
                 }
         )
         Spacer(modifier = Modifier.width(5.dp))
-        TextField(modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
+        TextField(
+            modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
             value = text,
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Blue,
@@ -70,20 +71,22 @@ fun SearchBar(viewModel: AppViewModel, pagerState: PagerState, pressOnBack: () -
                 text = it
                 if (pagerState.currentPage == 0) {
                     viewModel.movieSearch(it)
-                }else{
+                } else {
                     viewModel.tvSeriesSearch(it)
                 }
             },
             singleLine = true,
             trailingIcon = {
                 if (text.trim().isNotEmpty()) {
-                    Icon(Icons.Filled.Clear,
+                    Icon(
+                        Icons.Filled.Clear,
                         contentDescription = "clear text",
                         modifier = Modifier.padding(end = 16.dp).offset(x = 10.dp).clickable {
                             text = ""
                         })
                 } else {
-                    Icon(Icons.Filled.Search,
+                    Icon(
+                        Icons.Filled.Search,
                         contentDescription = "search",
                         modifier = Modifier.padding(end = 16.dp).offset(x = 10.dp).clickable {
 

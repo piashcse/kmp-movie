@@ -5,10 +5,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import component.TvSeries
 import component.base.BaseColumn
+import moe.tlaster.precompose.navigation.Navigator
+import navigation.NavigationScreen
 
 @Composable
 fun AiringTodayTvSeries(
@@ -21,7 +21,8 @@ fun AiringTodayTvSeries(
         viewModel.fetchAiringTodayTvSeries(1)
     }
     BaseColumn(
-        loading = uiState.isLoading, errorMessage = uiState.errorMessage) {
+        loading = uiState.isLoading, errorMessage = uiState.errorMessage
+    ) {
         uiState.tvSeriesList?.let {
             TvSeries(it) { seriesId ->
                 navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))

@@ -1,8 +1,8 @@
-package ui.movie.top_rated
+package ui.celebrities.trending
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.MovieItem
+import data.model.celebrities.Celebrity
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,24 +11,24 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import utils.network.UiState
 
-class TopRatedViewModel : ViewModel() {
+class TrendingCelebritiesViewModel : ViewModel() {
 
     private val repo = Repository() // Ensure Singleton or pass manually
 
-    private val _uiState = MutableStateFlow(MovieUiState())
-    val uiState: StateFlow<MovieUiState> get() = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(CelebrityUiState())
+    val uiState: StateFlow<CelebrityUiState> get() = _uiState.asStateFlow()
 
-    fun fetchTopRatedMovie(page: Int) {
+    fun fetchTrendingCelebrities(page: Int) {
         viewModelScope.launch {
-            repo.topRatedMovie(page).collect { result ->
-                handleStateUpdate(result) { state, data -> state.copy(movieList = data) }
+            repo.trendingCelebrities(page).collect { result ->
+                handleStateUpdate(result) { state, data -> state.copy(celebrityList = data) }
             }
         }
     }
 
     private fun <T> handleStateUpdate(
         result: UiState<T>,
-        stateUpdater: (MovieUiState, T?) -> MovieUiState
+        stateUpdater: (CelebrityUiState, T?) -> CelebrityUiState
     ) {
         _uiState.update { currentState ->
             when (result) {
@@ -47,8 +47,8 @@ class TopRatedViewModel : ViewModel() {
     }
 }
 
-data class MovieUiState(
-    val movieList: List<MovieItem>? = emptyList(),
+data class CelebrityUiState(
+    val celebrityList: List<Celebrity>? = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )

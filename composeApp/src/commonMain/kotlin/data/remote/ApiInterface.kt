@@ -6,6 +6,7 @@ import data.model.TvSeriesItem
 import data.model.artist.Artist
 import data.model.artist.ArtistDetail
 import data.model.artist.ArtistMovies
+import data.model.celebrities.Celebrity
 import data.model.movie_detail.MovieDetail
 import data.model.tv_detail.TvSeriesDetail
 import data.model.tv_detail.credit.Credit
@@ -38,9 +39,11 @@ interface ApiInterface {
     suspend fun recommendedMovies(
         movieId: Int
     ): BaseModel<MovieItem>
+
     suspend fun movieCredit(
         movieId: Int
     ): Artist
+
     suspend fun artistDetail(
         personId: Int
     ): ArtistDetail
@@ -80,5 +83,13 @@ interface ApiInterface {
     suspend fun artistMoviesAndTvSeries(
         personId: Int
     ): ArtistMovies
+
+    suspend fun popularCelebrity(
+        page: Int
+    ): BaseModel<Celebrity>
+
+    suspend fun trendingCelebrity(
+        page: Int
+    ): BaseModel<Celebrity>
 
 }
