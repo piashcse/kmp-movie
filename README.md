@@ -2,7 +2,7 @@
 
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-v1.7.3-green)](https://developer.android.com/jetpack/compose)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.20-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
-[![ktorCleint](https://img.shields.io/badge/ktor_client-3.1.1-pink)](https://ktor.io/docs/welcome.html)
+[![ktorCleint](https://img.shields.io/badge/ktor_client-3.1.2-pink)](https://ktor.io/docs/welcome.html)
 ![badge-Android](https://img.shields.io/badge/Platform-Android-brightgreen)
 ![badge-iOS](https://img.shields.io/badge/Platform-iOS-lightgray)
 ![badge-desktop](http://img.shields.io/badge/Platform-Desktop-4D76CD.svg?style=flat)
@@ -133,7 +133,7 @@ To run the application on an iPhone device/simulator:
 ### Web
 
 - Before running make sure you have `yarn 1.22.22`
-- Run the web application: `./gradlew wasmJsBrowserRun`
+- Run the web application: `./gradlew wasmJsBrowserDevelopmentRun`
 
 ## Project structure
 
