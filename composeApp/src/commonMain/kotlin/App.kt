@@ -89,8 +89,8 @@ internal fun App(
             )
         } else {
             listOf(
-                NavigationScreen.TrendingCelebrityNav,
                 NavigationScreen.PopularCelebrityNav,
+                NavigationScreen.TrendingCelebrityNav,
             )
         }
 

@@ -14,7 +14,7 @@ data class Celebrity(
     @SerialName("known_for")
     val knownFor: List<KnownFor>?,
     @SerialName("known_for_department")
-    val knownForDepartment: String,
+    val knownForDepartment: String?,
     @SerialName("name")
     val name: String,
     @SerialName("original_name")

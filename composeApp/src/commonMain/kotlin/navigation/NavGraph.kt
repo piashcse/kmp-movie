@@ -73,11 +73,11 @@ fun Navigation(navigator: Navigator, page: Int) {
                 TvSeriesDetail(navigator, it)
             }
         }
-        scene(route = NavigationScreen.TrendingCelebrity.route) {
-            TrendingCelebrities(navigator)
-        }
         scene(route = NavigationScreen.PopularCelebrity.route) {
             PopularCelebrities(navigator)
+        }
+        scene(route = NavigationScreen.TrendingCelebrity.route) {
+            TrendingCelebrities(navigator)
         }
     }
 }
@@ -115,7 +115,7 @@ fun initialScreen(page: Int): String {
         }
 
         else -> {
-            NavigationScreen.TrendingCelebrity.route
+            NavigationScreen.PopularCelebrity.route
         }
     }
 }
