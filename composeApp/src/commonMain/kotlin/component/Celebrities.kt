@@ -20,8 +20,6 @@ import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
 import data.model.celebrities.Celebrity
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import theme.cornerRadius
 import utils.AppConstant
 

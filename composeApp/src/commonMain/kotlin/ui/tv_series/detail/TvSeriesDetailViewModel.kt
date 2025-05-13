@@ -2,9 +2,6 @@ package ui.tv_series.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.TvSeriesItem
-import data.model.tv_detail.TvSeriesDetail
-import data.model.tv_detail.credit.Credit
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
