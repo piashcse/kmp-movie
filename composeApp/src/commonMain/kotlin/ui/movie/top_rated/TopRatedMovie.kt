@@ -1,5 +1,6 @@
 package ui.movie.top_rated
 
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -9,15 +10,18 @@ import component.Movies
 import component.base.BaseColumn
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
+import utils.OnGridPagination
 
 @Composable
 fun TopRatedMovie(
-    navigator: Navigator, viewModel: TopRatedViewModel = viewModel { TopRatedViewModel() }
+    navigator: Navigator,
+    viewModel: TopRatedViewModel = viewModel { TopRatedViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val gridState = rememberLazyGridState()
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchTopRatedMovie(1)
+    LaunchedEffect(Unit){
+        viewModel.loadTopRatedMovies()
     }
 
     BaseColumn(
@@ -25,10 +29,12 @@ fun TopRatedMovie(
         errorMessage = uiState.errorMessage
     ) {
         uiState.movieList?.let {
-            Movies(it) { movieId ->
-                navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
+            Movies(it, gridState) { movieId ->
+                navigator.navigate(NavigationScreen.MovieDetail.route + "/$movieId")
+            }
+            OnGridPagination(gridState = gridState) {
+                viewModel.loadTopRatedMovies()
             }
         }
     }
-
 }

@@ -8,47 +8,34 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import utils.network.UiState
+import utils.MovieUiState
+import utils.Paginator
 
-class NowPlayingViewModel : ViewModel() {
-
-    private val repo = Repository() // Ensure Singleton or pass manually
-
+class NowPlayingViewModel(private val repo: Repository = Repository()) : ViewModel() {
     private val _uiState = MutableStateFlow(MovieUiState())
-    val uiState: StateFlow<MovieUiState> get() = _uiState.asStateFlow()
+    val uiState: StateFlow<MovieUiState> = _uiState.asStateFlow()
 
-    fun fetchNowPlayingMovie(page: Int) {
-        viewModelScope.launch {
-            repo.nowPlayingMovie(page).collect { result ->
-                handleStateUpdate(result) { state, data -> state.copy(movieList = data) }
-            }
-        }
-    }
-
-    private fun <T> handleStateUpdate(
-        result: UiState<T>,
-        stateUpdater: (MovieUiState, T?) -> MovieUiState
-    ) {
-        _uiState.update { currentState ->
-            when (result) {
-                is UiState.Loading -> currentState.copy(isLoading = true)
-                is UiState.Success -> stateUpdater(
-                    currentState,
-                    result.data
-                ).copy(isLoading = false)
-
-                is UiState.Error -> currentState.copy(
-                    isLoading = false,
-                    errorMessage = result.exception.message
+    private val paginator = Paginator(
+        scope = viewModelScope,
+        initialKey = 1,
+        incrementBy = 1,
+        onLoadUpdated = { isLoading ->
+            _uiState.update { it.copy(isLoading = isLoading) }
+        },
+        onRequest = { page ->
+            repo.nowPlayingMovie(page)
+        },
+        onError = { throwable ->
+            _uiState.update { it.copy(errorMessage = throwable.message) }
+        },
+        onSuccess = { items, _ ->
+            _uiState.update { currentState ->
+                currentState.copy(
+                    movieList = currentState.movieList.orEmpty() + items
                 )
             }
         }
-    }
-}
+    )
 
-data class MovieUiState(
-    val movieList: List<MovieItem>? = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)
+    fun loadNowPlayingMovies() = paginator.loadNextItems()
+}

@@ -1,5 +1,11 @@
 package utils
 
+import data.model.MovieItem
+import data.model.TvSeriesItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import utils.network.UiState
 import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.minutes

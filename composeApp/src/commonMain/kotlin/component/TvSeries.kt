@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,9 +24,14 @@ import utils.AppConstant
 import utils.cornerRadius
 
 @Composable
-internal fun TvSeries(listItems: List<TvSeriesItem>, onclick: (id: Int) -> Unit) {
+internal fun TvSeries(
+    listItems: List<TvSeriesItem>,
+    gridState: LazyGridState,
+    onclick: (id: Int) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 180.dp),
+        state = gridState,
         modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp),
         content = {
             items(listItems) {

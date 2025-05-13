@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
@@ -27,10 +28,12 @@ import utils.AppConstant
 @Composable
 fun Celebrities(
     celebrities: List<Celebrity>,
-    navigator: Navigator,
+    gridState: LazyGridState,
+    onclick: (id: Int) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
+        state = gridState,
         modifier = Modifier
             .padding(horizontal = 5.dp)
     ) {
@@ -42,11 +45,7 @@ fun Celebrities(
                             .size(230.dp)
                             .cornerRadius(10)
                             .clickable {
-                                navigator.navigate(
-                                    NavigationScreen.ArtistDetail.route.plus(
-                                        "/${item.id}"
-                                    )
-                                )
+                                onclick(item.id)
                             },
                         imageModel = { AppConstant.IMAGE_URL + item.profilePath },
                         imageOptions = ImageOptions(

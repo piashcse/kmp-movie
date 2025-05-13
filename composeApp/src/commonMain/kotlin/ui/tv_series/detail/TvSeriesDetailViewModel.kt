@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import utils.TvSeriesDetailUiState
 import utils.network.UiState
 
-class TvSeriesDetailViewModel : ViewModel() {
-    private val repo = Repository()
+class TvSeriesDetailViewModel(private val repo: Repository = Repository()) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TvSeriesDetailUiState())
     val uiState: StateFlow<TvSeriesDetailUiState> get() = _uiState.asStateFlow()
@@ -72,11 +72,3 @@ class TvSeriesDetailViewModel : ViewModel() {
         }
     }
 }
-
-data class TvSeriesDetailUiState(
-    val isLoading: Boolean = false,
-    val tvSeriesDetail: TvSeriesDetail? = null,
-    val recommendedTvSeries: List<TvSeriesItem> = emptyList(),
-    val creditTvSeries: Credit? = null,
-    val errorMessage: String? = null
-)
