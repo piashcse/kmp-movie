@@ -8,47 +8,35 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import utils.network.UiState
+import utils.Paginator
+import utils.TvSeriesUiState
 
-class AiringTodayTvSeriesViewModel : ViewModel() {
-
-    private val repo = Repository() // Ensure Singleton or pass manually
+class AiringTodayTvSeriesViewModel(private val repo: Repository = Repository()) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TvSeriesUiState())
     val uiState: StateFlow<TvSeriesUiState> get() = _uiState.asStateFlow()
 
-    fun fetchAiringTodayTvSeries(page: Int) {
-        viewModelScope.launch {
-            repo.airingTodayTvSeries(page).collect { result ->
-                handleStateUpdate(result) { state, data -> state.copy(tvSeriesList = data) }
+    private val paginator = Paginator<TvSeriesItem>(
+        scope = viewModelScope,
+        initialKey = 1,
+        incrementBy = 1,
+        onLoadUpdated = { isLoading ->
+            _uiState.update { it.copy(isLoading = isLoading) }
+        },
+        onRequest = { nextKey ->
+            repo.airingTodayTvSeries(nextKey)
+        },
+        onError = { throwable ->
+            _uiState.update { it.copy(errorMessage = throwable.message) }
+        },
+        onSuccess = { items, _ ->
+            _uiState.update { current ->
+                current.copy(tvSeriesList = current.tvSeriesList.orEmpty() + items)
             }
         }
-    }
+    )
 
-    private fun <T> handleStateUpdate(
-        result: UiState<T>,
-        stateUpdater: (TvSeriesUiState, T?) -> TvSeriesUiState
-    ) {
-        _uiState.update { currentState ->
-            when (result) {
-                is UiState.Loading -> currentState.copy(isLoading = true)
-                is UiState.Success -> stateUpdater(
-                    currentState,
-                    result.data
-                ).copy(isLoading = false)
-
-                is UiState.Error -> currentState.copy(
-                    isLoading = false,
-                    errorMessage = result.exception.message
-                )
-            }
-        }
+    fun loadAiringTodayTvSeries() {
+        paginator.loadNextItems()
     }
 }
-
-data class TvSeriesUiState(
-    val tvSeriesList: List<TvSeriesItem>? = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)

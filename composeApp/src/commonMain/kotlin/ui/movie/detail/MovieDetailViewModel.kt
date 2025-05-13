@@ -2,20 +2,16 @@ package ui.movie.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.MovieItem
-import data.model.artist.Artist
-import data.model.movie_detail.MovieDetail
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import utils.MovieDetailUiState
 import utils.network.UiState
 
-class MovieDetailViewModel : ViewModel() {
-
-    private val repo = Repository() // Ensure this is a Singleton or injected manually
+class MovieDetailViewModel(private val repo: Repository = Repository()) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MovieDetailUiState())
     val uiState: StateFlow<MovieDetailUiState> get() = _uiState.asStateFlow()
@@ -70,11 +66,3 @@ class MovieDetailViewModel : ViewModel() {
         }
     }
 }
-
-data class MovieDetailUiState(
-    val movieDetail: MovieDetail? = null,
-    val recommendedMovies: List<MovieItem> = emptyList(),
-    val movieCredit: Artist? = null,
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)

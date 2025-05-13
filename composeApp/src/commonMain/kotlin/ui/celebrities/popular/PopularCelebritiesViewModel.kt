@@ -8,47 +8,35 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import utils.network.UiState
+import utils.CelebrityUiState
+import utils.Paginator
 
-class PopularCelebritiesViewModel : ViewModel() {
-
-    private val repo = Repository() // Ensure Singleton or pass manually
+class PopularCelebritiesViewModel(private val repo: Repository = Repository()) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CelebrityUiState())
     val uiState: StateFlow<CelebrityUiState> get() = _uiState.asStateFlow()
 
-    fun fetchPopularCelebrities(page: Int) {
-        viewModelScope.launch {
-            repo.popularCelebrities(page).collect { result ->
-                handleStateUpdate(result) { state, data -> state.copy(celebrityList = data) }
+    private val paginator = Paginator<Celebrity>(
+        scope = viewModelScope,
+        initialKey = 1,
+        incrementBy = 1,
+        onLoadUpdated = { isLoading ->
+            _uiState.update { it.copy(isLoading = isLoading) }
+        },
+        onRequest = { nextKey ->
+            repo.popularCelebrities(nextKey)
+        },
+        onError = { throwable ->
+            _uiState.update { it.copy(errorMessage = throwable.message) }
+        },
+        onSuccess = { items, _ ->
+            _uiState.update { current ->
+                current.copy(celebrityList = current.celebrityList.orEmpty() + items)
             }
         }
-    }
+    )
 
-    private fun <T> handleStateUpdate(
-        result: UiState<T>,
-        stateUpdater: (CelebrityUiState, T?) -> CelebrityUiState
-    ) {
-        _uiState.update { currentState ->
-            when (result) {
-                is UiState.Loading -> currentState.copy(isLoading = true)
-                is UiState.Success -> stateUpdater(
-                    currentState,
-                    result.data
-                ).copy(isLoading = false)
-
-                is UiState.Error -> currentState.copy(
-                    isLoading = false,
-                    errorMessage = result.exception.message
-                )
-            }
-        }
+    fun loadPopularCelebrities() {
+        paginator.loadNextItems()
     }
 }
-
-data class CelebrityUiState(
-    val celebrityList: List<Celebrity>? = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)

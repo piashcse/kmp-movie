@@ -1,5 +1,6 @@
 package ui.movie.upcoming
 
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -9,15 +10,18 @@ import component.Movies
 import component.base.BaseColumn
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
+import utils.OnGridPagination
 
 @Composable
 fun UpcomingMovie(
-    navigator: Navigator, viewModel: UpcomingMovieViewModel = viewModel { UpcomingMovieViewModel() }
+    navigator: Navigator,
+    viewModel: UpcomingMovieViewModel = viewModel { UpcomingMovieViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val gridState = rememberLazyGridState()
 
     LaunchedEffect(Unit) {
-        viewModel.fetchUpcomingMovie(1)
+        viewModel.loadUpcomingMovies()
     }
 
     BaseColumn(
@@ -25,10 +29,12 @@ fun UpcomingMovie(
         errorMessage = uiState.errorMessage
     ) {
         uiState.movieList?.let {
-            Movies(it) { movieId ->
-                navigator.navigate(NavigationScreen.MovieDetail.route.plus("/$movieId"))
+            Movies(it, gridState) { movieId ->
+                navigator.navigate(NavigationScreen.MovieDetail.route + "/$movieId")
+            }
+            OnGridPagination(gridState = gridState) {
+                viewModel.loadUpcomingMovies()
             }
         }
     }
-
 }

@@ -1,5 +1,6 @@
 package ui.celebrities.trending
 
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -8,6 +9,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import component.Celebrities
 import component.base.BaseColumn
 import moe.tlaster.precompose.navigation.Navigator
+import navigation.NavigationScreen
+import utils.OnGridPagination
 
 @Composable
 fun TrendingCelebrities(
@@ -15,9 +18,10 @@ fun TrendingCelebrities(
     viewModel: TrendingCelebritiesViewModel = viewModel { TrendingCelebritiesViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val gridState = rememberLazyGridState()
 
     LaunchedEffect(Unit) {
-        viewModel.fetchTrendingCelebrities(1)
+        viewModel.loadTrendingCelebrities()
     }
 
     BaseColumn(
@@ -25,7 +29,16 @@ fun TrendingCelebrities(
         errorMessage = uiState.errorMessage
     ) {
         uiState.celebrityList?.let {
-            Celebrities(it, navigator)
+            Celebrities(it, gridState) { celebrityId ->
+                navigator.navigate(
+                    NavigationScreen.ArtistDetail.route.plus(
+                        "/${celebrityId}"
+                    )
+                )
+            }
+            OnGridPagination(gridState = gridState) {
+                viewModel.loadTrendingCelebrities()
+            }
         }
     }
 }

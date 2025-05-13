@@ -2,19 +2,16 @@ package ui.tv_series.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.TvSeriesItem
-import data.model.tv_detail.TvSeriesDetail
-import data.model.tv_detail.credit.Credit
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import utils.TvSeriesDetailUiState
 import utils.network.UiState
 
-class TvSeriesDetailViewModel : ViewModel() {
-    private val repo = Repository()
+class TvSeriesDetailViewModel(private val repo: Repository = Repository()) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TvSeriesDetailUiState())
     val uiState: StateFlow<TvSeriesDetailUiState> get() = _uiState.asStateFlow()
@@ -72,11 +69,3 @@ class TvSeriesDetailViewModel : ViewModel() {
         }
     }
 }
-
-data class TvSeriesDetailUiState(
-    val isLoading: Boolean = false,
-    val tvSeriesDetail: TvSeriesDetail? = null,
-    val recommendedTvSeries: List<TvSeriesItem> = emptyList(),
-    val creditTvSeries: Credit? = null,
-    val errorMessage: String? = null
-)

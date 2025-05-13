@@ -273,7 +273,7 @@ fun TabScreen(navigator: Navigator, pagerState: PagerState, padding: PaddingValu
             }
         }
         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-            Navigation(navigator, page)
+            Navigation(navigator, pagerState.currentPage)
         }
     }
 }

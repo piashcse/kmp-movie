@@ -1,5 +1,6 @@
 package ui.tv_series.popular
 
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -9,6 +10,7 @@ import component.TvSeries
 import component.base.BaseColumn
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
+import utils.OnGridPagination
 
 @Composable
 fun PopularTvSeries(
@@ -16,15 +18,22 @@ fun PopularTvSeries(
     viewModel: PopularTvSeriesViewModel = viewModel { PopularTvSeriesViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val gridState = rememberLazyGridState()
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchPopularTvSeries(1)
+    LaunchedEffect(Unit){
+        viewModel.loadPopularTvSeries()
     }
 
-    BaseColumn(loading = uiState.isLoading, errorMessage = uiState.errorMessage) {
+    BaseColumn(
+        loading = uiState.isLoading,
+        errorMessage = uiState.errorMessage
+    ) {
         uiState.tvSeriesList?.let {
-            TvSeries(it) { seriesId ->
-                navigator.navigate(NavigationScreen.TvSeriesDetail.route.plus("/$seriesId"))
+            TvSeries(it, gridState) { seriesId ->
+                navigator.navigate(NavigationScreen.TvSeriesDetail.route + "/$seriesId")
+            }
+            OnGridPagination(gridState = gridState) {
+                viewModel.loadPopularTvSeries()
             }
         }
     }
