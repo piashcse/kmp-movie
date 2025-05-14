@@ -1,6 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -127,5 +128,20 @@ compose.desktop {
     }
 }
 buildConfig {
-    buildConfigField("API_KEY", "59cd6896d8432f9c69aed9b86b9c2931")
+    val apiKey = loadLocalProperty("local.properties", "API_KEY")
+    buildConfigField("API_KEY", apiKey)
+}
+
+fun Project.loadLocalProperty(
+    path: String,
+    propertyName: String,
+): String {
+    val localProperties = Properties()
+    val localPropertiesFile = project.rootProject.file(path)
+    if (localPropertiesFile.exists()) {
+        localProperties.load(localPropertiesFile.inputStream())
+        return localProperties.getProperty(propertyName)
+    } else {
+        throw GradleException("can not find property : $propertyName")
+    }
 }
