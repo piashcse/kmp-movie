@@ -61,14 +61,12 @@ You will need to provide a developer key to fetch the data from TMDB API.
 
 * Generate a new key (v3 auth) from [here](https://www.themoviedb.org/settings/api). Copy the key
   and go back to the project.
-* Add the key to build config in `./composeApp/build.gradle.kts`:
+* Add a new entry in `local.properties` file:
 
 ```kotlin
-defaultConfig {
-    ...
-    buildConfigField("API_KEY", TMDB_API_KEY)
-    ...
-}
+...
+API_KEY=superSecretSampleApiKeyOf32Chars
+...
 ```
 
 ## Built With 🛠
