@@ -63,13 +63,15 @@ class Paginator<T>(
 ) {
     private var isMakingRequest = false
     private var currentKey = initialKey
+    private var hasError = false  // NEW FLAG
 
     fun reset() {
         currentKey = initialKey
+        hasError = false
     }
 
     fun loadNextItems() {
-        if (isMakingRequest) return
+        if (isMakingRequest || hasError) return  // Prevent further loading if error occurred
 
         isMakingRequest = true
         scope.launch {
@@ -87,6 +89,7 @@ class Paginator<T>(
                         currentKey = nextKey
                     }
                     is UiState.Error -> {
+                        hasError = true  // STOP FURTHER PAGINATION
                         onError(result.exception)
                     }
                 }
@@ -97,7 +100,6 @@ class Paginator<T>(
         }
     }
 }
-
 @Composable
 fun OnGridPagination(
     gridState: LazyGridState,
