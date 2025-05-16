@@ -64,9 +64,12 @@ You will need to provide a developer key to fetch the data from TMDB API.
 * Add a new entry in `local.properties` file:
 
 ```kotlin
-...
 API_KEY=superSecretSampleApiKeyOf32Chars
-...
+```
+#### ⚠️ If you haven’t generated an API key yet, feel free to use the demo key below for development use only.
+
+```kotlin
+API_KEY=59cd6896d8432f9c69aed9b86b9c2931
 ```
 
 ## Built With 🛠
