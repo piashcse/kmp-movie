@@ -35,7 +35,7 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.SecondaryFontColor
-import utils.AppConstant
+import constant.AppConstant
 import utils.cornerRadius
 import utils.roundTo
 

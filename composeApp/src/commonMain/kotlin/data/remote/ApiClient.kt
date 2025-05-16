@@ -12,7 +12,7 @@ import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
 import kmp_movie.composeApp.BuildConfig
 import kotlinx.serialization.json.Json
-import utils.AppConstant
+import constant.AppConstant
 
 val client = HttpClient {
     defaultRequest {

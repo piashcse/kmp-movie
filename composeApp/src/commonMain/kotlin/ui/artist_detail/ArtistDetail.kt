@@ -45,7 +45,7 @@ import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.SecondaryFontColor
 import theme.cornerRadius
-import utils.AppConstant
+import constant.AppConstant
 
 @Composable
 fun ArtistDetail(
