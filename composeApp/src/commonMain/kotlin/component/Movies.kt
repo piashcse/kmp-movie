@@ -20,7 +20,7 @@ import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
 import data.model.MovieItem
-import utils.AppConstant
+import constant.AppConstant
 import utils.cornerRadius
 
 @Composable

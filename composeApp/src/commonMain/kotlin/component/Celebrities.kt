@@ -21,7 +21,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
 import data.model.celebrities.Celebrity
 import theme.cornerRadius
-import utils.AppConstant
+import constant.AppConstant
 
 @Composable
 fun Celebrities(

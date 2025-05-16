@@ -61,7 +61,7 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.cornerRadius
-import utils.AppConstant
+import constant.AppConstant
 import utils.roundTo
 
 @Composable
