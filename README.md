@@ -1,6 +1,6 @@
 # KMP Movie (Compose Multiplatform)
 
-[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-v1.8.0-green)](https://developer.android.com/jetpack/compose)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-v1.8.1-green)](https://developer.android.com/jetpack/compose)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.21-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
 [![ktorCleint](https://img.shields.io/badge/ktor_client-3.1.3-pink)](https://ktor.io/docs/welcome.html)
 ![badge-Android](https://img.shields.io/badge/Platform-Android-brightgreen)
