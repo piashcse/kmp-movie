@@ -107,6 +107,7 @@ class ApiService : ApiInterface {
         return client.get {
             url {
                 encodedPath = "tv/airing_today"
+                parameters.append("page", page.toString())
             }
         }.body()
     }
@@ -115,6 +116,7 @@ class ApiService : ApiInterface {
         return client.get {
             url {
                 encodedPath = "tv/on_the_air"
+                parameters.append("page", page.toString())
             }
         }.body()
     }
@@ -123,6 +125,7 @@ class ApiService : ApiInterface {
         return client.get {
             url {
                 encodedPath = "tv/popular"
+                parameters.append("page", page.toString())
             }
         }.body()
     }
@@ -131,6 +134,7 @@ class ApiService : ApiInterface {
         return client.get {
             url {
                 encodedPath = "tv/top_rated"
+                parameters.append("page", page.toString())
             }
         }.body()
     }
