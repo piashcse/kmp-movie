@@ -55,10 +55,3 @@ class ArtistDetailViewModel : ViewModel() {
         }
     }
 }
-
-data class ArtistDetailUiState(
-    val artistDetail: ArtistDetail? = null,
-    val artistMovies: List<ArtistMovie>? = null,
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)

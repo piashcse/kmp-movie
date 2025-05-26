@@ -4,14 +4,14 @@ android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
 androidx-activityCompose = "1.10.1"
-compose = "1.8.1"
+compose = "1.8.2"
 compose-adaptive = "1.1.1"
 compose-multiplatform = "1.8.1"
 kotlin = "2.1.21"
 ktor-client = "3.1.3"
 precompose = "1.6.2"
 landScapist = "2.4.8"
-androidx-lifecycle = "2.8.0"
+androidx-lifecycle = "2.8.3"
 buildConfig = "5.5.4"
 
 [libraries]
@@ -38,7 +38,7 @@ androidx-lifecycle = { module = "org.jetbrains.androidx.lifecycle:lifecycle-view
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

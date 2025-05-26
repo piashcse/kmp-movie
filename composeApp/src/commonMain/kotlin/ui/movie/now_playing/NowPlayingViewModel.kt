@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import utils.MovieUiState
+import ui.movie.MovieUiState
 import utils.Paginator
 
 class NowPlayingViewModel(private val repo: Repository = Repository()) : ViewModel() {
