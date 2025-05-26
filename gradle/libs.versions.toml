@@ -12,7 +12,7 @@ ktor-client = "3.1.3"
 precompose = "1.6.2"
 landScapist = "2.4.8"
 androidx-lifecycle = "2.8.3"
-buildConfig = "5.5.4"
+buildConfig = "5.6.5"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
