@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import utils.CelebrityUiState
+import ui.celebrities.CelebrityUiState
 import utils.Paginator
 
 class TrendingCelebritiesViewModel(private val repo: Repository = Repository()) : ViewModel() {

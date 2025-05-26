@@ -5,52 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
-import data.model.MovieItem
-import data.model.TvSeriesItem
-import data.model.artist.Artist
-import data.model.celebrities.Celebrity
-import data.model.movie_detail.MovieDetail
-import data.model.tv_detail.TvSeriesDetail
-import data.model.tv_detail.credit.Credit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import utils.network.UiState
-
-
-data class MovieUiState(
-    val movieList: List<MovieItem>? = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)
-
-data class TvSeriesUiState(
-    val tvSeriesList: List<TvSeriesItem>? = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)
-
-data class CelebrityUiState(
-    val celebrityList: List<Celebrity>? = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)
-
-data class MovieDetailUiState(
-    val movieDetail: MovieDetail? = null,
-    val recommendedMovies: List<MovieItem> = emptyList(),
-    val movieCredit: Artist? = null,
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)
-
-data class TvSeriesDetailUiState(
-    val isLoading: Boolean = false,
-    val tvSeriesDetail: TvSeriesDetail? = null,
-    val recommendedTvSeries: List<TvSeriesItem> = emptyList(),
-    val creditTvSeries: Credit? = null,
-    val errorMessage: String? = null
-)
 
 class Paginator<T>(
     private val scope: CoroutineScope,

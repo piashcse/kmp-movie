@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import ui.tv_series.TvSeriesUiState
 import utils.Paginator
-import utils.TvSeriesUiState
 
 class AiringTodayTvSeriesViewModel(private val repo: Repository = Repository()) : ViewModel() {
 
