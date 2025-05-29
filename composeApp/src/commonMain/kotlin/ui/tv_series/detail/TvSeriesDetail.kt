@@ -44,6 +44,7 @@ import component.base.BaseColumn
 import component.shimmerBackground
 import component.text.SubtitlePrimary
 import component.text.SubtitleSecondary
+import constant.AppConstant
 import data.model.TvSeriesItem
 import data.model.tv_detail.TvSeriesDetail
 import data.model.tv_detail.credit.Cast
@@ -61,7 +62,6 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.cornerRadius
-import constant.AppConstant
 import utils.roundTo
 
 @Composable

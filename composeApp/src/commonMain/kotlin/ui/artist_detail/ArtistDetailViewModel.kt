@@ -2,8 +2,6 @@ package ui.artist_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.artist.ArtistDetail
-import data.model.artist.ArtistMovie
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

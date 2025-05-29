@@ -25,6 +25,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
+import constant.AppConstant
 import data.model.MovieItem
 import data.model.TvSeriesItem
 import kmp_movie.composeapp.generated.resources.Res
@@ -35,7 +36,6 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.SecondaryFontColor
-import constant.AppConstant
 import utils.cornerRadius
 import utils.roundTo
 
