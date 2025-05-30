@@ -19,8 +19,8 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
-import data.model.MovieItem
 import constant.AppConstant
+import data.model.MovieItem
 import utils.cornerRadius
 
 @Composable
@@ -41,6 +41,12 @@ internal fun Movies(
                 )
             ) {
                 CoilImage(
+                    modifier = Modifier
+                        .height(250.dp)
+                        .fillMaxWidth()
+                        .cornerRadius(10)
+                        .shimmerBackground(RoundedCornerShape(10.dp))
+                        .clickable { onclick(it.id) },
                     imageModel = { AppConstant.IMAGE_URL.plus(it.posterPath) },
                     imageOptions = ImageOptions(
                         contentScale = ContentScale.Crop,
@@ -50,12 +56,6 @@ internal fun Movies(
                     component = rememberImageComponent {
                         +CircularRevealPlugin(duration = 800)
                     },
-                    modifier = Modifier
-                        .height(250.dp)
-                        .fillMaxWidth()
-                        .cornerRadius(10)
-                        .shimmerBackground(RoundedCornerShape(5.dp))
-                        .clickable { onclick(it.id) },
                 )
             }
         }

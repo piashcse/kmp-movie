@@ -31,6 +31,7 @@ import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
 import component.ExpandableText
 import component.base.BaseColumn
+import constant.AppConstant
 import data.model.artist.ArtistMovie
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.artist_detail
@@ -45,7 +46,6 @@ import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.SecondaryFontColor
 import theme.cornerRadius
-import constant.AppConstant
 
 @Composable
 fun ArtistDetail(

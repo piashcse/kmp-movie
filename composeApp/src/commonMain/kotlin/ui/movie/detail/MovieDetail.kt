@@ -44,6 +44,7 @@ import component.base.BaseColumn
 import component.shimmerBackground
 import component.text.SubtitlePrimary
 import component.text.SubtitleSecondary
+import constant.AppConstant
 import data.model.MovieItem
 import data.model.artist.Cast
 import data.model.movie_detail.MovieDetail
@@ -61,7 +62,6 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.cornerRadius
-import constant.AppConstant
 import utils.hourMinutes
 import utils.roundTo
 

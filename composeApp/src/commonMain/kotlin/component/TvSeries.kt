@@ -19,8 +19,8 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
-import data.model.TvSeriesItem
 import constant.AppConstant
+import data.model.TvSeriesItem
 import utils.cornerRadius
 
 @Composable
@@ -41,6 +41,12 @@ internal fun TvSeries(
                     )
                 ) {
                     CoilImage(
+                        modifier = Modifier.height(250.dp).fillMaxWidth().cornerRadius(10)
+                            .shimmerBackground(
+                                RoundedCornerShape(10.dp)
+                            ).clickable {
+                                onclick(it.id)
+                            },
                         imageModel = {
                             AppConstant.IMAGE_URL.plus(
                                 it.posterPath
@@ -57,12 +63,6 @@ internal fun TvSeries(
                                 duration = 800
                             )
                         },
-                        modifier = Modifier.height(250.dp).fillMaxWidth().cornerRadius(10)
-                            .shimmerBackground(
-                                RoundedCornerShape(5.dp)
-                            ).clickable {
-                                onclick(it.id)
-                            },
                     )
                 }
             }

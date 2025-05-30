@@ -1,5 +1,6 @@
 package data.remote
 
+import constant.AppConstant
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -12,7 +13,6 @@ import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
 import kmp_movie.composeApp.BuildConfig
 import kotlinx.serialization.json.Json
-import constant.AppConstant
 
 val client = HttpClient {
     defaultRequest {
