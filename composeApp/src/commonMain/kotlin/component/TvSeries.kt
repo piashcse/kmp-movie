@@ -55,7 +55,6 @@ internal fun TvSeries(
                         imageOptions = ImageOptions(
                             contentScale = ContentScale.Crop,
                             alignment = Alignment.Center,
-                            contentDescription = "Movie item",
                             colorFilter = null,
                         ),
                         component = rememberImageComponent {

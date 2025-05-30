@@ -267,7 +267,6 @@ fun ImageLoad(url: String, modifier: Modifier = Modifier) {
         imageOptions = ImageOptions(
             contentScale = ContentScale.Crop,
             alignment = Alignment.Center,
-            contentDescription = "Image"
         ),
         component = rememberImageComponent {
             +CircularRevealPlugin(
