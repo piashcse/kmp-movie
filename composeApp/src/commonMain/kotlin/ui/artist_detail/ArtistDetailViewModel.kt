@@ -10,9 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import utils.network.UiState
 
-class ArtistDetailViewModel : ViewModel() {
-
-    private val repo = Repository() // Ensure this is a Singleton or injected manually
+class ArtistDetailViewModel(private val repo: Repository = Repository()) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ArtistDetailUiState())
     val uiState: StateFlow<ArtistDetailUiState> get() = _uiState.asStateFlow()

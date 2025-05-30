@@ -14,7 +14,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kmp_movie.composeApp.BuildConfig
 import kotlinx.serialization.json.Json
 
-val client = HttpClient {
+val apiClient = HttpClient {
     defaultRequest {
         url {
             takeFrom(AppConstant.BASE_URL)

@@ -11,6 +11,7 @@ import ui.movie.MovieUiState
 import utils.Paginator
 
 class NowPlayingViewModel(private val repo: Repository = Repository()) : ViewModel() {
+
     private val _uiState = MutableStateFlow(MovieUiState())
     val uiState: StateFlow<MovieUiState> = _uiState.asStateFlow()
 

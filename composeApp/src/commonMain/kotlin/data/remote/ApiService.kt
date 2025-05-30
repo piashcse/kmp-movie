@@ -18,7 +18,7 @@ class ApiService : ApiInterface {
     override suspend fun nowPlayingMovies(
         page: Int,
     ): BaseModel<MovieItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "movie/now_playing"
                 parameters.append("page", page.toString())
@@ -30,7 +30,7 @@ class ApiService : ApiInterface {
     override suspend fun popularMovies(
         page: Int,
     ): BaseModel<MovieItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "movie/popular"
                 parameters.append("page", page.toString())
@@ -42,7 +42,7 @@ class ApiService : ApiInterface {
     override suspend fun topRatedMovies(
         page: Int,
     ): BaseModel<MovieItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "movie/top_rated"
                 parameters.append("page", page.toString())
@@ -54,7 +54,7 @@ class ApiService : ApiInterface {
     override suspend fun upcomingMovies(
         page: Int,
     ): BaseModel<MovieItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "movie/upcoming"
                 parameters.append("page", page.toString())
@@ -63,7 +63,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun movieDetail(movieId: Int): MovieDetail {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "movie/$movieId"
             }
@@ -71,7 +71,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun movieSearch(searchKey: String): BaseModel<MovieItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "search/movie"
                 parameters.append("query", searchKey)
@@ -80,7 +80,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun recommendedMovies(movieId: Int): BaseModel<MovieItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "movie/$movieId/recommendations"
             }
@@ -88,7 +88,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun movieCredit(movieId: Int): Artist {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "movie/$movieId/credits"
             }
@@ -96,7 +96,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun artistDetail(personId: Int): ArtistDetail {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "person/$personId"
             }
@@ -104,7 +104,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun airingTodayTvSeries(page: Int): BaseModel<TvSeriesItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "tv/airing_today"
                 parameters.append("page", page.toString())
@@ -113,7 +113,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun onTheAirTvSeries(page: Int): BaseModel<TvSeriesItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "tv/on_the_air"
                 parameters.append("page", page.toString())
@@ -122,7 +122,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun popularTvSeries(page: Int): BaseModel<TvSeriesItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "tv/popular"
                 parameters.append("page", page.toString())
@@ -131,7 +131,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun topRatedTvSeries(page: Int): BaseModel<TvSeriesItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "tv/top_rated"
                 parameters.append("page", page.toString())
@@ -140,7 +140,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun tvSeriesDetail(seriesId: Int): TvSeriesDetail {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "tv/${seriesId}"
             }
@@ -148,7 +148,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun recommendedTvSeries(seriesId: Int): BaseModel<TvSeriesItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "tv/${seriesId}/recommendations"
             }
@@ -156,7 +156,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun creditTvSeries(seriesId: Int): Credit {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "tv/${seriesId}/credits"
             }
@@ -164,7 +164,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun tvSeriesSearch(searchKey: String): BaseModel<TvSeriesItem> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "search/tv"
                 parameters.append("query", searchKey)
@@ -173,7 +173,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun artistMoviesAndTvSeries(personId: Int): ArtistMovies {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "person/${personId}/combined_credits"
             }
@@ -181,7 +181,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun popularCelebrity(page: Int): BaseModel<Celebrity> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "person/popular"
                 parameters.append("page", page.toString())
@@ -190,7 +190,7 @@ class ApiService : ApiInterface {
     }
 
     override suspend fun trendingCelebrity(page: Int): BaseModel<Celebrity> {
-        return client.get {
+        return apiClient.get {
             url {
                 encodedPath = "trending/person/week"
                 parameters.append("page", page.toString())

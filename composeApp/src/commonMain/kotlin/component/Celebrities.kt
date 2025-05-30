@@ -37,7 +37,7 @@ fun Celebrities(
     onclick: (id: Int) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns =  GridCells.Adaptive(minSize = 180.dp),
         state = gridState,
         modifier = Modifier
             .padding(start = 5.dp, end = 5.dp, top = 5.dp)

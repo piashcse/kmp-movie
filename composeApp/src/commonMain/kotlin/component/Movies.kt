@@ -51,7 +51,6 @@ internal fun Movies(
                     imageOptions = ImageOptions(
                         contentScale = ContentScale.Crop,
                         alignment = Alignment.Center,
-                        contentDescription = "Movie item",
                     ),
                     component = rememberImageComponent {
                         +CircularRevealPlugin(duration = 800)
