@@ -1,6 +1,6 @@
 package piashcse.kmp.movie
 
-import App
+import ui.App
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import kotlinx.browser.document

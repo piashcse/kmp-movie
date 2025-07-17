@@ -1,6 +1,6 @@
 package piashcse.kmp.movie
 
-import App
+import ui.App
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
