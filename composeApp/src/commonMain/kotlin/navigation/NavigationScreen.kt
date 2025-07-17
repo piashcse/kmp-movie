@@ -132,7 +132,7 @@ sealed class NavigationScreen(
         })
 
     data object TrendingCelebrityNav :
-        NavigationScreen("trending_celebrity", title = "Trending Celebrity", navIcon = {
+        NavigationScreen("trending_celebrity", title = "Trending", navIcon = {
             Icon(
                 Icons.Filled.Timeline,
                 contentDescription = "Timeline",
@@ -143,7 +143,7 @@ sealed class NavigationScreen(
         })
 
     data object PopularCelebrityNav :
-        NavigationScreen("popular_celebrity", title = "Popular Celebrity", navIcon = {
+        NavigationScreen("popular_celebrity", title = "Popular", navIcon = {
             Icon(
                 Icons.Filled.Favorite,
                 contentDescription = "Timeline",

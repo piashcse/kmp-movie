@@ -11,19 +11,19 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
 import org.jetbrains.compose.resources.stringResource
-import ui.artist_detail.ArtistDetail
-import ui.celebrities.popular.PopularCelebrities
-import ui.celebrities.trending.TrendingCelebrities
-import ui.movie.detail.MovieDetail
-import ui.movie.now_playing.NowPlayingScreen
-import ui.movie.popular.PopularMovie
-import ui.movie.top_rated.TopRatedMovie
-import ui.movie.upcoming.UpcomingMovie
-import ui.tv_series.airing_today.AiringTodayTvSeries
-import ui.tv_series.detail.TvSeriesDetail
-import ui.tv_series.on_the_air.OnTheAirTvSeries
-import ui.tv_series.popular.PopularTvSeries
-import ui.tv_series.top_rated.TopRatedTvSeries
+import ui.screens.artist_detail.ArtistDetail
+import ui.screens.celebrities.popular.PopularCelebrities
+import ui.screens.celebrities.trending.TrendingCelebrities
+import ui.screens.movie.detail.MovieDetail
+import ui.screens.movie.now_playing.NowPlayingScreen
+import ui.screens.movie.popular.PopularMovie
+import ui.screens.movie.top_rated.TopRatedMovie
+import ui.screens.movie.upcoming.UpcomingMovie
+import ui.screens.tv_series.airing_today.AiringTodayTvSeries
+import ui.screens.tv_series.detail.TvSeriesDetail
+import ui.screens.tv_series.on_the_air.OnTheAirTvSeries
+import ui.screens.tv_series.popular.PopularTvSeries
+import ui.screens.tv_series.top_rated.TopRatedTvSeries
 
 @Composable
 fun Navigation(navigator: Navigator, page: Int) {
