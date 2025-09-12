@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.serialization)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.buildConfig)
+    alias(libs.plugins.build.config)
 }
 
 kotlin {

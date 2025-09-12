@@ -3,19 +3,19 @@ agp = "8.13.0"
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
-androidx-activityCompose = "1.10.1"
-compose = "1.9.0"
+androidx-activity-compose = "1.11.0"
+compose = "1.9.1"
 compose-adaptive = "1.1.2"
 compose-multiplatform = "1.8.2"
 kotlin = "2.2.20"
-ktor-client = "3.2.3"
+ktor-client = "3.3.0"
 precompose = "1.6.2"
 landScapist = "2.5.2"
 androidx-lifecycle = "2.9.3"
-buildConfig = "5.6.8"
+build-config = "5.6.8"
 
 [libraries]
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
 compose-material3-adaptive = { group = "org.jetbrains.compose.material3.adaptive", name = "adaptive", version.ref = "compose-adaptive" }
 compose-material3-adaptive-layout = { group = "org.jetbrains.compose.material3.adaptive", name = "adaptive-layout", version.ref = "compose-adaptive" }
 compose-material3-adaptive-navigation = { group = "org.jetbrains.compose.material3.adaptive", name = "adaptive-navigation", version.ref = "compose-adaptive" }
@@ -42,4 +42,4 @@ compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-m
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
+build-config = { id = "com.github.gmazzo.buildconfig", version.ref = "build-config" }
