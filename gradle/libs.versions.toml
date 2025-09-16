@@ -6,12 +6,13 @@ android-targetSdk = "36"
 androidx-activity-compose = "1.11.0"
 compose = "1.9.1"
 compose-adaptive = "1.1.2"
-compose-multiplatform = "1.8.2"
+compose-material3 = "1.9.0-beta06"
+compose-multiplatform = "1.9.0"
 kotlin = "2.2.20"
 ktor-client = "3.3.0"
 precompose = "1.6.2"
 landScapist = "2.5.2"
-androidx-lifecycle = "2.9.3"
+androidx-lifecycle = "2.9.4"
 build-config = "5.6.8"
 
 [libraries]
@@ -19,8 +20,8 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 compose-material3-adaptive = { group = "org.jetbrains.compose.material3.adaptive", name = "adaptive", version.ref = "compose-adaptive" }
 compose-material3-adaptive-layout = { group = "org.jetbrains.compose.material3.adaptive", name = "adaptive-layout", version.ref = "compose-adaptive" }
 compose-material3-adaptive-navigation = { group = "org.jetbrains.compose.material3.adaptive", name = "adaptive-navigation", version.ref = "compose-adaptive" }
-compose-material3-adaptive-navigation-suite = { group = "org.jetbrains.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "compose-multiplatform" }
-compose-material3-windowSizeClass = { group = "org.jetbrains.compose.material3", name = "material3-window-size-class", version.ref = "compose-multiplatform" }
+compose-material3-adaptive-navigation-suite = { group = "org.jetbrains.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "compose-material3" }
+compose-material3-windowSizeClass = { group = "org.jetbrains.compose.material3", name = "material3-window-size-class", version.ref = "compose-material3" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 

@@ -12,16 +12,14 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -184,15 +182,15 @@ private fun DestinationScaffold(
                 route != NavigationScreen.MovieDetail.route && route != NavigationScreen.ArtistDetail.route && route != NavigationScreen.TvSeriesDetail.route -> {
                     FloatingActionButton(
                         onClick = { onAppBarVisibilityChange(false) },
-                        backgroundColor = FloatingActionBackground
+                        containerColor = FloatingActionBackground
                     ) {
                         Icon(Icons.Filled.Search, "", tint = Color.White)
                     }
                 }
             }
         }
-    ) { padding ->
-        TabScreen(navigator, pagerState, padding)
+    ) { contentPadding ->
+        TabScreen(navigator, pagerState, contentPadding)
         if (currentRoute(navigator) !== NavigationScreen.MovieDetail.route) {
             Column {
                 if (isAppBarVisible.not()) {
@@ -248,14 +246,8 @@ fun TabScreen(navigator: Navigator, pagerState: PagerState, padding: PaddingValu
                 NavigationScreen.ArtistDetail.route
             )
         ) {
-            TabRow(
+            PrimaryTabRow(
                 selectedTabIndex = pagerState.currentPage,
-                indicator = { tabPositions ->
-                    TabRowDefaults.PrimaryIndicator(
-                        Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                        color = MaterialTheme.colors.primary,
-                    )
-                }
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
@@ -268,7 +260,7 @@ fun TabScreen(navigator: Navigator, pagerState: PagerState, padding: PaddingValu
                         text = {
                             Text(
                                 title,
-                                color = if (pagerState.currentPage == index) MaterialTheme.colors.primary else Color.Gray
+                                color = if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary else Color.Gray
                             )
                         })
                 }
