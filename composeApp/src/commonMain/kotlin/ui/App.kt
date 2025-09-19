@@ -1,14 +1,16 @@
 package ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -33,11 +35,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ui.component.AppBarWithArrow
 import ui.component.KMPNavigationSuiteScaffold
-import ui.component.ProgressIndicator
 import ui.component.SearchBar
 import ui.component.SearchResults
 import kmp_movie.composeapp.generated.resources.Res
@@ -70,89 +72,133 @@ internal fun App(
         val navigator = rememberNavigator()
         var isAppBarVisible by remember { mutableStateOf(true) }
         val isLoading by appViewModel.isLoading.collectAsState()
+        var searchFilter by remember { mutableStateOf("Movies") }
         val pagerState = rememberPagerState {
             3
         }
-        val items = if (pagerState.currentPage == 0) {
-            listOf(
-                NavigationScreen.NowPlayingMovieNav,
-                NavigationScreen.PopularMovieNav,
-                NavigationScreen.TopRatedMovieNav,
-                NavigationScreen.UpcomingMovieNav,
-            )
-        } else if (pagerState.currentPage == 1) {
-            listOf(
-                NavigationScreen.AiringTodayTvSeriesNav,
-                NavigationScreen.OnTheAirTvSeriesNav,
-                NavigationScreen.PopularTvSeriesNav,
-                NavigationScreen.TopRatedTvSeriesNav,
-            )
-        } else {
-            listOf(
-                NavigationScreen.PopularCelebrityNav,
-                NavigationScreen.TrendingCelebrityNav,
-            )
-        }
-
         BackHandler(isAppBarVisible.not()) {
             isAppBarVisible = true
         }
         val currentRoute = currentRoute(navigator)
+
+        val items = when (pagerState.currentPage) {
+            0 -> {
+                listOf(
+                    NavigationScreen.NowPlayingMovieNav,
+                    NavigationScreen.PopularMovieNav,
+                    NavigationScreen.TopRatedMovieNav,
+                    NavigationScreen.UpcomingMovieNav,
+                )
+            }
+            1 -> {
+                listOf(
+                    NavigationScreen.AiringTodayTvSeriesNav,
+                    NavigationScreen.OnTheAirTvSeriesNav,
+                    NavigationScreen.PopularTvSeriesNav,
+                    NavigationScreen.TopRatedTvSeriesNav,
+                )
+            }
+            else -> {
+                listOf(
+                    NavigationScreen.PopularCelebrityNav,
+                    NavigationScreen.TrendingCelebrityNav,
+                )
+            }
+        }
+
         MaterialTheme {
-            Column(
-                modifier = Modifier.consumeWindowInsets(
-                    if (isAppBarVisible) {
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                    } else {
-                        WindowInsets(0, 0, 0, 0)
-                    },
-                ),
+            Box(
+                modifier = Modifier.fillMaxSize()
             ) {
-                if (isAppBarVisible) {
-                    AppBarWithArrow(
-                        navigationTitle(navigator),
-                        isBackEnable = isBackButtonEnable(navigator)
-                    ) {
-                        navigator.popBackStack()
-                    }
-                }
-                if (isBottomBarVisible(navigator)) {
-                    KMPNavigationSuiteScaffold(
-                        navigationSuiteItems = {
-                            items.forEach { destination ->
-                                item(
-                                    selected = destination.route == currentRoute,
-                                    onClick = {
-                                        navigator.navigate(
-                                            destination.route,
-                                            NavOptions(launchSingleTop = true),
-                                        )
-                                    },
-                                    icon = destination.navIcon,
-                                    label = { Text(text = destination.title, fontSize = 12.sp) },
-                                )
-                            }
-                        },
-                        windowAdaptiveInfo = windowAdaptiveInfo,
-                    ) {
+                // Main app content (tabs, etc.)
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    if (isBottomBarVisible(navigator)) {
+                        KMPNavigationSuiteScaffold(
+                            navigationSuiteItems = {
+                                items.forEach { destination ->
+                                    item(
+                                        selected = destination.route == currentRoute,
+                                        onClick = {
+                                            navigator.navigate(
+                                                destination.route,
+                                                NavOptions(launchSingleTop = true),
+                                            )
+                                        },
+                                        icon = destination.navIcon,
+                                        label = { Text(text = destination.title, fontSize = 12.sp) },
+                                    )
+                                }
+                            },
+                            windowAdaptiveInfo = windowAdaptiveInfo,
+                        ) {
+                            DestinationScaffold(
+                                navigator = navigator,
+                                isAppBarVisible = isAppBarVisible,
+                                pagerState = pagerState,
+                                onAppBarVisibilityChange = { isAppBarVisible = it },
+                                onSearchFilterChange = { searchFilter = it }
+                            )
+                        }
+                    } else {
                         DestinationScaffold(
                             navigator = navigator,
-                            appViewModel = appViewModel,
                             isAppBarVisible = isAppBarVisible,
-                            isLoading = isLoading,
                             pagerState = pagerState,
-                            onAppBarVisibilityChange = { isAppBarVisible = it }
+                            onAppBarVisibilityChange = { isAppBarVisible = it },
+                            onSearchFilterChange = { searchFilter = it }
                         )
                     }
-                } else {
-                    DestinationScaffold(
-                        navigator = navigator,
-                        appViewModel = appViewModel,
-                        isAppBarVisible = isAppBarVisible,
-                        isLoading = isLoading,
-                        pagerState = pagerState,
-                        onAppBarVisibilityChange = { isAppBarVisible = it }
-                    )
+                }
+                
+                // Show app bar when search is not active
+                if (isAppBarVisible) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top))
+                    ) {
+                        AppBarWithArrow(
+                            navigationTitle(navigator),
+                            isBackEnable = isBackButtonEnable(navigator)
+                        ) {
+                            navigator.popBackStack()
+                        }
+                    }
+                }
+                
+                // Show search UI when search is active
+                if (!isAppBarVisible) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .windowInsetsPadding(WindowInsets.safeDrawing)
+                    ) {
+                        SearchBar(
+                            viewModel = appViewModel,
+                            searchFilter = searchFilter,
+                            isLoading = isLoading,
+                            pressOnBack = {
+                                isAppBarVisible = true
+                            }
+                        )
+                        // Display search results based on the active filter
+                        SearchResults(
+                            navController = navigator,
+                            movieSearchData = appViewModel.movieSearchData.value,
+                            tvSeriesSearchData = appViewModel.tvSeriesSearchData.value,
+                            celebritySearchData = appViewModel.celebritySearchData.value,
+                            currentFilter = searchFilter,
+                            onFilterChange = { filter -> 
+                                searchFilter = filter
+                                // Clear previous search results when changing filter
+                                // The actual API call will be triggered when the user types
+                            }
+                        ) {
+                            isAppBarVisible = true
+                        }
+                    }
                 }
             }
         }
@@ -163,14 +209,11 @@ internal fun App(
 @Composable
 private fun DestinationScaffold(
     navigator: Navigator,
-    appViewModel: AppViewModel,
     isAppBarVisible: Boolean,
-    isLoading: Boolean,
     pagerState: PagerState,
     onAppBarVisibilityChange: (Boolean) -> Unit,
+    onSearchFilterChange: (String) -> Unit
 ) {
-    var searchFilter by remember { mutableStateOf("Movies") }
-    
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         floatingActionButton = {
@@ -181,7 +224,7 @@ private fun DestinationScaffold(
                         onClick = { 
                             onAppBarVisibilityChange(false)
                             // Reset filter to default when opening search
-                            searchFilter = "Movies"
+                            onSearchFilterChange("Movies")
                         },
                         containerColor = FloatingActionBackground
                     ) {
@@ -191,48 +234,16 @@ private fun DestinationScaffold(
             }
         }
     ) { contentPadding ->
-        TabScreen(navigator, pagerState, contentPadding)
-        if (currentRoute(navigator) !== NavigationScreen.MovieDetail.route) {
-            Column {
-                if (isAppBarVisible.not()) {
-                    SearchBar(
-                        viewModel = appViewModel,
-                        searchFilter = searchFilter,
-                        isLoading = isLoading,
-                        pressOnBack = {
-                            onAppBarVisibilityChange(true)
-                        }
-                    )
-                    // Display search results based on the active filter
-                    SearchResults(
-                        navController = navigator,
-                        movieSearchData = appViewModel.movieSearchData.value,
-                        tvSeriesSearchData = appViewModel.tvSeriesSearchData.value,
-                        celebritySearchData = appViewModel.celebritySearchData.value,
-                        currentFilter = searchFilter,
-                        onFilterChange = { filter -> 
-                            searchFilter = filter
-                            // Clear previous search results when changing filter
-                            // The actual API call will be triggered when the user types
-                        }
-                    ) {
-                        onAppBarVisibilityChange(true)
-                    }
-                }
+        // Only show content when app bar is visible (search not active)
+        if (isAppBarVisible) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 58.dp) // AppBar height (no need for conditional since AppBar handles its own insets)
+                    .padding(contentPadding)
+            ) {
+                TabScreen(navigator, pagerState, contentPadding)
             }
-        }
-    }
-}
-
-@Composable
-fun isBackButtonEnable(navigator: Navigator): Boolean {
-    return when (currentRoute(navigator)) {
-        NavigationScreen.ArtistDetail.route, NavigationScreen.MovieDetail.route, NavigationScreen.TvSeriesDetail.route -> {
-            true
-        }
-
-        else -> {
-            false
         }
     }
 }
@@ -279,6 +290,19 @@ fun TabScreen(navigator: Navigator, pagerState: PagerState, padding: PaddingValu
         }
         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
             Navigation(navigator, pagerState.currentPage)
+        }
+    }
+}
+
+@Composable
+fun isBackButtonEnable(navigator: Navigator): Boolean {
+    return when (currentRoute(navigator)) {
+        NavigationScreen.ArtistDetail.route, NavigationScreen.MovieDetail.route, NavigationScreen.TvSeriesDetail.route -> {
+            true
+        }
+
+        else -> {
+            false
         }
     }
 }
