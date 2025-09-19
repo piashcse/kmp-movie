@@ -39,8 +39,7 @@ import ui.component.AppBarWithArrow
 import ui.component.KMPNavigationSuiteScaffold
 import ui.component.ProgressIndicator
 import ui.component.SearchBar
-import ui.component.SearchForMovie
-import ui.component.SearchForTVSeries
+import ui.component.SearchResults
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.celebrities
 import kmp_movie.composeapp.generated.resources.movies
@@ -109,12 +108,7 @@ internal fun App(
                     },
                 ),
             ) {
-                if (isAppBarVisible.not()) {
-                    SearchBar(appViewModel, pagerState) {
-                        isAppBarVisible = true
-                    }
-
-                } else {
+                if (isAppBarVisible) {
                     AppBarWithArrow(
                         navigationTitle(navigator),
                         isBackEnable = isBackButtonEnable(navigator)
@@ -175,6 +169,8 @@ private fun DestinationScaffold(
     pagerState: PagerState,
     onAppBarVisibilityChange: (Boolean) -> Unit,
 ) {
+    var searchFilter by remember { mutableStateOf("Movies") }
+    
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         floatingActionButton = {
@@ -182,7 +178,11 @@ private fun DestinationScaffold(
             when {
                 route != NavigationScreen.MovieDetail.route && route != NavigationScreen.ArtistDetail.route && route != NavigationScreen.TvSeriesDetail.route -> {
                     FloatingActionButton(
-                        onClick = { onAppBarVisibilityChange(false) },
+                        onClick = { 
+                            onAppBarVisibilityChange(false)
+                            // Reset filter to default when opening search
+                            searchFilter = "Movies"
+                        },
                         containerColor = FloatingActionBackground
                     ) {
                         Icon(Icons.Filled.Search, "", tint = Color.White)
@@ -195,19 +195,29 @@ private fun DestinationScaffold(
         if (currentRoute(navigator) !== NavigationScreen.MovieDetail.route) {
             Column {
                 if (isAppBarVisible.not()) {
-                    if (pagerState.currentPage == 0) {
-                        SearchForMovie(navigator, appViewModel.movieSearchData.value) {
+                    SearchBar(
+                        viewModel = appViewModel,
+                        searchFilter = searchFilter,
+                        isLoading = isLoading,
+                        pressOnBack = {
                             onAppBarVisibilityChange(true)
                         }
-                    } else {
-                        SearchForTVSeries(
-                            navigator,
-                            appViewModel.tvSeriesSearchData.value
-                        ) {
-                            onAppBarVisibilityChange(true)
+                    )
+                    // Display search results based on the active filter
+                    SearchResults(
+                        navController = navigator,
+                        movieSearchData = appViewModel.movieSearchData.value,
+                        tvSeriesSearchData = appViewModel.tvSeriesSearchData.value,
+                        celebritySearchData = appViewModel.celebritySearchData.value,
+                        currentFilter = searchFilter,
+                        onFilterChange = { filter -> 
+                            searchFilter = filter
+                            // Clear previous search results when changing filter
+                            // The actual API call will be triggered when the user types
                         }
+                    ) {
+                        onAppBarVisibilityChange(true)
                     }
-                    ProgressIndicator(isLoading)
                 }
             }
         }

@@ -172,6 +172,15 @@ class ApiService : ApiInterface {
         }.body()
     }
 
+    override suspend fun celebritySearch(searchKey: String): BaseModel<Celebrity> {
+        return apiClient.get {
+            url {
+                encodedPath = "search/person"
+                parameters.append("query", searchKey)
+            }
+        }.body()
+    }
+
     override suspend fun artistMoviesAndTvSeries(personId: Int): ArtistMovies {
         return apiClient.get {
             url {
