@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.model.MovieItem
 import data.model.TvSeriesItem
+import data.model.celebrities.Celebrity
 import data.repository.Repository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -24,6 +25,8 @@ class AppViewModel : ViewModel() {
     val movieSearchData get() = _movieSearchData.asStateFlow()
     private val _tvSeriesSearchData = MutableStateFlow<List<TvSeriesItem>>(arrayListOf())
     val tvSeriesSearchData get() = _tvSeriesSearchData.asStateFlow()
+    private val _celebritySearchData = MutableStateFlow<List<Celebrity>>(arrayListOf())
+    val celebritySearchData get() = _celebritySearchData.asStateFlow()
 
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading get() = _isLoading.asStateFlow()
@@ -69,6 +72,32 @@ class AppViewModel : ViewModel() {
 
                     is UiState.Success -> {
                         _tvSeriesSearchData.value = it.data.results
+                        _isLoading.value = false
+                    }
+
+                    is UiState.Error -> {
+                        _isLoading.value = false
+                    }
+                }
+            }
+        }
+    }
+
+    @FlowPreview
+    fun celebritySearch(searchKey: String) {
+        viewModelScope.launch {
+            flowOf(searchKey).debounce(300).filter {
+                it.trim().isEmpty().not()
+            }.distinctUntilChanged().flatMapLatest {
+                repo.searchCelebrity(it)
+            }.collect {
+                when (it) {
+                    is UiState.Loading -> {
+                        _isLoading.value = true
+                    }
+
+                    is UiState.Success -> {
+                        _celebritySearchData.value = it.data.results
                         _isLoading.value = false
                     }
 

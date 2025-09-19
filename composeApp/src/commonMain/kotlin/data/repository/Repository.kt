@@ -185,6 +185,16 @@ class Repository(private val api: ApiService = ApiService()) {
         }
     }
 
+    fun searchCelebrity(searchKey: String) = flow {
+        try {
+            emit(UiState.Loading)
+            val result = api.celebritySearch(searchKey)
+            emit(UiState.Success(result))
+        } catch (e: Exception) {
+            emit(UiState.Error(e))
+        }
+    }
+
     fun popularCelebrities(page: Int) = flow {
         try {
             emit(UiState.Loading)

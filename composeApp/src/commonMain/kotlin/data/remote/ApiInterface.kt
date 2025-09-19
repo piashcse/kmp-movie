@@ -80,6 +80,10 @@ interface ApiInterface {
         searchKey: String
     ): BaseModel<TvSeriesItem>
 
+    suspend fun celebritySearch(
+        searchKey: String
+    ): BaseModel<Celebrity>
+
     suspend fun artistMoviesAndTvSeries(
         personId: Int
     ): ArtistMovies
