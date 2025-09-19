@@ -46,6 +46,8 @@ import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.celebrities
 import kmp_movie.composeapp.generated.resources.movies
 import kmp_movie.composeapp.generated.resources.tv_series
+import utils.getPlatform
+import utils.Platform
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.PreComposeApp
@@ -215,7 +217,7 @@ private fun DestinationScaffold(
     onSearchFilterChange: (String) -> Unit
 ) {
     Scaffold(
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        contentWindowInsets = if (getPlatform() == Platform.IOS) WindowInsets(0, 0, 0, 0) else WindowInsets.safeDrawing,
         floatingActionButton = {
             val route = currentRoute(navigator)
             when {
@@ -239,7 +241,7 @@ private fun DestinationScaffold(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 58.dp) // AppBar height (no need for conditional since AppBar handles its own insets)
+                    .padding(top = if (getPlatform() == Platform.IOS) 58.dp else 0.dp)
                     .padding(contentPadding)
             ) {
                 TabScreen(navigator, pagerState, contentPadding)
