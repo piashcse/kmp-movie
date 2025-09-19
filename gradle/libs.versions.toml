@@ -11,7 +11,7 @@ compose-multiplatform = "1.9.0"
 kotlin = "2.2.20"
 ktor-client = "3.3.0"
 precompose = "1.6.2"
-landScapist = "2.5.2"
+landScapist = "2.6.0"
 androidx-lifecycle = "2.9.4"
 build-config = "5.6.8"
 
