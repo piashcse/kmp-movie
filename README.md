@@ -29,27 +29,32 @@ UI experience across all platforms, leveraging [The Movie DB API](https://www.th
 
 # Main Features
 
-- Movie
-    - Movie List
-    - Movie Search
-    - Movie Detail
-    - Recommended Movie
-- TV Series
-    - TV Series List
-    - TV Series Search
-    - TV Series Detail
-    - Recommended TV Series
-- Celebrities
-  - Popular Celebrities
-  - Trending Celebrities
-- Artist Detail
-- Bottom Navigation
-- Navigation Rail
-- Pagination supports for all platfroms 
+### Movies
+- 🎞 Now Playing, Popular, Top Rated & Upcoming movie sections
+- 🔍 Movie Detail Pages with Cast & Crew
+- 🎯 Recommended Movies
+- 🔍 Search Movies
+- 👤 Artist/Actor Detail Page with navigation from movie cast
+
+### TV Series
+- 📺 Airing Today, On The Air, Popular & Upcoming TV series sections
+- 🔍 TV Series Detail Pages with Cast & Crew
+- 🎯 Recommended TV Series
+- 🔍 Search TV Series
+- 👤 Artist/Actor Detail Page with navigation from TV series cast
+
+### Celebrity
+- 🌟 Popular and Trending Celebrities/Persons sections
+- 🔍 Celebrity Search functionality
+- 👤 Celebrity Detail Page with navigation from movie/tv cast
+### Common Features
+- 🧭 **Bottom Navigation**
+- 🚦 **Navigation Rail**
+- 📄 **Pagination** supports for all platforms 
 
 ## Architecture
 
-- MVVM Architecture (Model - ComposableView - ViewModel)
+- **MVVM Architecture (Model - ComposableView - ViewModel)**
 
 <p float="left">
   <img width="100%" height="60%" src="https://github.com/piashcse/kmm-movie/blob/master/screenshots/mvvm_architecture.png" />
