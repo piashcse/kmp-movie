@@ -281,7 +281,7 @@ fun SearchTvSeriesItem(
             .clickable {
                 onResultClick.invoke()
                 navController.navigate(
-                    NavigationScreen.MovieDetail.route.plus(
+                    NavigationScreen.TvSeriesDetail.route.plus(
                         "/${item.id}"
                     )
                 )
