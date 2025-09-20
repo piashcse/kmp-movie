@@ -50,6 +50,7 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -73,6 +74,10 @@ kotlin {
             implementation(libs.compose.material3.adaptive)
             implementation(libs.compose.material3.adaptive.layout)
             implementation(libs.compose.material3.adaptive.navigation.suite)
+            // Koin dependencies
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

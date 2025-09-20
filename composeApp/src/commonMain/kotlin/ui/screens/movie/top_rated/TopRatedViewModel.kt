@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.update
 import ui.screens.movie.MovieUiState
 import utils.Paginator
 
-class TopRatedViewModel(private val repo: Repository = Repository()) : ViewModel() {
+class TopRatedViewModel(private val repo: Repository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MovieUiState())
     val uiState: StateFlow<MovieUiState> get() = _uiState.asStateFlow()

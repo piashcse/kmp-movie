@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.update
 import ui.screens.celebrities.CelebrityUiState
 import utils.Paginator
 
-class PopularCelebritiesViewModel(private val repo: Repository = Repository()) : ViewModel() {
+class PopularCelebritiesViewModel(private val repo: Repository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CelebrityUiState())
     val uiState: StateFlow<CelebrityUiState> get() = _uiState.asStateFlow()

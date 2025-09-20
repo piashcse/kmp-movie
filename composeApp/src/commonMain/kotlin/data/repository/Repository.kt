@@ -4,7 +4,7 @@ import data.remote.ApiService
 import kotlinx.coroutines.flow.flow
 import utils.network.UiState
 
-class Repository(private val api: ApiService = ApiService()) {
+class Repository(private val api: ApiService) {
     fun nowPlayingMovie(page: Int) = flow {
         try {
             emit(UiState.Loading)

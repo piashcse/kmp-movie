@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import utils.network.UiState
 
-class MovieDetailViewModel(private val repo: Repository = Repository()) : ViewModel() {
+class MovieDetailViewModel(private val repo: Repository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MovieDetailUiState())
     val uiState: StateFlow<MovieDetailUiState> get() = _uiState.asStateFlow()

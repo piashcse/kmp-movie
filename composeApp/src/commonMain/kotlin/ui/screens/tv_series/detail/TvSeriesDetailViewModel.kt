@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import utils.network.UiState
 
-class TvSeriesDetailViewModel(private val repo: Repository = Repository()) : ViewModel() {
+class TvSeriesDetailViewModel(private val repo: Repository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TvSeriesDetailUiState())
     val uiState: StateFlow<TvSeriesDetailUiState> get() = _uiState.asStateFlow()

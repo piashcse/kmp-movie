@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
+import org.koin.compose.viewmodel.koinViewModel
 import ui.component.Movies
 import ui.component.base.BaseColumn
 import moe.tlaster.precompose.navigation.Navigator
@@ -15,7 +15,7 @@ import utils.OnGridPagination
 @Composable
 fun TopRatedMovie(
     navigator: Navigator,
-    viewModel: TopRatedViewModel = viewModel { TopRatedViewModel() }
+    viewModel: TopRatedViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val gridState = rememberLazyGridState()
