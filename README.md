@@ -86,6 +86,7 @@ API_KEY=59cd6896d8432f9c69aed9b86b9c2931
   Management
 - [Ktor Client](https://ktor.io/docs/welcome.html) - Ktor includes a multiplatform asynchronous HTTP
   client, which allows you to make requests and handle responses.
+- [Koin](https://insert-koin.io/) - A pragmatic lightweight dependency injection framework for Kotlin
 - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) - Kotlin multiplatform /
   multi-format reflectionless serialization
 - [View Model](https://developer.android.com/topic/libraries/architecture/viewmodel) - The ViewModel

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.update
 import ui.screens.tv_series.TvSeriesUiState
 import utils.Paginator
 
-class PopularTvSeriesViewModel(private val repo: Repository = Repository()) : ViewModel() {
+class PopularTvSeriesViewModel(private val repo: Repository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TvSeriesUiState())
     val uiState: StateFlow<TvSeriesUiState> get() = _uiState.asStateFlow()

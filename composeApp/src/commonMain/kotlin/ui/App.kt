@@ -34,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.celebrities
 import kmp_movie.composeapp.generated.resources.movies
@@ -51,6 +50,7 @@ import navigation.currentRoute
 import navigation.isBottomBarVisible
 import navigation.navigationTitle
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import theme.FloatingActionBackground
 import ui.component.AppBarWithArrow
 import ui.component.KMPNavigationSuiteScaffold
@@ -63,7 +63,7 @@ import utils.getPlatform
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 internal fun App(
-    appViewModel: AppViewModel = viewModel { AppViewModel() },
+    appViewModel: AppViewModel = koinViewModel(),
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
     PreComposeApp {

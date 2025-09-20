@@ -24,15 +24,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
-import ui.component.ExpandableText
-import ui.component.base.BaseColumn
-import constant.AppConstant
-import data.model.artist.ArtistMovie
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.artist_detail
 import kmp_movie.composeapp.generated.resources.artist_movies
@@ -42,16 +37,21 @@ import kmp_movie.composeapp.generated.resources.place_of_birth
 import moe.tlaster.precompose.navigation.Navigator
 import navigation.NavigationScreen
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.SecondaryFontColor
 import theme.cornerRadius
+import ui.component.ExpandableText
+import ui.component.base.BaseColumn
+import constant.AppConstant
+import data.model.artist.ArtistMovie
 
 @Composable
 fun ArtistDetail(
     navigator: Navigator,
     personId: Int,
-    viewModel: ArtistDetailViewModel = viewModel { ArtistDetailViewModel() }
+    viewModel: ArtistDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 

@@ -34,10 +34,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
+import org.koin.compose.viewmodel.koinViewModel
 import com.skydoves.landscapist.components.rememberImageComponent
 import ui.component.ExpandableText
 import ui.component.base.BaseColumn
@@ -68,7 +68,7 @@ import utils.roundTo
 fun TvSeriesDetail(
     navigator: Navigator,
     seriesId: Int,
-    viewModel: TvSeriesDetailViewModel = viewModel { TvSeriesDetailViewModel() }
+    viewModel: TvSeriesDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
