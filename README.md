@@ -145,27 +145,103 @@ To run the application on an iPhone device/simulator:
 
 ## Project structure
 
-This Compose Multiplatform project includes three modules:
-
 ### [`composeApp`](/composeApp)
 
-This is a Kotlin module that contains the logic common for both Android and iOS applications, the
-code you share between platforms.
-This shared module is also where you write your Compose Multiplatform code. In
+This is a Kotlin module that contains the logic common for all platforms.
+This shared module is where you write your Compose Multiplatform code. In
 `composeApp/src/commonMain/kotlin/App.kt`, you can find the shared root `@Composable` function for
 your app.
 It uses Gradle as the build system. You can add dependencies and change settings in
-`shared/build.gradle.kts`. The shared module builds into an Android library and an iOS framework.
+`composeApp/build.gradle.kts`. The shared module builds into platform-specific libraries:
+- Android library for Android
+- Framework for iOS
+- JVM library for Desktop
+- JavaScript library for Web
+
+#### Complete `composeApp` directory structure
+
+The complete structure of the `composeApp` module showing all platform-specific directories:
+
+```
+composeApp/
+├── build.gradle.kts
+├── src/
+│   ├── androidMain/
+│   │   ├── kotlin/
+│   │   ├── res/
+│   │   │   ├── drawable/
+│   │   │   ├── drawable-v24/
+│   │   │   ├── mipmap-anydpi-v26/
+│   │   │   ├── mipmap-hdpi/
+│   │   │   ├── mipmap-mdpi/
+│   │   │   ├── mipmap-xhdpi/
+│   │   │   ├── mipmap-xxhdpi/
+│   │   │   ├── mipmap-xxxhdpi/
+│   │   │   └── values/
+│   │   └── AndroidManifest.xml
+│   ├── commonMain/
+│   │   ├── composeResources/
+│   │   │   ├── drawable/
+│   │   │   └── values/
+│   │   └── kotlin/
+│   │       ├── constant/
+│   │       │   └── AppConstant.kt
+│   │       ├── data/
+│   │       │   ├── model/
+│   │       │   │   ├── artist/
+│   │       │   │   ├── celebrities/
+│   │       │   │   ├── movie_detail/
+│   │       │   │   ├── tv_detail/
+│   │       │   │   ├── BaseModel.kt
+│   │       │   │   ├── MovieItem.kt
+│   │       │   │   └── TvSeriesItem.kt
+│   │       │   ├── remote/
+│   │       │   │   ├── ApiClient.kt
+│   │       │   │   ├── ApiInterface.kt
+│   │       │   │   └── ApiService.kt
+│   │       │   └── repository/
+│   │       │       └── Repository.kt
+│   │       ├── di/
+│   │       │   ├── AppModule.kt
+│   │       │   ├── KoinApplication.kt
+│   │       │   ├── KoinInitializer.kt
+│   │       │   └── PlatformModule.kt
+│   │       ├── navigation/
+│   │       │   ├── NavGraph.kt
+│   │       │   └── NavigationScreen.kt
+│   │       ├── theme/
+│   │       │   ├── Color.kt
+│   │       │   ├── Shape.kt
+│   │       │   ├── Theme.kt
+│   │       │   └── Type.kt
+│   │       ├── ui/
+│   │       │   ├── component/
+│   │       │   ├── screens/
+│   │       │   └── App.kt
+│   │       └── utils/
+│   │           ├── network/
+│   │           ├── CommonExtension.kt
+│   │           ├── Platform.kt
+│   │           ├── UIExtension.kt
+│   │           └── Utils.kt
+│   ├── desktopMain/
+│   │   └── kotlin/
+│   ├── iosMain/
+│   │   └── kotlin/
+│   └── wasmJsMain/
+│       ├── kotlin/
+│       └── resources/
+```
 
 ### [`androidApp`](/composeApp/src/androidMain/)
 
 This is a Kotlin module that builds into an Android application. It uses Gradle as the build system.
 The `androidApp` module depends on and uses the shared module as a regular Android library.
 
-### [`iosApp`](/iosApp)
+### [`iosApp`](/composeApp/src/iosMain/)
 
 This is an Xcode project that builds into an iOS application. It depends on and uses the shared
-module as a CocoaPods dependency.
+module as a regular iOS framework.
 
 ## Acknowledgements
 
