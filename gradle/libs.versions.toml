@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.0"
+agp = "8.13.1"
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
@@ -9,11 +9,11 @@ compose-adaptive = "1.2.0"
 compose-material3 = "1.9.0"
 compose-multiplatform = "1.9.3"
 kotlin = "2.2.21"
-ktor-client = "3.3.2"
+ktor-client = "3.3.3"
 precompose = "1.6.2"
 landScapist = "2.6.1"
 androidx-lifecycle = "2.9.6"
-build-config = "6.0.0"
+build-config = "6.0.5"
 koin = "4.1.1"
 
 [libraries]
