@@ -65,7 +65,8 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.logging)
-            implementation(libs.precompose)
+            implementation(libs.androidx.navigation3.ui)
+            implementation(libs.androidx.navigation3.material3.adaptive)
             implementation(libs.landscapist.coil)
             implementation(libs.landscapist.animation)
             implementation(libs.androidx.lifecycle)
@@ -81,6 +82,7 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

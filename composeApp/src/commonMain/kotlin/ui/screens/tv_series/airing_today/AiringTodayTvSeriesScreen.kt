@@ -1,23 +1,23 @@
-package ui.screens.movie.now_playing
+package ui.screens.tv_series.airing_today
 
 import androidx.compose.runtime.Composable
-import data.model.MovieItem
+import data.model.TvSeriesItem
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.GenericListScreen
 
 @Composable
-fun NowPlayingScreen(
+fun AiringTodayTvSeriesScreen(
     onNavigateToDetail: (Int) -> Unit,
-    viewModel: NowPlayingViewModel = koinViewModel()
+    viewModel: AiringTodayTvSeriesViewModel = koinViewModel()
 ) {
     GenericListScreen(
         uiState = viewModel.uiState,
-        loadItems = { viewModel.loadNowPlayingMovies() },
-        getItems = { it.movieList },
+        loadItems = { viewModel.loadAiringTodayTvSeries() },
+        getItems = { it.tvSeriesList },
         getIsLoading = { it.isLoading },
         getErrorMessage = { it.errorMessage },
-        getImagePath = { (it as MovieItem).posterPath },
-        getItemId = { (it as MovieItem).id },
+        getImagePath = { (it as TvSeriesItem).posterPath },
+        getItemId = { (it as TvSeriesItem).id },
         onNavigateToDetail = onNavigateToDetail
     )
 }

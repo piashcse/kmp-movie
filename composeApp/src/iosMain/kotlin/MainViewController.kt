@@ -1,15 +1,12 @@
 import androidx.compose.ui.window.ComposeUIViewController
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import ui.App
 import di.initKoinPlatform
-import di.KoinApplication
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import platform.UIKit.UIViewController
+import ui.App
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun MainViewController(): UIViewController = ComposeUIViewController {
-    KoinApplication {
-        App()
-    }
+    App()
 }.also {
     initKoinPlatform()
 }

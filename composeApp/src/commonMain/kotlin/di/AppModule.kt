@@ -13,7 +13,7 @@ import ui.screens.celebrities.trending.TrendingCelebritiesViewModel
 import ui.screens.movie.detail.MovieDetailViewModel
 import ui.screens.movie.now_playing.NowPlayingViewModel
 import ui.screens.movie.popular.PopularMovieViewModel
-import ui.screens.movie.top_rated.TopRatedViewModel
+import ui.screens.movie.top_rated.TopRatedMovieViewModel
 import ui.screens.movie.upcoming.UpcomingMovieViewModel
 import ui.screens.tv_series.airing_today.AiringTodayTvSeriesViewModel
 import ui.screens.tv_series.detail.TvSeriesDetailViewModel
@@ -23,21 +23,29 @@ import ui.screens.tv_series.top_rated.TopRatedTvSeriesViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
 val appModule: Module = module {
-    // Add your common dependencies here
+    // Core dependencies
     single { ApiService() }
     single { Repository(get()) }
+    
+    // App-level ViewModels
     viewModel { AppViewModel(get()) }
-    viewModel { ArtistDetailViewModel(get()) }
-    viewModel { PopularCelebritiesViewModel(get()) }
-    viewModel { TrendingCelebritiesViewModel(get()) }
-    viewModel { MovieDetailViewModel(get()) }
+    
+    // Movie ViewModels
     viewModel { NowPlayingViewModel(get()) }
     viewModel { PopularMovieViewModel(get()) }
-    viewModel { TopRatedViewModel(get()) }
+    viewModel { TopRatedMovieViewModel(get()) }
     viewModel { UpcomingMovieViewModel(get()) }
+    viewModel { MovieDetailViewModel(get()) }
+    
+    // TV Series ViewModels
     viewModel { AiringTodayTvSeriesViewModel(get()) }
-    viewModel { TvSeriesDetailViewModel(get()) }
     viewModel { OnTheAirTvSeriesViewModel(get()) }
     viewModel { PopularTvSeriesViewModel(get()) }
     viewModel { TopRatedTvSeriesViewModel(get()) }
+    viewModel { TvSeriesDetailViewModel(get()) }
+    
+    // Celebrity ViewModels
+    viewModel { PopularCelebritiesViewModel(get()) }
+    viewModel { TrendingCelebritiesViewModel(get()) }
+    viewModel { ArtistDetailViewModel(get()) }
 }

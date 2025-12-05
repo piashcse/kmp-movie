@@ -2,6 +2,7 @@ package ui.screens.artist_detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,6 +14,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,14 +34,14 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
+import constant.AppConstant
+import data.model.artist.ArtistMovie
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.artist_detail
 import kmp_movie.composeapp.generated.resources.artist_movies
 import kmp_movie.composeapp.generated.resources.biography
 import kmp_movie.composeapp.generated.resources.birth_day
 import kmp_movie.composeapp.generated.resources.place_of_birth
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import theme.DefaultBackgroundColor
@@ -44,13 +50,13 @@ import theme.SecondaryFontColor
 import theme.cornerRadius
 import ui.component.ExpandableText
 import ui.component.base.BaseColumn
-import constant.AppConstant
-import data.model.artist.ArtistMovie
 
 @Composable
 fun ArtistDetail(
-    navigator: Navigator,
     personId: Int,
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToTvSeries: (Int) -> Unit,
+    onBack: () -> Unit,
     viewModel: ArtistDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -71,42 +77,56 @@ fun ArtistDetail(
                 .padding(8.dp),
         ) {
             uiState.artistDetail?.let { artist ->
-                Row {
-                    CoilImage(
+                Box {
+                    Row {
+                        CoilImage(
+                            modifier = Modifier
+                                .padding(bottom = 8.dp)
+                                .height(250.dp)
+                                .width(190.dp)
+                                .cornerRadius(10),
+                            imageModel = { AppConstant.IMAGE_URL + artist.profilePath },
+                            imageOptions = ImageOptions(
+                                contentScale = ContentScale.Crop,
+                                alignment = Alignment.Center,
+                            ),
+                            component = rememberImageComponent {
+                                +CircularRevealPlugin(duration = 800)
+                            },
+                        )
+                        Column {
+                            Text(
+                                modifier = Modifier.padding(start = 8.dp),
+                                text = artist.name ?: "",
+                                color = FontColor,
+                                fontSize = 26.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                            PersonalInfo(
+                                stringResource(Res.string.artist_detail),
+                                artist.knownForDepartment
+                            )
+                            PersonalInfo(
+                                stringResource(Res.string.artist_detail),
+                                artist.gender.toString()
+                            )
+                            PersonalInfo(stringResource(Res.string.birth_day), artist.birthday ?: "")
+                            PersonalInfo(
+                                stringResource(Res.string.place_of_birth),
+                                artist.placeOfBirth ?: ""
+                            )
+                        }
+                    }
+                    IconButton(
+                        onClick = onBack,
                         modifier = Modifier
-                            .padding(bottom = 8.dp)
-                            .height(250.dp)
-                            .width(190.dp)
-                            .cornerRadius(10),
-                        imageModel = { AppConstant.IMAGE_URL + artist.profilePath },
-                        imageOptions = ImageOptions(
-                            contentScale = ContentScale.Crop,
-                            alignment = Alignment.Center,
-                        ),
-                        component = rememberImageComponent {
-                            +CircularRevealPlugin(duration = 800)
-                        },
-                    )
-                    Column {
-                        Text(
-                            modifier = Modifier.padding(start = 8.dp),
-                            text = artist.name ?: "",
-                            color = FontColor,
-                            fontSize = 26.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                        PersonalInfo(
-                            stringResource(Res.string.artist_detail),
-                            artist.knownForDepartment
-                        )
-                        PersonalInfo(
-                            stringResource(Res.string.artist_detail),
-                            artist.gender.toString()
-                        )
-                        PersonalInfo(stringResource(Res.string.birth_day), artist.birthday ?: "")
-                        PersonalInfo(
-                            stringResource(Res.string.place_of_birth),
-                            artist.placeOfBirth ?: ""
+                            .padding(top = 8.dp, start = 8.dp)
+                            .align(Alignment.TopStart)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
                         )
                     }
                 }
@@ -121,9 +141,9 @@ fun ArtistDetail(
                 uiState.artistMovies?.let {
                     ArtistMoviesAndTvShows(it) { item ->
                         if (item.mediaType == "movie") {
-                            navigator.navigate(NavigationScreen.MovieDetail.route + "/${item.id}")
+                            onNavigateToMovie(item.id)
                         } else {
-                            navigator.navigate(NavigationScreen.TvSeriesDetail.route + "/${item.id}")
+                            onNavigateToTvSeries(item.id)
                         }
                     }
                 }

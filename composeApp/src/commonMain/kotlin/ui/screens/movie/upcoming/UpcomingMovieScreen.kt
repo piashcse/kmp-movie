@@ -1,4 +1,4 @@
-package ui.screens.movie.now_playing
+package ui.screens.movie.upcoming
 
 import androidx.compose.runtime.Composable
 import data.model.MovieItem
@@ -6,13 +6,13 @@ import org.koin.compose.viewmodel.koinViewModel
 import ui.component.GenericListScreen
 
 @Composable
-fun NowPlayingScreen(
+fun UpcomingMovieScreen(
     onNavigateToDetail: (Int) -> Unit,
-    viewModel: NowPlayingViewModel = koinViewModel()
+    viewModel: UpcomingMovieViewModel = koinViewModel()
 ) {
     GenericListScreen(
         uiState = viewModel.uiState,
-        loadItems = { viewModel.loadNowPlayingMovies() },
+        loadItems = { viewModel.loadUpcomingMovies() },
         getItems = { it.movieList },
         getIsLoading = { it.isLoading },
         getErrorMessage = { it.errorMessage },

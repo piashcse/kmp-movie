@@ -13,11 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
@@ -45,8 +45,6 @@ import data.model.TvSeriesItem
 import data.model.celebrities.Celebrity
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.rating_
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
@@ -96,13 +94,15 @@ fun FilterButton(
 
 @Composable
 fun SearchResults(
-    navController: Navigator,
     movieSearchData: List<MovieItem>,
     tvSeriesSearchData: List<TvSeriesItem>,
     celebritySearchData: List<Celebrity>,
     currentFilter: String = "Movies",
     onFilterChange: (String) -> Unit = {},
-    onResultClick: () -> Unit
+    onResultClick: () -> Unit,
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToTvSeries: (Int) -> Unit,
+    onNavigateToCelebrity: (Int) -> Unit
 ) {
     var selectedFilter by remember { mutableStateOf(currentFilter) }
     
@@ -159,27 +159,27 @@ fun SearchResults(
                 "Movies" -> {
                     items(items = movieSearchData.take(10), itemContent = { item ->
                         SearchMovieItem(
-                            navController = navController,
                             item = item,
-                            onResultClick = onResultClick
+                            onResultClick = onResultClick,
+                            onNavigateToMovie = onNavigateToMovie
                         )
                     })
                 }
                 "TV Series" -> {
                     items(items = tvSeriesSearchData.take(10), itemContent = { item ->
                         SearchTvSeriesItem(
-                            navController = navController,
                             item = item,
-                            onResultClick = onResultClick
+                            onResultClick = onResultClick,
+                            onNavigateToTvSeries = onNavigateToTvSeries
                         )
                     })
                 }
                 "Celebrities" -> {
                     items(items = celebritySearchData.take(10), itemContent = { item ->
                         SearchCelebrityItem(
-                            navController = navController,
                             item = item,
-                            onResultClick = onResultClick
+                            onResultClick = onResultClick,
+                            onNavigateToCelebrity = onNavigateToCelebrity
                         )
                     })
                 }
@@ -187,9 +187,9 @@ fun SearchResults(
                     // Default to movies
                     items(items = movieSearchData.take(10), itemContent = { item ->
                         SearchMovieItem(
-                            navController = navController,
                             item = item,
-                            onResultClick = onResultClick
+                            onResultClick = onResultClick,
+                            onNavigateToMovie = onNavigateToMovie
                         )
                     })
                 }
@@ -200,20 +200,16 @@ fun SearchResults(
 
 @Composable
 fun SearchMovieItem(
-    navController: Navigator,
     item: MovieItem,
-    onResultClick: () -> Unit
+    onResultClick: () -> Unit,
+    onNavigateToMovie: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
             .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
             .clickable {
                 onResultClick.invoke()
-                navController.navigate(
-                    NavigationScreen.MovieDetail.route.plus(
-                        "/${item.id}"
-                    )
-                )
+                onNavigateToMovie(item.id)
             }
     ) {
         CoilImage(
@@ -234,8 +230,8 @@ fun SearchMovieItem(
                 )
             },
             modifier = Modifier
-                .height(80.dp)
-                .width(60.dp)
+                .height(120.dp)
+                .width(100.dp)
                 .cornerRadius(8)
                 .shimmerBackground(RoundedCornerShape(5.dp)),
         )
@@ -271,20 +267,16 @@ fun SearchMovieItem(
 
 @Composable
 fun SearchTvSeriesItem(
-    navController: Navigator,
     item: TvSeriesItem,
-    onResultClick: () -> Unit
+    onResultClick: () -> Unit,
+    onNavigateToTvSeries: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
             .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
             .clickable {
                 onResultClick.invoke()
-                navController.navigate(
-                    NavigationScreen.TvSeriesDetail.route.plus(
-                        "/${item.id}"
-                    )
-                )
+                onNavigateToTvSeries(item.id)
             }
     ) {
         CoilImage(
@@ -305,8 +297,8 @@ fun SearchTvSeriesItem(
                 )
             },
             modifier = Modifier
-                .height(80.dp)
-                .width(60.dp)
+                .height(120.dp)
+                .width(100.dp)
                 .cornerRadius(8)
                 .shimmerBackground(RoundedCornerShape(5.dp)),
         )
@@ -342,20 +334,16 @@ fun SearchTvSeriesItem(
 
 @Composable
 fun SearchCelebrityItem(
-    navController: Navigator,
     item: Celebrity,
-    onResultClick: () -> Unit
+    onResultClick: () -> Unit,
+    onNavigateToCelebrity: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
             .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
             .clickable {
                 onResultClick.invoke()
-                navController.navigate(
-                    NavigationScreen.ArtistDetail.route.plus(
-                        "/${item.id}"
-                    )
-                )
+                onNavigateToCelebrity(item.id)
             }
     ) {
         CoilImage(
@@ -376,8 +364,8 @@ fun SearchCelebrityItem(
                 )
             },
             modifier = Modifier
-                .height(80.dp)
-                .width(60.dp)
+                .height(120.dp)
+                .width(100.dp)
                 .cornerRadius(8)
                 .shimmerBackground(RoundedCornerShape(5.dp)),
         )

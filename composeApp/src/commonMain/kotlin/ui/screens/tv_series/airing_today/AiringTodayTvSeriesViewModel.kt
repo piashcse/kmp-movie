@@ -1,42 +1,20 @@
 package ui.screens.tv_series.airing_today
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import data.model.TvSeriesItem
 import data.repository.Repository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.Flow
+import ui.screens.base.PaginatedViewModel
 import ui.screens.tv_series.TvSeriesUiState
-import utils.Paginator
+import utils.network.UiState
 
-class AiringTodayTvSeriesViewModel(private val repo: Repository) : ViewModel() {
+class AiringTodayTvSeriesViewModel(private val repo: Repository) : PaginatedViewModel<TvSeriesItem, TvSeriesUiState>(
+    initialState = TvSeriesUiState(),
+    updateItems = { state, items -> state.copy(tvSeriesList = items) },
+    getItems = { it.tvSeriesList }
+) {
+    override fun fetchPage(page: Int): Flow<UiState<List<TvSeriesItem>>> = repo.airingTodayTvSeries(page)
+    override fun updateLoading(state: TvSeriesUiState, isLoading: Boolean) = state.copy(isLoading = isLoading)
+    override fun updateError(state: TvSeriesUiState, error: String?) = state.copy(errorMessage = error)
 
-    private val _uiState = MutableStateFlow(TvSeriesUiState())
-    val uiState: StateFlow<TvSeriesUiState> get() = _uiState.asStateFlow()
-
-    private val paginator = Paginator<TvSeriesItem>(
-        scope = viewModelScope,
-        initialKey = 1,
-        incrementBy = 1,
-        onLoadUpdated = { isLoading ->
-            _uiState.update { it.copy(isLoading = isLoading) }
-        },
-        onRequest = { nextKey ->
-            repo.airingTodayTvSeries(nextKey)
-        },
-        onError = { throwable ->
-            _uiState.update { it.copy(errorMessage = throwable.message) }
-        },
-        onSuccess = { items, _ ->
-            _uiState.update { current ->
-                current.copy(tvSeriesList = current.tvSeriesList.orEmpty() + items)
-            }
-        }
-    )
-
-    fun loadAiringTodayTvSeries() {
-        paginator.loadNextItems()
-    }
+    fun loadAiringTodayTvSeries() = loadItems()
 }
