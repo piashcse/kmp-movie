@@ -40,6 +40,7 @@ import navigation.PopularCelebrity
 import navigation.PopularMovie
 import navigation.PopularTvSeries
 import navigation.Route
+import navigation.Search
 import navigation.TopLevelRoute
 import navigation.TopRatedMovie
 import navigation.TopRatedTvSeries
@@ -63,6 +64,11 @@ import ui.screens.tv_series.detail.TvSeriesDetail as TvSeriesDetailScreen
 import ui.screens.tv_series.on_the_air.OnTheAirTvSeries as OnTheAirTvSeriesScreen
 import ui.screens.tv_series.popular.PopularTvSeries as PopularTvSeriesScreen
 import ui.screens.tv_series.top_rated.TopRatedTvSeries as TopRatedTvSeriesScreen
+import ui.screens.search.SearchScreen
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -89,69 +95,95 @@ internal fun App(
             }
         }
     ) {
-        NavDisplay(
-            backStack = backStack,
-            entryProvider = entryProvider {
-                entry<NowPlayingMovie> { 
-                    MainScreen(NowPlayingMovie, backStack, appViewModel, windowAdaptiveInfo)
-                }
-                entry<PopularMovie> { 
-                    MainScreen(PopularMovie, backStack, appViewModel, windowAdaptiveInfo)
-                }
-                entry<TopRatedMovie> { 
-                    MainScreen(TopRatedMovie, backStack, appViewModel, windowAdaptiveInfo)
-                }
-                entry<UpcomingMovie> { 
-                    MainScreen(UpcomingMovie, backStack, appViewModel, windowAdaptiveInfo)
-                }
-                entry<AiringTodayTvSeries> { 
-                    MainScreen(AiringTodayTvSeries, backStack, appViewModel, windowAdaptiveInfo)
-                }
-                entry<OnTheAirTvSeries> { 
-                    MainScreen(OnTheAirTvSeries, backStack, appViewModel, windowAdaptiveInfo)
-                }
-                entry<PopularTvSeries> { 
-                    MainScreen(PopularTvSeries, backStack, appViewModel, windowAdaptiveInfo)
-                }
-                entry<TopRatedTvSeries> { 
-                    MainScreen(TopRatedTvSeries, backStack, appViewModel, windowAdaptiveInfo)
-                }
-                entry<PopularCelebrity> { 
-                    MainScreen(PopularCelebrity, backStack, appViewModel, windowAdaptiveInfo)
-                }
-                entry<TrendingCelebrity> { 
-                    MainScreen(TrendingCelebrity, backStack, appViewModel, windowAdaptiveInfo)
-                }
-                
-                entry<MovieDetail> { args ->
-                    val route = args as MovieDetail
-                    MovieDetailScreen(
-                        movieId = route.id,
-                        onBack = { backStack.removeLast() },
-                        onNavigateToDetail = { id -> backStack.add(MovieDetail(id)) },
-                        onNavigateToArtist = { id -> backStack.add(ArtistDetail(id)) }
-                    )
-                }
-                entry<ArtistDetail> { args ->
-                    val route = args as ArtistDetail
-                    ArtistDetailScreen(
-                        personId = route.id,
-                        onBack = { backStack.removeLast() },
-                        onNavigateToMovie = { id -> backStack.add(MovieDetail(id)) },
-                        onNavigateToTvSeries = { id -> backStack.add(TvSeriesDetail(id)) }
-                    )
-                }
-                entry<TvSeriesDetail> { args ->
-                    val route = args as TvSeriesDetail
-                    TvSeriesDetailScreen(
-                        seriesId = route.id,
-                        onBack = { backStack.removeLast() },
-                        onNavigateToDetail = { id -> backStack.add(TvSeriesDetail(id)) },
-                        onNavigateToArtist = { id -> backStack.add(ArtistDetail(id)) }
-                    )
+        Scaffold(
+            floatingActionButton = {
+                if (currentTopLevelRoute == NowPlayingMovie || currentTopLevelRoute == AiringTodayTvSeries || currentTopLevelRoute == PopularCelebrity) {
+                     // Show FAB only on main screens or always? User said "Make the search funcitoality by flaoting action button"
+                     // I'll show it always for now, or maybe hide it on detail screens if backStack.last() is not TopLevelRoute
+                     val currentRoute = backStack.lastOrNull()
+                     if (currentRoute is TopLevelRoute) {
+                         FloatingActionButton(
+                             onClick = { backStack.add(Search) }
+                         ) {
+                             Icon(Icons.Filled.Search, contentDescription = "Search")
+                         }
+                     }
                 }
             }
-        )
+        ) { paddingValues ->
+            NavDisplay(
+                modifier = Modifier.padding(paddingValues),
+                backStack = backStack,
+                entryProvider = entryProvider {
+                    entry<NowPlayingMovie> { 
+                        MainScreen(NowPlayingMovie, backStack, appViewModel, windowAdaptiveInfo)
+                    }
+                    entry<PopularMovie> { 
+                        MainScreen(PopularMovie, backStack, appViewModel, windowAdaptiveInfo)
+                    }
+                    entry<TopRatedMovie> { 
+                        MainScreen(TopRatedMovie, backStack, appViewModel, windowAdaptiveInfo)
+                    }
+                    entry<UpcomingMovie> { 
+                        MainScreen(UpcomingMovie, backStack, appViewModel, windowAdaptiveInfo)
+                    }
+                    entry<AiringTodayTvSeries> { 
+                        MainScreen(AiringTodayTvSeries, backStack, appViewModel, windowAdaptiveInfo)
+                    }
+                    entry<OnTheAirTvSeries> { 
+                        MainScreen(OnTheAirTvSeries, backStack, appViewModel, windowAdaptiveInfo)
+                    }
+                    entry<PopularTvSeries> { 
+                        MainScreen(PopularTvSeries, backStack, appViewModel, windowAdaptiveInfo)
+                    }
+                    entry<TopRatedTvSeries> { 
+                        MainScreen(TopRatedTvSeries, backStack, appViewModel, windowAdaptiveInfo)
+                    }
+                    entry<PopularCelebrity> { 
+                        MainScreen(PopularCelebrity, backStack, appViewModel, windowAdaptiveInfo)
+                    }
+                    entry<TrendingCelebrity> { 
+                        MainScreen(TrendingCelebrity, backStack, appViewModel, windowAdaptiveInfo)
+                    }
+                    
+                    entry<MovieDetail> { args ->
+                        val route = args as MovieDetail
+                        MovieDetailScreen(
+                            movieId = route.id,
+                            onBack = { backStack.removeLast() },
+                            onNavigateToDetail = { id -> backStack.add(MovieDetail(id)) },
+                            onNavigateToArtist = { id -> backStack.add(ArtistDetail(id)) }
+                        )
+                    }
+                    entry<ArtistDetail> { args ->
+                        val route = args as ArtistDetail
+                        ArtistDetailScreen(
+                            personId = route.id,
+                            onBack = { backStack.removeLast() },
+                            onNavigateToMovie = { id -> backStack.add(MovieDetail(id)) },
+                            onNavigateToTvSeries = { id -> backStack.add(TvSeriesDetail(id)) }
+                        )
+                    }
+                    entry<TvSeriesDetail> { args ->
+                        val route = args as TvSeriesDetail
+                        TvSeriesDetailScreen(
+                            seriesId = route.id,
+                            onBack = { backStack.removeLast() },
+                            onNavigateToDetail = { id -> backStack.add(TvSeriesDetail(id)) },
+                            onNavigateToArtist = { id -> backStack.add(ArtistDetail(id)) }
+                        )
+                    }
+                    entry<Search> {
+                        SearchScreen(
+                            onBack = { backStack.removeLast() },
+                            onNavigateToMovie = { id -> backStack.add(MovieDetail(id)) },
+                            onNavigateToTvSeries = { id -> backStack.add(TvSeriesDetail(id)) },
+                            onNavigateToArtist = { id -> backStack.add(ArtistDetail(id)) }
+                        )
+                    }
+                }
+            )
+        }
     }
 }
 

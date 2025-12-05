@@ -89,3 +89,6 @@ data class ArtistDetail(val id: Int) : Route
 
 @Serializable
 data class TvSeriesDetail(val id: Int) : Route
+
+@Serializable
+data object Search : Route
