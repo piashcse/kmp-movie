@@ -172,6 +172,17 @@ fun MainScreen(
         }
     }
 
+    LaunchedEffect(pagerState.settledPage) {
+        val page = pagerState.settledPage
+        val currentRoutePage = getPageForRoute(route)
+        if (page != currentRoutePage) {
+            val newRoute = getDefaultRouteForPage(page)
+            if (backStack.lastOrNull() != newRoute) {
+                backStack.add(newRoute)
+            }
+        }
+    }
+
     TabScreen(
         pagerState = pagerState,
         padding = PaddingValues(0.dp),
