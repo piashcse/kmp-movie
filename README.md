@@ -82,8 +82,7 @@ API_KEY=59cd6896d8432f9c69aed9b86b9c2931
 - [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform) - Compose
   Multiplatform, a modern UI framework for Kotlin that makes building performant and beautiful user
   interfaces.
-- [PreCompose](https://github.com/Tlaster/PreCompose) - Compose Multiplatform Navigation && State
-  Management
+- [Navigation 3](https://developer.android.com/guide/navigation/navigation-3) - Compose Multiplatform Navigation backed by JetBrains
 - [Ktor Client](https://ktor.io/docs/welcome.html) - Ktor includes a multiplatform asynchronous HTTP
   client, which allows you to make requests and handle responses.
 - [Koin](https://insert-koin.io/) - A pragmatic lightweight dependency injection framework for Kotlin
