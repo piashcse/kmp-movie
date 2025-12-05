@@ -80,27 +80,28 @@ internal fun App(
     // Ideally use rememberSerializable if available, but for simplicity/compatibility:
     val backStack = remember { mutableStateListOf<Route>(NowPlayingMovie) }
     
-    val currentTopLevelRoute = backStack.lastOrNull { it is TopLevelRoute } as? TopLevelRoute ?: NowPlayingMovie
+    // Get the current route (last item in backStack)
+    val currentRoute = backStack.lastOrNull() ?: NowPlayingMovie
+    
+    // Determine the current top-level route for navigation items
+    val currentTopLevelRoute = if (currentRoute is TopLevelRoute) {
+        currentRoute
+    } else {
+        // When on detail screen, find the TopLevelRoute before it
+        backStack.dropLast(1).lastOrNull { it is TopLevelRoute } as? TopLevelRoute ?: NowPlayingMovie
+    }
+    
     val currentItems = getItemsForPage(getPageForRoute(currentTopLevelRoute))
+    
+    // Check if current route is a detail screen (hide bottom navigation for detail screens)
+    val isDetailScreen = currentRoute !is TopLevelRoute
 
-    KMPNavigationSuiteScaffold(
-        navigationSuiteItems = {
-            currentItems.forEach { item ->
-                item(
-                    selected = backStack.lastOrNull() == item,
-                    onClick = { backStack.add(item) },
-                    icon = { Icon(imageVector = item.icon!!, contentDescription = item.title) },
-                    label = { Text(text = item.title) },
-                )
-            }
-        }
-    ) {
+    // Content that will be rendered with or without navigation
+    val content: @Composable () -> Unit = {
         Scaffold(
             floatingActionButton = {
                 if (currentTopLevelRoute == NowPlayingMovie || currentTopLevelRoute == AiringTodayTvSeries || currentTopLevelRoute == PopularCelebrity) {
-                     // Show FAB only on main screens or always? User said "Make the search funcitoality by flaoting action button"
-                     // I'll show it always for now, or maybe hide it on detail screens if backStack.last() is not TopLevelRoute
-                     val currentRoute = backStack.lastOrNull()
+                     // Show FAB only on main screens
                      if (currentRoute is TopLevelRoute) {
                          FloatingActionButton(
                              onClick = { backStack.add(Search) }
@@ -185,6 +186,49 @@ internal fun App(
             )
         }
     }
+
+    // Conditionally wrap with navigation scaffold
+    if (isDetailScreen) {
+        // On detail screens, render content directly without navigation
+        content()
+    } else {
+        // On main screens, render with navigation scaffold
+        KMPNavigationSuiteScaffold(
+            navigationSuiteItems = {
+                currentItems.forEach { item ->
+                    item(
+                        selected = currentRoute == item,
+                        onClick = { navigateTo(backStack, item) },
+                        icon = { Icon(imageVector = item.icon!!, contentDescription = item.title) },
+                        label = { Text(text = item.title) },
+                    )
+                }
+            }
+        ) {
+            content()
+        }
+    }
+}
+
+/**
+ * Smart navigation function that manages the backStack properly:
+ * - Replaces current route when navigating between TopLevelRoutes (same level)
+ * - Adds to stack when navigating to detail screens
+ */
+private fun navigateTo(backStack: MutableList<Route>, destination: Route) {
+    val current = backStack.lastOrNull()
+    
+    when {
+        // Both current and destination are TopLevelRoutes: REPLACE
+        destination is TopLevelRoute && current is TopLevelRoute -> {
+            backStack.removeLast()
+            backStack.add(destination)
+        }
+        // Navigating to detail screen or first navigation: ADD
+        else -> {
+            backStack.add(destination)
+        }
+    }
 }
 
 @Composable
@@ -210,7 +254,7 @@ fun MainScreen(
         if (page != currentRoutePage) {
             val newRoute = getDefaultRouteForPage(page)
             if (backStack.lastOrNull() != newRoute) {
-                backStack.add(newRoute)
+                navigateTo(backStack, newRoute)
             }
         }
     }
