@@ -13,11 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
@@ -230,8 +230,8 @@ fun SearchMovieItem(
                 )
             },
             modifier = Modifier
-                .height(80.dp)
-                .width(60.dp)
+                .height(120.dp)
+                .width(100.dp)
                 .cornerRadius(8)
                 .shimmerBackground(RoundedCornerShape(5.dp)),
         )
@@ -297,8 +297,8 @@ fun SearchTvSeriesItem(
                 )
             },
             modifier = Modifier
-                .height(80.dp)
-                .width(60.dp)
+                .height(120.dp)
+                .width(100.dp)
                 .cornerRadius(8)
                 .shimmerBackground(RoundedCornerShape(5.dp)),
         )
@@ -364,8 +364,8 @@ fun SearchCelebrityItem(
                 )
             },
             modifier = Modifier
-                .height(80.dp)
-                .width(60.dp)
+                .height(120.dp)
+                .width(100.dp)
                 .cornerRadius(8)
                 .shimmerBackground(RoundedCornerShape(5.dp)),
         )
