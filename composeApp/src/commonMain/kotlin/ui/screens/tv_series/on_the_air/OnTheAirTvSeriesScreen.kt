@@ -6,7 +6,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import ui.component.GenericListScreen
 
 @Composable
-fun OnTheAirTvSeries(
+fun OnTheAirTvSeriesScreen(
     onNavigateToDetail: (Int) -> Unit,
     viewModel: OnTheAirTvSeriesViewModel = koinViewModel()
 ) {

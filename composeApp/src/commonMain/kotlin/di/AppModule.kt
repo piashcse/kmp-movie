@@ -13,7 +13,7 @@ import ui.screens.celebrities.trending.TrendingCelebritiesViewModel
 import ui.screens.movie.detail.MovieDetailViewModel
 import ui.screens.movie.now_playing.NowPlayingViewModel
 import ui.screens.movie.popular.PopularMovieViewModel
-import ui.screens.movie.top_rated.TopRatedViewModel
+import ui.screens.movie.top_rated.TopRatedMovieViewModel
 import ui.screens.movie.upcoming.UpcomingMovieViewModel
 import ui.screens.tv_series.airing_today.AiringTodayTvSeriesViewModel
 import ui.screens.tv_series.detail.TvSeriesDetailViewModel
@@ -33,7 +33,7 @@ val appModule: Module = module {
     viewModel { MovieDetailViewModel(get()) }
     viewModel { NowPlayingViewModel(get()) }
     viewModel { PopularMovieViewModel(get()) }
-    viewModel { TopRatedViewModel(get()) }
+    viewModel { TopRatedMovieViewModel(get()) }
     viewModel { UpcomingMovieViewModel(get()) }
     viewModel { AiringTodayTvSeriesViewModel(get()) }
     viewModel { TvSeriesDetailViewModel(get()) }

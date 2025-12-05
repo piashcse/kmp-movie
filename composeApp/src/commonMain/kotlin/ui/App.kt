@@ -51,19 +51,19 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.KMPNavigationSuiteScaffold
 import ui.screens.AppViewModel
-import ui.screens.celebrities.popular.PopularCelebrities
-import ui.screens.celebrities.trending.TrendingCelebrities
+import ui.screens.celebrities.popular.PopularCelebritiesScreen
+import ui.screens.celebrities.trending.TrendingCelebritiesScreen
 import ui.screens.movie.now_playing.NowPlayingScreen
 import ui.screens.artist_detail.ArtistDetail as ArtistDetailScreen
 import ui.screens.movie.detail.MovieDetail as MovieDetailScreen
-import ui.screens.movie.popular.PopularMovie as PopularMovieScreen
-import ui.screens.movie.top_rated.TopRatedMovie as TopRatedMovieScreen
-import ui.screens.movie.upcoming.UpcomingMovie as UpcomingMovieScreen
-import ui.screens.tv_series.airing_today.AiringTodayTvSeries as AiringTodayTvSeriesScreen
+import ui.screens.movie.popular.PopularMovieScreen
+import ui.screens.movie.top_rated.TopRatedMovieScreen
+import ui.screens.movie.upcoming.UpcomingMovieScreen
+import ui.screens.tv_series.airing_today.AiringTodayTvSeriesScreen
 import ui.screens.tv_series.detail.TvSeriesDetail as TvSeriesDetailScreen
-import ui.screens.tv_series.on_the_air.OnTheAirTvSeries as OnTheAirTvSeriesScreen
-import ui.screens.tv_series.popular.PopularTvSeries as PopularTvSeriesScreen
-import ui.screens.tv_series.top_rated.TopRatedTvSeries as TopRatedTvSeriesScreen
+import ui.screens.tv_series.on_the_air.OnTheAirTvSeriesScreen
+import ui.screens.tv_series.popular.PopularTvSeriesScreen
+import ui.screens.tv_series.top_rated.TopRatedTvSeriesScreen
 import ui.screens.search.SearchScreen
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.FloatingActionButton
@@ -284,8 +284,8 @@ private fun TabScreen(
                 TopRatedTvSeries -> TopRatedTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
                 
                 // Celebrities
-                PopularCelebrity -> PopularCelebrities(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
-                TrendingCelebrity -> TrendingCelebrities(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
+                PopularCelebrity -> PopularCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
+                TrendingCelebrity -> TrendingCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
             }
         }
     }

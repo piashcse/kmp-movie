@@ -5,213 +5,57 @@ import kotlinx.coroutines.flow.flow
 import utils.network.UiState
 
 class Repository(private val api: ApiService) {
-    fun nowPlayingMovie(page: Int) = flow {
+    
+    // Helper for endpoints that return BaseModel with .results
+    private inline fun <T> flowWithResults(
+        crossinline apiCall: suspend () -> data.model.BaseModel<T>
+    ) = flow {
         try {
             emit(UiState.Loading)
-            val result = api.nowPlayingMovies(page)
+            val result = apiCall()
             emit(UiState.Success(result.results))
         } catch (e: Exception) {
             emit(UiState.Error(e))
         }
     }
-
-    fun popularMovie(page: Int) = flow {
+    
+    // Helper for endpoints that return direct objects
+    private inline fun <T> flowDirect(
+        crossinline apiCall: suspend () -> T
+    ) = flow {
         try {
             emit(UiState.Loading)
-            val result = api.popularMovies(page)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun topRatedMovie(page: Int) = flow {
-        emit(UiState.Loading)
-        try {
-            val result = api.topRatedMovies(page)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun upComingMovie(page: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.upcomingMovies(page)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun movieDetail(movieId: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.movieDetail(movieId)
+            val result = apiCall()
             emit(UiState.Success(result))
         } catch (e: Exception) {
             emit(UiState.Error(e))
         }
     }
-
-    fun searchMovie(searchKey: String) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.movieSearch(searchKey)
-            emit(UiState.Success(result))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun recommendedMovie(movieId: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.recommendedMovies(movieId)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun movieCredit(movieId: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.movieCredit(movieId)
-            emit(UiState.Success(result))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun artistDetail(personId: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.artistDetail(personId)
-            emit(UiState.Success(result))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun artistMoviesAndTvShows(personId: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.artistMoviesAndTvSeries(personId)
-            emit(UiState.Success(result))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun airingTodayTvSeries(page: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.airingTodayTvSeries(page)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun onTheAirTvSeries(page: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.onTheAirTvSeries(page)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun popularTvSeries(page: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.popularTvSeries(page)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun topRatedTvSeries(page: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.topRatedTvSeries(page)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun tvSeriesDetail(seriesId: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.tvSeriesDetail(seriesId)
-            emit(UiState.Success(result))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun recommendedTvSeries(seriesId: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.recommendedTvSeries(seriesId)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun creditTvSeries(seriesId: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.creditTvSeries(seriesId)
-            emit(UiState.Success(result))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun searchTvSeries(searchKey: String) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.tvSeriesSearch(searchKey)
-            emit(UiState.Success(result))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun searchCelebrity(searchKey: String) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.celebritySearch(searchKey)
-            emit(UiState.Success(result))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun popularCelebrities(page: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.popularCelebrity(page)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-
-    fun trendingCelebrities(page: Int) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = api.trendingCelebrity(page)
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
+    
+    // Movie endpoints
+    fun nowPlayingMovie(page: Int) = flowWithResults { api.nowPlayingMovies(page) }
+    fun popularMovie(page: Int) = flowWithResults { api.popularMovies(page) }
+    fun topRatedMovie(page: Int) = flowWithResults { api.topRatedMovies(page) }
+    fun upComingMovie(page: Int) = flowWithResults { api.upcomingMovies(page) }
+    fun movieDetail(movieId: Int) = flowDirect { api.movieDetail(movieId) }
+    fun searchMovie(searchKey: String) = flowDirect { api.movieSearch(searchKey) }
+    fun recommendedMovie(movieId: Int) = flowWithResults { api.recommendedMovies(movieId) }
+    fun movieCredit(movieId: Int) = flowDirect { api.movieCredit(movieId) }
+    
+    // TV Series endpoints
+    fun airingTodayTvSeries(page: Int) = flowWithResults { api.airingTodayTvSeries(page) }
+    fun onTheAirTvSeries(page: Int) = flowWithResults { api.onTheAirTvSeries(page) }
+    fun popularTvSeries(page: Int) = flowWithResults { api.popularTvSeries(page) }
+    fun topRatedTvSeries(page: Int) = flowWithResults { api.topRatedTvSeries(page) }
+    fun tvSeriesDetail(seriesId: Int) = flowDirect { api.tvSeriesDetail(seriesId) }
+    fun recommendedTvSeries(seriesId: Int) = flowWithResults { api.recommendedTvSeries(seriesId) }
+    fun creditTvSeries(seriesId: Int) = flowDirect { api.creditTvSeries(seriesId) }
+    fun searchTvSeries(searchKey: String) = flowDirect { api.tvSeriesSearch(searchKey) }
+    
+    // Celebrity endpoints
+    fun popularCelebrities(page: Int) = flowWithResults { api.popularCelebrity(page) }
+    fun trendingCelebrities(page: Int) = flowWithResults { api.trendingCelebrity(page) }
+    fun searchCelebrity(searchKey: String) = flowDirect { api.celebritySearch(searchKey) }
+    fun artistDetail(personId: Int) = flowDirect { api.artistDetail(personId) }
+    fun artistMoviesAndTvShows(personId: Int) = flowDirect { api.artistMoviesAndTvSeries(personId) }
 }

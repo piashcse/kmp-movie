@@ -7,7 +7,7 @@ import ui.screens.base.PaginatedViewModel
 import ui.screens.movie.MovieUiState
 import utils.network.UiState
 
-class TopRatedViewModel(private val repo: Repository) : PaginatedViewModel<MovieItem, MovieUiState>(
+class TopRatedMovieViewModel(private val repo: Repository) : PaginatedViewModel<MovieItem, MovieUiState>(
     initialState = MovieUiState(),
     updateItems = { state, items -> state.copy(movieList = items) },
     getItems = { it.movieList }

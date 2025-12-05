@@ -1,4 +1,4 @@
-package ui.screens.celebrities.trending
+package ui.screens.celebrities.popular
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -18,13 +18,13 @@ import ui.component.GenericListScreen
 import utils.roundTo
 
 @Composable
-fun TrendingCelebrities(
+fun PopularCelebritiesScreen(
     onNavigateToDetail: (Int) -> Unit,
-    viewModel: TrendingCelebritiesViewModel = koinViewModel()
+    viewModel: PopularCelebritiesViewModel = koinViewModel()
 ) {
     GenericListScreen(
         uiState = viewModel.uiState,
-        loadItems = { viewModel.loadTrendingCelebrities() },
+        loadItems = { viewModel.loadPopularCelebrities() },
         getItems = { it.celebrityList },
         getIsLoading = { it.isLoading },
         getErrorMessage = { it.errorMessage },
