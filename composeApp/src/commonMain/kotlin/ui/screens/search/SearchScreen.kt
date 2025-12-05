@@ -9,11 +9,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.SearchBar
 import ui.component.SearchResults
 import ui.screens.AppViewModel
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun SearchScreen(
     onBack: () -> Unit,
