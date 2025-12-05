@@ -1,10 +1,9 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import moe.tlaster.precompose.ProvidePreComposeLocals
-import ui.App
-import di.initKoinPlatform
 import di.KoinApplication
+import di.initKoinPlatform
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import ui.App
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun main() = application {
@@ -14,9 +13,7 @@ fun main() = application {
         title = "kmp-movie",
     ) {
         KoinApplication {
-            ProvidePreComposeLocals {
-                App()
-            }
+            App()
         }
     }
 }

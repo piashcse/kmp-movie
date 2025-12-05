@@ -1,15 +1,15 @@
 package piashcse.kmp.movie
 
-import ui.App
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import di.KoinApplication
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import ui.App
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalCoroutinesApi::class)

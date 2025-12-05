@@ -8,13 +8,11 @@ import androidx.compose.runtime.getValue
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.Celebrities
 import ui.component.base.BaseColumn
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import utils.OnGridPagination
 
 @Composable
 fun PopularCelebrities(
-    navigator: Navigator,
+    onNavigateToDetail: (Int) -> Unit,
     viewModel: PopularCelebritiesViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -30,11 +28,7 @@ fun PopularCelebrities(
     ) {
         uiState.celebrityList?.let {
             Celebrities(it, gridState) { celebrityId ->
-                navigator.navigate(
-                    NavigationScreen.ArtistDetail.route.plus(
-                        "/${celebrityId}"
-                    )
-                )
+                onNavigateToDetail(celebrityId)
             }
             OnGridPagination(gridState = gridState) {
                 viewModel.loadPopularCelebrities()

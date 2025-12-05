@@ -8,13 +8,11 @@ import androidx.compose.runtime.getValue
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.Movies
 import ui.component.base.BaseColumn
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import utils.OnGridPagination
 
 @Composable
 fun PopularMovie(
-    navigator: Navigator,
+    onNavigateToDetail: (Int) -> Unit,
     viewModel: PopularMovieViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -29,7 +27,7 @@ fun PopularMovie(
     ) {
         uiState.movieList?.let {
             Movies(it, gridState) { movieId ->
-                navigator.navigate(NavigationScreen.MovieDetail.route + "/$movieId")
+                onNavigateToDetail(movieId)
             }
             OnGridPagination(gridState = gridState) {
                 viewModel.loadPopularMovies()

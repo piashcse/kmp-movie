@@ -8,13 +8,11 @@ import androidx.compose.runtime.getValue
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.TvSeries
 import ui.component.base.BaseColumn
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import utils.OnGridPagination
 
 @Composable
 fun OnTheAirTvSeries(
-    navigator: Navigator,
+    onNavigateToDetail: (Int) -> Unit,
     viewModel: OnTheAirTvSeriesViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -30,7 +28,7 @@ fun OnTheAirTvSeries(
     ) {
         uiState.tvSeriesList?.let {
             TvSeries(it, gridState) { seriesId ->
-                navigator.navigate(NavigationScreen.TvSeriesDetail.route + "/$seriesId")
+                onNavigateToDetail(seriesId)
             }
             OnGridPagination(gridState = gridState) {
                 viewModel.loadOnTheAirTvSeries()

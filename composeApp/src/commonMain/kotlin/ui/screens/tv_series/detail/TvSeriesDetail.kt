@@ -19,7 +19,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,13 +41,7 @@ import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
-import org.koin.compose.viewmodel.koinViewModel
 import com.skydoves.landscapist.components.rememberImageComponent
-import ui.component.ExpandableText
-import ui.component.base.BaseColumn
-import ui.component.shimmerBackground
-import ui.component.text.SubtitlePrimary
-import ui.component.text.SubtitleSecondary
 import constant.AppConstant
 import data.model.TvSeriesItem
 import data.model.tv_detail.TvSeriesDetail
@@ -56,18 +54,24 @@ import kmp_movie.composeapp.generated.resources.language
 import kmp_movie.composeapp.generated.resources.number_of_episode
 import kmp_movie.composeapp.generated.resources.rating
 import kmp_movie.composeapp.generated.resources.similar_movie
-import moe.tlaster.precompose.navigation.Navigator
-import navigation.NavigationScreen
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.cornerRadius
+import ui.component.ExpandableText
+import ui.component.base.BaseColumn
+import ui.component.shimmerBackground
+import ui.component.text.SubtitlePrimary
+import ui.component.text.SubtitleSecondary
 import utils.roundTo
 
 @Composable
 fun TvSeriesDetail(
-    navigator: Navigator,
     seriesId: Int,
+    onNavigateToDetail: (Int) -> Unit,
+    onNavigateToArtist: (Int) -> Unit,
+    onBack: () -> Unit,
     viewModel: TvSeriesDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -84,21 +88,21 @@ fun TvSeriesDetail(
         loading = uiState.isLoading,
         errorMessage = uiState.errorMessage
     ) {
-        uiState.tvSeriesDetail?.let { UiDetail(it) }
+        uiState.tvSeriesDetail?.let { UiDetail(it, onBack) }
         Spacer(modifier = Modifier.height(10.dp))
         Column(modifier = Modifier.padding(horizontal = 10.dp)) {
             uiState.recommendedTvSeries.takeIf { it.isNotEmpty() }?.let {
-                RecommendedTVSeries(navigator, it)
+                RecommendedTVSeries(it, onNavigateToDetail)
             }
             uiState.creditTvSeries?.cast?.let {
-                ArtistAndCrew(navigator, it)
+                ArtistAndCrew(it, onNavigateToArtist)
             }
         }
     }
 }
 
 @Composable
-fun UiDetail(data: TvSeriesDetail) {
+fun UiDetail(data: TvSeriesDetail, onBack: () -> Unit) {
     Box {
         ImageLoad(
             url = AppConstant.IMAGE_URL + data.backdropPath,
@@ -112,6 +116,18 @@ fun UiDetail(data: TvSeriesDetail) {
                 }
                 .shimmerBackground(RoundedCornerShape(5.dp))
         )
+        IconButton(
+            onClick = onBack,
+            modifier = Modifier
+                .padding(top = 16.dp, start = 16.dp)
+                .align(Alignment.TopStart)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.White
+            )
+        }
         Column(modifier = Modifier.padding(start = 10.dp, top = 200.dp, end = 10.dp)) {
             Row {
                 ImageLoad(
@@ -190,7 +206,7 @@ fun UiDetail(data: TvSeriesDetail) {
 }
 
 @Composable
-fun RecommendedTVSeries(navigator: Navigator, recommendedMovie: List<TvSeriesItem>) {
+fun RecommendedTVSeries(recommendedMovie: List<TvSeriesItem>, onNavigateToDetail: (Int) -> Unit) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
             text = stringResource(Res.string.similar_movie),
@@ -211,11 +227,7 @@ fun RecommendedTVSeries(navigator: Navigator, recommendedMovie: List<TvSeriesIte
                             .size(135.dp, 180.dp)
                             .cornerRadius(10)
                             .clickable {
-                                navigator.navigate(
-                                    NavigationScreen.TvSeriesDetail.route.plus(
-                                        "/${item.id}"
-                                    )
-                                )
+                                onNavigateToDetail(item.id)
                             }
 
                     )
@@ -226,7 +238,7 @@ fun RecommendedTVSeries(navigator: Navigator, recommendedMovie: List<TvSeriesIte
 }
 
 @Composable
-fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
+fun ArtistAndCrew(cast: List<Cast>, onNavigateToArtist: (Int) -> Unit) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
             text = stringResource(Res.string.cast),
@@ -248,9 +260,7 @@ fun ArtistAndCrew(navigator: Navigator?, cast: List<Cast>) {
                             .size(80.dp)
                             .cornerRadius(40)
                             .clickable {
-                                navigator?.navigate(
-                                    NavigationScreen.ArtistDetail.route.plus("/${item.id}")
-                                )
+                                onNavigateToArtist(item.id)
                             }
                     )
                     SubtitleSecondary(text = item.name)
