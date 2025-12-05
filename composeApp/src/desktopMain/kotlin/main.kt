@@ -1,6 +1,5 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import di.KoinApplication
 import di.initKoinPlatform
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ui.App
@@ -12,8 +11,6 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "kmp-movie",
     ) {
-        KoinApplication {
-            App()
-        }
+        App()
     }
 }

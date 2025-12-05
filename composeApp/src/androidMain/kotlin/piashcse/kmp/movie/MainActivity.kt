@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
-import di.KoinApplication
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ui.App
 
@@ -20,9 +19,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         
         setContent {
-            KoinApplication {
-                App()
-            }
+            App()
         }
     }
 }

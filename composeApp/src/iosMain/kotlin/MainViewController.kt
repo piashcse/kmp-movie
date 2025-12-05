@@ -1,5 +1,4 @@
 import androidx.compose.ui.window.ComposeUIViewController
-import di.KoinApplication
 import di.initKoinPlatform
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import platform.UIKit.UIViewController
@@ -7,9 +6,7 @@ import ui.App
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun MainViewController(): UIViewController = ComposeUIViewController {
-    KoinApplication {
-        App()
-    }
+    App()
 }.also {
     initKoinPlatform()
 }

@@ -23,21 +23,29 @@ import ui.screens.tv_series.top_rated.TopRatedTvSeriesViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
 val appModule: Module = module {
-    // Add your common dependencies here
+    // Core dependencies
     single { ApiService() }
     single { Repository(get()) }
+    
+    // App-level ViewModels
     viewModel { AppViewModel(get()) }
-    viewModel { ArtistDetailViewModel(get()) }
-    viewModel { PopularCelebritiesViewModel(get()) }
-    viewModel { TrendingCelebritiesViewModel(get()) }
-    viewModel { MovieDetailViewModel(get()) }
+    
+    // Movie ViewModels
     viewModel { NowPlayingViewModel(get()) }
     viewModel { PopularMovieViewModel(get()) }
     viewModel { TopRatedMovieViewModel(get()) }
     viewModel { UpcomingMovieViewModel(get()) }
+    viewModel { MovieDetailViewModel(get()) }
+    
+    // TV Series ViewModels
     viewModel { AiringTodayTvSeriesViewModel(get()) }
-    viewModel { TvSeriesDetailViewModel(get()) }
     viewModel { OnTheAirTvSeriesViewModel(get()) }
     viewModel { PopularTvSeriesViewModel(get()) }
     viewModel { TopRatedTvSeriesViewModel(get()) }
+    viewModel { TvSeriesDetailViewModel(get()) }
+    
+    // Celebrity ViewModels
+    viewModel { PopularCelebritiesViewModel(get()) }
+    viewModel { TrendingCelebritiesViewModel(get()) }
+    viewModel { ArtistDetailViewModel(get()) }
 }
