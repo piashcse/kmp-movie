@@ -70,45 +70,40 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 
+// Page constants for better code clarity
+private const val PAGE_MOVIES = 0
+private const val PAGE_TV_SERIES = 1
+private const val PAGE_CELEBRITIES = 2
+private const val PAGE_COUNT = 3
+
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 internal fun App(
     appViewModel: AppViewModel = koinViewModel(),
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    // We use rememberSaveable with a custom saver or just mutableStateListOf for now.
-    // Ideally use rememberSerializable if available, but for simplicity/compatibility:
     val backStack = remember { mutableStateListOf<Route>(NowPlayingMovie) }
-    
-    // Get the current route (last item in backStack)
     val currentRoute = backStack.lastOrNull() ?: NowPlayingMovie
     
     // Determine the current top-level route for navigation items
-    val currentTopLevelRoute = if (currentRoute is TopLevelRoute) {
-        currentRoute
-    } else {
-        // When on detail screen, find the TopLevelRoute before it
-        backStack.dropLast(1).lastOrNull { it is TopLevelRoute } as? TopLevelRoute ?: NowPlayingMovie
+    val currentTopLevelRoute = when {
+        currentRoute is TopLevelRoute -> currentRoute
+        else -> backStack.dropLast(1).lastOrNull { it is TopLevelRoute } as? TopLevelRoute ?: NowPlayingMovie
     }
     
-    val currentItems = getItemsForPage(getPageForRoute(currentTopLevelRoute))
-    
-    // Check if current route is a detail screen (hide bottom navigation for detail screens)
+    val currentPage = getPageForRoute(currentTopLevelRoute)
+    val currentItems = getItemsForPage(currentPage)
     val isDetailScreen = currentRoute !is TopLevelRoute
 
     // Content that will be rendered with or without navigation
     val content: @Composable () -> Unit = {
         Scaffold(
             floatingActionButton = {
-                if (currentTopLevelRoute == NowPlayingMovie || currentTopLevelRoute == AiringTodayTvSeries || currentTopLevelRoute == PopularCelebrity) {
-                     // Show FAB only on main screens
-                     if (currentRoute is TopLevelRoute) {
-                         FloatingActionButton(
-                             onClick = { backStack.add(Search) }
-                         ) {
-                             Icon(Icons.Filled.Search, contentDescription = "Search")
-                         }
-                     }
+                // Show FAB only on first page of each tab (Movies, TV Series, Celebrities)
+                if (currentRoute is TopLevelRoute && currentRoute == getDefaultRouteForPage(currentPage)) {
+                    FloatingActionButton(onClick = { backStack.add(Search) }) {
+                        Icon(Icons.Filled.Search, contentDescription = "Search")
+                    }
                 }
             }
         ) { paddingValues ->
@@ -116,37 +111,23 @@ internal fun App(
                 modifier = Modifier.padding(paddingValues),
                 backStack = backStack,
                 entryProvider = entryProvider {
-                    entry<NowPlayingMovie> { 
-                        MainScreen(NowPlayingMovie, backStack, appViewModel, windowAdaptiveInfo)
-                    }
-                    entry<PopularMovie> { 
-                        MainScreen(PopularMovie, backStack, appViewModel, windowAdaptiveInfo)
-                    }
-                    entry<TopRatedMovie> { 
-                        MainScreen(TopRatedMovie, backStack, appViewModel, windowAdaptiveInfo)
-                    }
-                    entry<UpcomingMovie> { 
-                        MainScreen(UpcomingMovie, backStack, appViewModel, windowAdaptiveInfo)
-                    }
-                    entry<AiringTodayTvSeries> { 
-                        MainScreen(AiringTodayTvSeries, backStack, appViewModel, windowAdaptiveInfo)
-                    }
-                    entry<OnTheAirTvSeries> { 
-                        MainScreen(OnTheAirTvSeries, backStack, appViewModel, windowAdaptiveInfo)
-                    }
-                    entry<PopularTvSeries> { 
-                        MainScreen(PopularTvSeries, backStack, appViewModel, windowAdaptiveInfo)
-                    }
-                    entry<TopRatedTvSeries> { 
-                        MainScreen(TopRatedTvSeries, backStack, appViewModel, windowAdaptiveInfo)
-                    }
-                    entry<PopularCelebrity> { 
-                        MainScreen(PopularCelebrity, backStack, appViewModel, windowAdaptiveInfo)
-                    }
-                    entry<TrendingCelebrity> { 
-                        MainScreen(TrendingCelebrity, backStack, appViewModel, windowAdaptiveInfo)
-                    }
+                    // Movie routes
+                    entry<NowPlayingMovie> { MainScreen(NowPlayingMovie, backStack) }
+                    entry<PopularMovie> { MainScreen(PopularMovie, backStack) }
+                    entry<TopRatedMovie> { MainScreen(TopRatedMovie, backStack) }
+                    entry<UpcomingMovie> { MainScreen(UpcomingMovie, backStack) }
                     
+                    // TV Series routes
+                    entry<AiringTodayTvSeries> { MainScreen(AiringTodayTvSeries, backStack) }
+                    entry<OnTheAirTvSeries> { MainScreen(OnTheAirTvSeries, backStack) }
+                    entry<PopularTvSeries> { MainScreen(PopularTvSeries, backStack) }
+                    entry<TopRatedTvSeries> { MainScreen(TopRatedTvSeries, backStack) }
+                    
+                    // Celebrity routes
+                    entry<PopularCelebrity> { MainScreen(PopularCelebrity, backStack) }
+                    entry<TrendingCelebrity> { MainScreen(TrendingCelebrity, backStack) }
+                    
+                    // Detail screens
                     entry<MovieDetail> { args ->
                         val route = args as MovieDetail
                         MovieDetailScreen(
@@ -189,10 +170,8 @@ internal fun App(
 
     // Conditionally wrap with navigation scaffold
     if (isDetailScreen) {
-        // On detail screens, render content directly without navigation
         content()
     } else {
-        // On main screens, render with navigation scaffold
         KMPNavigationSuiteScaffold(
             navigationSuiteItems = {
                 currentItems.forEach { item ->
@@ -210,36 +189,13 @@ internal fun App(
     }
 }
 
-/**
- * Smart navigation function that manages the backStack properly:
- * - Replaces current route when navigating between TopLevelRoutes (same level)
- * - Adds to stack when navigating to detail screens
- */
-private fun navigateTo(backStack: MutableList<Route>, destination: Route) {
-    val current = backStack.lastOrNull()
-    
-    when {
-        // Both current and destination are TopLevelRoutes: REPLACE
-        destination is TopLevelRoute && current is TopLevelRoute -> {
-            backStack.removeLast()
-            backStack.add(destination)
-        }
-        // Navigating to detail screen or first navigation: ADD
-        else -> {
-            backStack.add(destination)
-        }
-    }
-}
-
 @Composable
-fun MainScreen(
+private fun MainScreen(
     route: TopLevelRoute,
-    backStack: MutableList<Route>,
-    viewModel: AppViewModel,
-    windowAdaptiveInfo: WindowAdaptiveInfo
+    backStack: MutableList<Route>
 ) {
     val initialPage = getPageForRoute(route)
-    val pagerState = rememberPagerState(initialPage = initialPage) { 3 }
+    val pagerState = rememberPagerState(initialPage = initialPage) { PAGE_COUNT }
     
     LaunchedEffect(route) {
         val page = getPageForRoute(route)
@@ -250,8 +206,7 @@ fun MainScreen(
 
     LaunchedEffect(pagerState.settledPage) {
         val page = pagerState.settledPage
-        val currentRoutePage = getPageForRoute(route)
-        if (page != currentRoutePage) {
+        if (page != getPageForRoute(route)) {
             val newRoute = getDefaultRouteForPage(page)
             if (backStack.lastOrNull() != newRoute) {
                 navigateTo(backStack, newRoute)
@@ -261,17 +216,29 @@ fun MainScreen(
 
     TabScreen(
         pagerState = pagerState,
-        padding = PaddingValues(0.dp),
         currentRoute = route,
-        onNavigate = { dest -> backStack.add(dest) }
+        onNavigate = { backStack.add(it) }
     )
+}
+
+/**
+ * Smart navigation function that manages the backStack properly
+ */
+private fun navigateTo(backStack: MutableList<Route>, destination: Route) {
+    val current = backStack.lastOrNull()
+    when {
+        destination is TopLevelRoute && current is TopLevelRoute -> {
+            backStack.removeLast()
+            backStack.add(destination)
+        }
+        else -> backStack.add(destination)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TabScreen(
-    pagerState: PagerState, 
-    padding: PaddingValues,
+private fun TabScreen(
+    pagerState: PagerState,
     currentRoute: TopLevelRoute,
     onNavigate: (Route) -> Unit
 ) {
@@ -282,73 +249,64 @@ fun TabScreen(
         stringResource(Res.string.celebrities)
     )
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(padding)
-    ) {
-        PrimaryTabRow(
-            selectedTabIndex = pagerState.currentPage,
-        ) {
+    Column(Modifier.fillMaxSize()) {
+        PrimaryTabRow(selectedTabIndex = pagerState.currentPage) {
             tabs.forEachIndexed { index, title ->
                 Tab(
                     selected = pagerState.currentPage == index,
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
-                    },
+                    onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
                     text = {
                         Text(
                             title,
-                            color = if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary else Color.Gray
+                            color = if (pagerState.currentPage == index) 
+                                MaterialTheme.colorScheme.primary else Color.Gray
                         )
-                    })
+                    }
+                )
             }
         }
+        
         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-            val routeToRender = if (page == getPageForRoute(currentRoute)) currentRoute else getDefaultRouteForPage(page)
+            val route = if (page == getPageForRoute(currentRoute)) currentRoute 
+                       else getDefaultRouteForPage(page)
             
-            when (routeToRender) {
+            when (route) {
+                // Movies
                 NowPlayingMovie -> NowPlayingScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
                 PopularMovie -> PopularMovieScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
                 TopRatedMovie -> TopRatedMovieScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
                 UpcomingMovie -> UpcomingMovieScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
                 
+                // TV Series
                 AiringTodayTvSeries -> AiringTodayTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
                 OnTheAirTvSeries -> OnTheAirTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
                 PopularTvSeries -> PopularTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
                 TopRatedTvSeries -> TopRatedTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
                 
+                // Celebrities
                 PopularCelebrity -> PopularCelebrities(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
                 TrendingCelebrity -> TrendingCelebrities(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
-                else -> {}
             }
         }
     }
 }
 
-fun getPageForRoute(route: TopLevelRoute): Int {
-    return when (route) {
-        NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie -> 0
-        AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries -> 1
-        PopularCelebrity, TrendingCelebrity -> 2
-    }
+private fun getPageForRoute(route: TopLevelRoute): Int = when (route) {
+    NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie -> PAGE_MOVIES
+    AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries -> PAGE_TV_SERIES
+    PopularCelebrity, TrendingCelebrity -> PAGE_CELEBRITIES
 }
 
-fun getDefaultRouteForPage(page: Int): TopLevelRoute {
-    return when (page) {
-        0 -> NowPlayingMovie
-        1 -> AiringTodayTvSeries
-        2 -> PopularCelebrity
-        else -> NowPlayingMovie
-    }
+private fun getDefaultRouteForPage(page: Int): TopLevelRoute = when (page) {
+    PAGE_MOVIES -> NowPlayingMovie
+    PAGE_TV_SERIES -> AiringTodayTvSeries
+    PAGE_CELEBRITIES -> PopularCelebrity
+    else -> NowPlayingMovie
 }
 
-fun getItemsForPage(page: Int): List<TopLevelRoute> {
-    return when (page) {
-        0 -> listOf(NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie)
-        1 -> listOf(AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries)
-        else -> listOf(PopularCelebrity, TrendingCelebrity)
-    }
+private fun getItemsForPage(page: Int): List<TopLevelRoute> = when (page) {
+    PAGE_MOVIES -> listOf(NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie)
+    PAGE_TV_SERIES -> listOf(AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries)
+    PAGE_CELEBRITIES -> listOf(PopularCelebrity, TrendingCelebrity)
+    else -> emptyList()
 }

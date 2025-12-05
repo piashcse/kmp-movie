@@ -1,43 +1,20 @@
 package ui.screens.celebrities.trending
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import data.model.celebrities.Celebrity
 import data.repository.Repository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.Flow
+import ui.screens.base.PaginatedViewModel
 import ui.screens.celebrities.CelebrityUiState
-import utils.Paginator
+import utils.network.UiState
 
-class TrendingCelebritiesViewModel(private val repo: Repository) : ViewModel() {
+class TrendingCelebritiesViewModel(private val repo: Repository) : PaginatedViewModel<Celebrity, CelebrityUiState>(
+    initialState = CelebrityUiState(),
+    updateItems = { state, items -> state.copy(celebrityList = items) },
+    getItems = { it.celebrityList }
+) {
+    override fun fetchPage(page: Int): Flow<UiState<List<Celebrity>>> = repo.trendingCelebrities(page)
+    override fun updateLoading(state: CelebrityUiState, isLoading: Boolean) = state.copy(isLoading = isLoading)
+    override fun updateError(state: CelebrityUiState, error: String?) = state.copy(errorMessage = error)
 
-    private val _uiState = MutableStateFlow(CelebrityUiState())
-    val uiState: StateFlow<CelebrityUiState> get() = _uiState.asStateFlow()
-
-    private val paginator = Paginator<Celebrity>(
-        scope = viewModelScope,
-        initialKey = 1,
-        incrementBy = 1,
-        onLoadUpdated = { isLoading ->
-            _uiState.update { it.copy(isLoading = isLoading) }
-        },
-        onRequest = { nextKey ->
-            repo.trendingCelebrities(nextKey)
-        },
-        onError = { throwable ->
-            _uiState.update { it.copy(errorMessage = throwable.message) }
-        },
-        onSuccess = { items, _ ->
-            _uiState.update { current ->
-                current.copy(celebrityList = current.celebrityList.orEmpty() + items)
-            }
-        }
-    )
-
-    fun loadTrendingCelebrities() {
-        paginator.loadNextItems()
-    }
-
+    fun loadTrendingCelebrities() = loadItems()
 }

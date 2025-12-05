@@ -1,37 +1,23 @@
 package ui.screens.movie.popular
 
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import data.model.MovieItem
 import org.koin.compose.viewmodel.koinViewModel
-import ui.component.Movies
-import ui.component.base.BaseColumn
-import utils.OnGridPagination
+import ui.component.GenericListScreen
 
 @Composable
 fun PopularMovie(
     onNavigateToDetail: (Int) -> Unit,
     viewModel: PopularMovieViewModel = koinViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val gridState = rememberLazyGridState()
-
-    LaunchedEffect(Unit){
-        viewModel.loadPopularMovies()
-    }
-    BaseColumn(
-        loading = uiState.isLoading,
-        errorMessage = uiState.errorMessage
-    ) {
-        uiState.movieList?.let {
-            Movies(it, gridState) { movieId ->
-                onNavigateToDetail(movieId)
-            }
-            OnGridPagination(gridState = gridState) {
-                viewModel.loadPopularMovies()
-            }
-        }
-    }
+    GenericListScreen(
+        uiState = viewModel.uiState,
+        loadItems = { viewModel.loadPopularMovies() },
+        getItems = { it.movieList },
+        getIsLoading = { it.isLoading },
+        getErrorMessage = { it.errorMessage },
+        getImagePath = { (it as MovieItem).posterPath },
+        getItemId = { (it as MovieItem).id },
+        onNavigateToDetail = onNavigateToDetail
+    )
 }

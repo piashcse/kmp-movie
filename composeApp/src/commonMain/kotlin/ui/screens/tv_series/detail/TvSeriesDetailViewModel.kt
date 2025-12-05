@@ -17,8 +17,6 @@ class TvSeriesDetailViewModel(private val repo: Repository) : ViewModel() {
 
     fun fetchTvSeriesDetails(seriesId: Int) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-
             launch { fetchTvSeriesDetail(seriesId) }
             launch { fetchRecommendedTvSeries(seriesId) }
             launch { fetchCreditTvSeries(seriesId) }
@@ -27,43 +25,43 @@ class TvSeriesDetailViewModel(private val repo: Repository) : ViewModel() {
 
     private suspend fun fetchTvSeriesDetail(seriesId: Int) {
         repo.tvSeriesDetail(seriesId).collect { result ->
-            _uiState.update {
-                when (result) {
-                    is UiState.Loading -> it.copy(isLoading = true)
-                    is UiState.Success -> it.copy(tvSeriesDetail = result.data, isLoading = false)
-                    is UiState.Error -> it.copy(isLoading = false)
-                }
+            handleStateUpdate(result) { state, data -> 
+                state.copy(tvSeriesDetail = data) 
             }
         }
     }
 
     private suspend fun fetchRecommendedTvSeries(seriesId: Int) {
         repo.recommendedTvSeries(seriesId).collect { result ->
-            _uiState.update {
-                when (result) {
-                    is UiState.Loading -> it.copy(isLoading = true)
-                    is UiState.Success -> it.copy(
-                        recommendedTvSeries = result.data,
-                        isLoading = false
-                    )
-
-                    is UiState.Error -> it.copy(isLoading = false)
-                }
+            handleStateUpdate(result) { state, data -> 
+                state.copy(recommendedTvSeries = data.orEmpty()) 
             }
         }
     }
 
     private suspend fun fetchCreditTvSeries(seriesId: Int) {
         repo.creditTvSeries(seriesId).collect { result ->
-            _uiState.update {
-                when (result) {
-                    is UiState.Loading -> it.copy(isLoading = true)
-                    is UiState.Success -> it.copy(creditTvSeries = result.data, isLoading = false)
-                    is UiState.Error -> it.copy(
-                        isLoading = false,
-                        errorMessage = result.exception.message
-                    )
-                }
+            handleStateUpdate(result) { state, data -> 
+                state.copy(creditTvSeries = data) 
+            }
+        }
+    }
+
+    private fun <T> handleStateUpdate(
+        result: UiState<T>,
+        stateUpdater: (TvSeriesDetailUiState, T?) -> TvSeriesDetailUiState
+    ) {
+        _uiState.update { currentState ->
+            when (result) {
+                is UiState.Loading -> currentState.copy(isLoading = true)
+                is UiState.Success -> stateUpdater(
+                    currentState,
+                    result.data
+                ).copy(isLoading = false)
+                is UiState.Error -> currentState.copy(
+                    isLoading = false,
+                    errorMessage = result.exception.message
+                )
             }
         }
     }
