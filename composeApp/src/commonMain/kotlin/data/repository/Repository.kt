@@ -1,36 +1,11 @@
 package data.repository
 
 import data.remote.ApiService
-import kotlinx.coroutines.flow.flow
+import utils.flowDirect
+import utils.flowWithResults
 import utils.network.UiState
 
 class Repository(private val api: ApiService) {
-    
-    // Helper for endpoints that return BaseModel with .results
-    private inline fun <T> flowWithResults(
-        crossinline apiCall: suspend () -> data.model.BaseModel<T>
-    ) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = apiCall()
-            emit(UiState.Success(result.results))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
-    
-    // Helper for endpoints that return direct objects
-    private inline fun <T> flowDirect(
-        crossinline apiCall: suspend () -> T
-    ) = flow {
-        try {
-            emit(UiState.Loading)
-            val result = apiCall()
-            emit(UiState.Success(result))
-        } catch (e: Exception) {
-            emit(UiState.Error(e))
-        }
-    }
     
     // Movie endpoints
     fun nowPlayingMovie(page: Int) = flowWithResults { api.nowPlayingMovies(page) }

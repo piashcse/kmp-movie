@@ -61,7 +61,7 @@ fun FilterButton(
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = if (isSelected) MaterialTheme.colors.primary else Color(0xFFE0E0E0),
+            containerColor = if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFFE0E0E0),
             contentColor = if (isSelected) Color.White else FontColor
         ),
         modifier = Modifier
