@@ -1,7 +1,6 @@
 package ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -22,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import kmp_movie.composeapp.generated.resources.Res
@@ -129,27 +127,24 @@ internal fun App(
                     
                     // Detail screens
                     entry<MovieDetail> { args ->
-                        val route = args as MovieDetail
                         MovieDetailScreen(
-                            movieId = route.id,
+                            movieId = args.id,
                             onBack = { backStack.removeLast() },
                             onNavigateToDetail = { id -> backStack.add(MovieDetail(id)) },
                             onNavigateToArtist = { id -> backStack.add(ArtistDetail(id)) }
                         )
                     }
                     entry<ArtistDetail> { args ->
-                        val route = args as ArtistDetail
                         ArtistDetailScreen(
-                            personId = route.id,
+                            personId = args.id,
                             onBack = { backStack.removeLast() },
                             onNavigateToMovie = { id -> backStack.add(MovieDetail(id)) },
                             onNavigateToTvSeries = { id -> backStack.add(TvSeriesDetail(id)) }
                         )
                     }
                     entry<TvSeriesDetail> { args ->
-                        val route = args as TvSeriesDetail
                         TvSeriesDetailScreen(
-                            seriesId = route.id,
+                            seriesId = args.id,
                             onBack = { backStack.removeLast() },
                             onNavigateToDetail = { id -> backStack.add(TvSeriesDetail(id)) },
                             onNavigateToArtist = { id -> backStack.add(ArtistDetail(id)) }
