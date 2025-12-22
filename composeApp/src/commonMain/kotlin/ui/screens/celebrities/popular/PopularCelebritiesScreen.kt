@@ -15,6 +15,7 @@ import kmp_movie.composeapp.generated.resources.popularity
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.GenericListScreen
+import ui.screens.common.GenericUiState
 import utils.roundTo
 
 @Composable
@@ -22,20 +23,20 @@ fun PopularCelebritiesScreen(
     onNavigateToDetail: (Int) -> Unit,
     viewModel: PopularCelebritiesViewModel = koinViewModel()
 ) {
-    GenericListScreen(
+    GenericListScreen<Celebrity, GenericUiState<Celebrity>>(
         uiState = viewModel.uiState,
         loadItems = { viewModel.loadPopularCelebrities() },
-        getItems = { it.celebrityList },
+        getItems = { it.items },
         getIsLoading = { it.isLoading },
         getErrorMessage = { it.errorMessage },
-        getImagePath = { (it as Celebrity).profilePath },
-        getItemId = { (it as Celebrity).id },
+        getImagePath = { it.profilePath },
+        getItemId = { it.id },
         onNavigateToDetail = onNavigateToDetail,
         imageHeight = 230.dp,
         additionalContent = { celebrity ->
             Column(Modifier.padding(start = 4.dp, end = 4.dp, top = 4.dp)) {
                 Text(
-                    text = (celebrity as Celebrity).name,
+                    text = celebrity.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )

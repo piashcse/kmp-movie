@@ -22,15 +22,15 @@ val apiClient = HttpClient {
             parameters.append("api_key", BuildConfig.API_KEY)
         }
     }
-    
-    expectSuccess = true
-    
+
+    expectSuccess = false // Changed to false to handle errors properly with Sandwich
+
     install(HttpTimeout) {
         connectTimeoutMillis = TIMEOUT_MILLIS
         requestTimeoutMillis = TIMEOUT_MILLIS
         socketTimeoutMillis = TIMEOUT_MILLIS
     }
-    
+
     install(Logging) {
         level = LogLevel.HEADERS
         logger = object : Logger {
@@ -39,7 +39,7 @@ val apiClient = HttpClient {
             }
         }
     }
-    
+
     install(ContentNegotiation) {
         json(Json {
             ignoreUnknownKeys = true

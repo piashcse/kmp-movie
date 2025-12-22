@@ -1,9 +1,4 @@
 package ui.screens.celebrities
 
-import data.model.celebrities.Celebrity
-
-data class CelebrityUiState(
-    val celebrityList: List<Celebrity>? = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)
+// This class has been replaced by GenericUiState<Celebrity> in ui.screens.common.GenericUiState
+// This file is kept for backward compatibility during migration and can be removed after all references are updated

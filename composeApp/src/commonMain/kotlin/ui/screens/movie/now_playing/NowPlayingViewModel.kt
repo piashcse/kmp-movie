@@ -3,18 +3,11 @@ package ui.screens.movie.now_playing
 import data.model.MovieItem
 import data.repository.Repository
 import kotlinx.coroutines.flow.Flow
-import ui.screens.base.PaginatedViewModel
-import ui.screens.movie.MovieUiState
+import ui.screens.common.GenericPaginatedViewModel
 import utils.network.UiState
 
-class NowPlayingViewModel(private val repo: Repository) : PaginatedViewModel<MovieItem, MovieUiState>(
-    initialState = MovieUiState(),
-    updateItems = { state, items -> state.copy(movieList = items) },
-    getItems = { it.movieList }
-) {
+class NowPlayingViewModel(repo: Repository) : GenericPaginatedViewModel<MovieItem>(repo) {
     override fun fetchPage(page: Int): Flow<UiState<List<MovieItem>>> = repo.nowPlayingMovie(page)
-    override fun updateLoading(state: MovieUiState, isLoading: Boolean) = state.copy(isLoading = isLoading)
-    override fun updateError(state: MovieUiState, error: String?) = state.copy(errorMessage = error)
 
     fun loadNowPlayingMovies() = loadItems()
 }

@@ -26,24 +26,24 @@ val appModule: Module = module {
     // Core dependencies
     single { ApiService() }
     single { Repository(get()) }
-    
+
     // App-level ViewModels
     viewModel { AppViewModel(get()) }
-    
+
     // Movie ViewModels
     viewModel { NowPlayingViewModel(get()) }
     viewModel { PopularMovieViewModel(get()) }
     viewModel { TopRatedMovieViewModel(get()) }
     viewModel { UpcomingMovieViewModel(get()) }
     viewModel { MovieDetailViewModel(get()) }
-    
+
     // TV Series ViewModels
     viewModel { AiringTodayTvSeriesViewModel(get()) }
     viewModel { OnTheAirTvSeriesViewModel(get()) }
     viewModel { PopularTvSeriesViewModel(get()) }
     viewModel { TopRatedTvSeriesViewModel(get()) }
     viewModel { TvSeriesDetailViewModel(get()) }
-    
+
     // Celebrity ViewModels
     viewModel { PopularCelebritiesViewModel(get()) }
     viewModel { TrendingCelebritiesViewModel(get()) }

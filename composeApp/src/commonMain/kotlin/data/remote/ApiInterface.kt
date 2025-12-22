@@ -1,5 +1,6 @@
 package data.remote
 
+import com.skydoves.sandwich.ApiResponse
 import data.model.BaseModel
 import data.model.MovieItem
 import data.model.TvSeriesItem
@@ -14,86 +15,86 @@ import data.model.tv_detail.credit.Credit
 interface ApiInterface {
     suspend fun nowPlayingMovies(
         page: Int
-    ): BaseModel<MovieItem>
+    ): ApiResponse<BaseModel<MovieItem>>
 
     suspend fun popularMovies(
         page: Int
-    ): BaseModel<MovieItem>
+    ): ApiResponse<BaseModel<MovieItem>>
 
     suspend fun topRatedMovies(
         page: Int
-    ): BaseModel<MovieItem>
+    ): ApiResponse<BaseModel<MovieItem>>
 
     suspend fun upcomingMovies(
         page: Int
-    ): BaseModel<MovieItem>
+    ): ApiResponse<BaseModel<MovieItem>>
 
     suspend fun movieDetail(
         movieId: Int
-    ): MovieDetail
+    ): ApiResponse<MovieDetail>
 
     suspend fun movieSearch(
         searchKey: String
-    ): BaseModel<MovieItem>
+    ): ApiResponse<BaseModel<MovieItem>>
 
     suspend fun recommendedMovies(
         movieId: Int
-    ): BaseModel<MovieItem>
+    ): ApiResponse<BaseModel<MovieItem>>
 
     suspend fun movieCredit(
         movieId: Int
-    ): Artist
+    ): ApiResponse<Artist>
 
     suspend fun artistDetail(
         personId: Int
-    ): ArtistDetail
+    ): ApiResponse<ArtistDetail>
 
     suspend fun airingTodayTvSeries(
         page: Int
-    ): BaseModel<TvSeriesItem>
+    ): ApiResponse<BaseModel<TvSeriesItem>>
 
     suspend fun onTheAirTvSeries(
         page: Int
-    ): BaseModel<TvSeriesItem>
+    ): ApiResponse<BaseModel<TvSeriesItem>>
 
     suspend fun popularTvSeries(
         page: Int
-    ): BaseModel<TvSeriesItem>
+    ): ApiResponse<BaseModel<TvSeriesItem>>
 
     suspend fun topRatedTvSeries(
         page: Int
-    ): BaseModel<TvSeriesItem>
+    ): ApiResponse<BaseModel<TvSeriesItem>>
 
     suspend fun tvSeriesDetail(
         seriesId: Int
-    ): TvSeriesDetail
+    ): ApiResponse<TvSeriesDetail>
 
     suspend fun recommendedTvSeries(
         seriesId: Int
-    ): BaseModel<TvSeriesItem>
+    ): ApiResponse<BaseModel<TvSeriesItem>>
 
     suspend fun creditTvSeries(
         seriesId: Int
-    ): Credit
+    ): ApiResponse<Credit>
 
     suspend fun tvSeriesSearch(
         searchKey: String
-    ): BaseModel<TvSeriesItem>
+    ): ApiResponse<BaseModel<TvSeriesItem>>
 
     suspend fun celebritySearch(
         searchKey: String
-    ): BaseModel<Celebrity>
+    ): ApiResponse<BaseModel<Celebrity>>
 
     suspend fun artistMoviesAndTvSeries(
         personId: Int
-    ): ArtistMovies
+    ): ApiResponse<ArtistMovies>
 
     suspend fun popularCelebrity(
         page: Int
-    ): BaseModel<Celebrity>
+    ): ApiResponse<BaseModel<Celebrity>>
 
     suspend fun trendingCelebrity(
         page: Int
-    ): BaseModel<Celebrity>
+    ): ApiResponse<BaseModel<Celebrity>>
 
 }
