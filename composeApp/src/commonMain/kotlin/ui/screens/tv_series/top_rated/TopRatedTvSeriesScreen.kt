@@ -16,8 +16,8 @@ fun TopRatedTvSeriesScreen(
         getItems = { it.tvSeriesList },
         getIsLoading = { it.isLoading },
         getErrorMessage = { it.errorMessage },
-        getImagePath = { (it as TvSeriesItem).posterPath },
-        getItemId = { (it as TvSeriesItem).id },
+        getImagePath = { it.posterPath },
+        getItemId = { it.id },
         onNavigateToDetail = onNavigateToDetail
     )
 }

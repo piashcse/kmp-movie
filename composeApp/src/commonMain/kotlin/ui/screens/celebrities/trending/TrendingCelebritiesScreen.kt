@@ -28,14 +28,14 @@ fun TrendingCelebritiesScreen(
         getItems = { it.celebrityList },
         getIsLoading = { it.isLoading },
         getErrorMessage = { it.errorMessage },
-        getImagePath = { (it as Celebrity).profilePath },
-        getItemId = { (it as Celebrity).id },
+        getImagePath = { it.profilePath },
+        getItemId = { it.id },
         onNavigateToDetail = onNavigateToDetail,
         imageHeight = 230.dp,
         additionalContent = { celebrity ->
             Column(Modifier.padding(start = 4.dp, end = 4.dp, top = 4.dp)) {
                 Text(
-                    text = (celebrity as Celebrity).name,
+                    text = celebrity.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )

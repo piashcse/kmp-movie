@@ -97,7 +97,7 @@ fun ArtistDetail(
                         Column {
                             Text(
                                 modifier = Modifier.padding(start = 8.dp),
-                                text = artist.name ?: "",
+                                text = artist.name,
                                 color = FontColor,
                                 fontSize = 26.sp,
                                 fontWeight = FontWeight.Medium

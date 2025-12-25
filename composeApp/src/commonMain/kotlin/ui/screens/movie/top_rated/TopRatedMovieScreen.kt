@@ -16,8 +16,8 @@ fun TopRatedMovieScreen(
         getItems = { it.movieList },
         getIsLoading = { it.isLoading },
         getErrorMessage = { it.errorMessage },
-        getImagePath = { (it as MovieItem).posterPath },
-        getItemId = { (it as MovieItem).id },
+        getImagePath = { it.posterPath },
+        getItemId = { it.id },
         onNavigateToDetail = onNavigateToDetail
     )
 }
