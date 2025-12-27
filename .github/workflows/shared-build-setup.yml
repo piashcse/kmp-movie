@@ -1,0 +1,60 @@
+name: Shared Build Setup
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        required: true
+        type: string
+        default: '17'
+      gradle-version:
+        required: false
+        type: string
+        default: 'wrapper'
+      cache-encryption-key:
+        required: false
+        type: string
+        default: ''
+      api-key:
+        required: false
+        type: string
+        default: ''
+    outputs:
+      java-home:
+        description: "Java home directory"
+        value: ${{ jobs.setup.outputs.java-home }}
+      gradle-home:
+        description: "Gradle home directory"
+        value: ${{ jobs.setup.outputs.gradle-home }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      java-home: ${{ steps.java.outputs.JAVA_HOME }}
+      gradle-home: ${{ steps.gradle.outputs.GRADLE_HOME }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        id: java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: ${{ inputs.java-version }}
+          cache: 'gradle'
+
+      - name: Setup Gradle
+        id: gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: ${{ inputs.gradle-version }}
+          cache-encryption-key: ${{ inputs.cache-encryption-key }}
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Create local.properties with API key
+        if: inputs.api-key != ''
+        run: echo "API_KEY=${{ inputs.api-key }}" >> local.properties

@@ -1,0 +1,146 @@
+name: iOS
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+    paths:
+      - 'composeApp/**'
+      - 'build.gradle.kts'
+      - 'gradle.properties'
+      - 'gradle/**'
+      - 'iosApp/**'
+      - '.github/workflows/ios.yml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'composeApp/**'
+      - 'build.gradle.kts'
+      - 'gradle.properties'
+      - 'gradle/**'
+      - 'iosApp/**'
+      - '.github/workflows/ios.yml'
+
+env:
+  API_KEY: ${{ secrets.API_KEY }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Run iOS Tests
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Create local.properties
+        run: echo "API_KEY=${{ env.API_KEY }}" >> local.properties
+
+      - name: Run iOS Simulator Tests
+        run: ./gradlew :composeApp:iosSimulatorArm64Test
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-test-results
+          path: composeApp/build/reports/tests/iosSimulatorArm64Test/
+
+  build:
+    name: Build iOS Framework
+    runs-on: macos-latest
+    timeout-minutes: 30
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Create local.properties
+        run: echo "API_KEY=${{ env.API_KEY }}" >> local.properties
+
+      - name: Build iOS Framework
+        run: ./gradlew :composeApp:linkReleaseFrameworkIosArm64 :composeApp:linkDebugFrameworkIosSimulatorArm64
+
+      - name: Upload iOS Framework
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-framework
+          path: composeApp/build/bin/iosArm64/release/ComposeApp.framework
+
+  xcode-build:
+    name: Build Xcode Project
+    runs-on: macos-latest
+    timeout-minutes: 30
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Create local.properties
+        run: echo "API_KEY=${{ env.API_KEY }}" >> local.properties
+
+      - name: Build KMP Framework
+        run: ./gradlew :composeApp:packForXcode
+
+      - name: Setup iOS project
+        run: |
+          cd iosApp
+          ls -la
+          xcodebuild -list
+
+      - name: Build iOS App
+        run: |
+          cd iosApp
+          xcodebuild -scheme iosApp -destination generic/platform=iOS -configuration Debug CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload iOS App
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: iosApp/build/Build/Products/Debug-iphoneos/

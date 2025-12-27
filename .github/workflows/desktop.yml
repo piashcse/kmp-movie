@@ -1,0 +1,136 @@
+name: Desktop
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+    paths:
+      - 'composeApp/**'
+      - 'build.gradle.kts'
+      - 'gradle.properties'
+      - 'gradle/**'
+      - '.github/workflows/desktop.yml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'composeApp/**'
+      - 'build.gradle.kts'
+      - 'gradle.properties'
+      - 'gradle/**'
+      - '.github/workflows/desktop.yml'
+
+env:
+  API_KEY: ${{ secrets.API_KEY }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Run Desktop Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Create local.properties
+        run: echo "API_KEY=${{ env.API_KEY }}" >> local.properties
+
+      - name: Run JVM Tests
+        run: ./gradlew :composeApp:jvmTest
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-test-results
+          path: composeApp/build/reports/tests/jvmTest/
+
+  build:
+    name: Build Desktop App
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    needs: test
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Create local.properties
+        run: echo "API_KEY=${{ env.API_KEY }}" >> local.properties
+
+      - name: Build Desktop App
+        run: ./gradlew :composeApp:packageReleaseDistributionForCurrentOS
+
+      - name: Upload Desktop App
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-app-${{ matrix.os }}
+          path: composeApp/build/compose/bin/main/
+
+  build-all-platforms:
+    name: Build All Desktop Platforms
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Create local.properties
+        run: echo "API_KEY=${{ env.API_KEY }}" >> local.properties
+
+      - name: Build Desktop App for All Platforms
+        run: ./gradlew :composeApp:createReleaseDistributable
+
+      - name: Upload Desktop Apps
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-app-all-platforms
+          path: composeApp/build/compose/dist/
