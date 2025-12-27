@@ -4,7 +4,6 @@ on:
   push:
     branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main" ]
 
 env:
   API_KEY: ${{ secrets.API_KEY }}

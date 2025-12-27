@@ -10,7 +10,6 @@ on:
       - 'gradle/**'
       - '.github/workflows/desktop.yml'
   pull_request:
-    branches: [ "main" ]
     paths:
       - 'composeApp/**'
       - 'build.gradle.kts'
