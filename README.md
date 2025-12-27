@@ -142,6 +142,24 @@ To run the application on an iPhone device/simulator:
 - Before running make sure you have `yarn 1.22.22`
 - Run the web application: `./gradlew wasmJsBrowserDevelopmentRun`
 
+## CI/CD Setup
+
+This project includes a comprehensive CI/CD setup using GitHub Actions that automatically:
+
+- Tests the application on every push and pull request
+- Builds artifacts for all platforms (Android, iOS, Desktop, Web)
+- Deploys the web version to GitHub Pages
+- Creates GitHub releases with platform-specific artifacts when tags are pushed
+
+For more details about the CI/CD setup, see [`.github/README.md`](.github/README.md).
+
+## Secrets Required for CI/CD
+
+To enable the CI/CD workflows, add these secrets to your GitHub repository settings:
+
+- `API_KEY`: The Movie Database API key for the app
+- `GRADLE_ENCRYPTION_KEY`: Encryption key for Gradle cache (optional but recommended)
+
 ## Project structure
 
 ### [`composeApp`](/composeApp)
