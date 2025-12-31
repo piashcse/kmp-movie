@@ -70,6 +70,7 @@ kotlin {
             implementation(libs.landscapist.coil)
             implementation(libs.landscapist.animation)
             implementation(libs.androidx.lifecycle)
+            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.compose.material3.windowSizeClass)
             implementation(libs.compose.material3.adaptive.navigation)
             implementation(libs.compose.material3.adaptive)

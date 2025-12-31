@@ -7,7 +7,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.collectAsState
 import ui.screens.AppViewModel
 
 /**
@@ -63,7 +63,7 @@ fun ProvideThemeState(
     val themeState = remember(appViewModel) { ThemeState(appViewModel) }
 
     appViewModel?.let { viewModel ->
-        val currentThemeMode by viewModel.themeMode.collectAsStateWithLifecycle()
+        val currentThemeMode by viewModel.themeMode.collectAsState()
         @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
         LaunchedEffect(currentThemeMode) {
             themeState.setThemeMode(currentThemeMode)
