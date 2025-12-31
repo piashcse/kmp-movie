@@ -14,11 +14,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -44,9 +45,6 @@ import kmp_movie.composeapp.generated.resources.birth_day
 import kmp_movie.composeapp.generated.resources.place_of_birth
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import theme.DefaultBackgroundColor
-import theme.FontColor
-import theme.SecondaryFontColor
 import theme.cornerRadius
 import ui.component.ExpandableText
 import ui.component.base.BaseColumn
@@ -73,7 +71,7 @@ fun ArtistDetail(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .background(DefaultBackgroundColor)
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(8.dp),
         ) {
             uiState.artistDetail?.let { artist ->
@@ -98,7 +96,7 @@ fun ArtistDetail(
                             Text(
                                 modifier = Modifier.padding(start = 8.dp),
                                 text = artist.name,
-                                color = FontColor,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 fontSize = 26.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -126,14 +124,14 @@ fun ArtistDetail(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
                 Text(
                     modifier = Modifier.padding(bottom = 8.dp),
                     text = stringResource(Res.string.biography),
-                    color = SecondaryFontColor,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -158,11 +156,11 @@ fun PersonalInfo(title: String, info: String) {
     Column(modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)) {
         Text(
             text = title,
-            color = SecondaryFontColor,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 13.sp,
             fontWeight = FontWeight.SemiBold
         )
-        Text(text = info, color = FontColor, fontSize = 16.sp)
+        Text(text = info, color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp)
     }
 }
 
@@ -172,7 +170,7 @@ fun ArtistMoviesAndTvShows(artistMovies: List<ArtistMovie>, onMovieClick: (Artis
         if (artistMovies.isNotEmpty()) {
             Text(
                 text = stringResource(Res.string.artist_movies),
-                color = FontColor,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold
             )

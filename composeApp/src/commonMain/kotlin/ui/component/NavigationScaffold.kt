@@ -16,8 +16,7 @@
 
 package ui.component
 
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRailItemDefaults
@@ -31,7 +30,6 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import theme.FontColor
 
 /**
  * KMP Movie navigation suite scaffold with item and content slots.
@@ -119,15 +117,14 @@ class KMPNavigationSuiteScope internal constructor(
  */
 object KMPNavigationDefaults {
     @Composable
-    fun navigationContainerColor() = MaterialTheme.colors.primary
+    fun navigationContainerColor() = MaterialTheme.colorScheme.primary
 
     @Composable
-    fun navigationSelectedItemColor() = Color.White
+    fun navigationSelectedItemColor() = MaterialTheme.colorScheme.onPrimary
 
     @Composable
-    fun navigationUnselectedItemColor() =
-        navigationSelectedItemColor().copy(alpha = ContentAlpha.medium)
+    fun navigationUnselectedItemColor() = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
 
     @Composable
-    fun navigationRailItemColor() = FontColor
+    fun navigationRailItemColor() = MaterialTheme.colorScheme.onSurface
 }

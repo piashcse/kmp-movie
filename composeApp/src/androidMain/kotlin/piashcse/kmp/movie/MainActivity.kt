@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // Ensure the decor fits system windows
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        
+
         setContent {
             App()
         }

@@ -1,7 +1,6 @@
 package theme
 
-import androidx.compose.material.Typography
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -9,51 +8,42 @@ import androidx.compose.ui.unit.sp
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    body1 = TextStyle(
+    bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
     ),
-    button = TextStyle(
+    titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
-        fontSize = 14.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 22.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
     ),
-    caption = TextStyle(
+    labelSmall = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 11.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
     )
-
 )
 
-val Typography.subTitlePrimary: TextStyle
-    @Composable
-    get() {
-        return TextStyle(
-            fontFamily = FontFamily.Default,
-            color = FontColor,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
-        )
-    }
+// Additional custom text styles
+val subTitlePrimary: TextStyle = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontSize = 14.sp,
+    fontWeight = FontWeight.Medium
+)
 
-val Typography.subTitleSecondary: TextStyle
-    @Composable
-    get() {
-        return TextStyle(
-            fontFamily = FontFamily.Default,
-            color = SecondaryFontColor,
-            fontSize = 10.sp,
-        )
-    }
+val subTitleSecondary: TextStyle = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontSize = 10.sp,
+)
 
-val Typography.bioGrapyText: TextStyle
-    @Composable
-    get() {
-        return TextStyle(
-            fontFamily = FontFamily.Default,
-            color = SecondaryFontColor,
-            fontSize = 14.sp,
-        )
-    }
+val bioGrapyText: TextStyle = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontSize = 14.sp,
+)
