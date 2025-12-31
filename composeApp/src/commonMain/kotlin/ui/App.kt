@@ -108,8 +108,8 @@ internal fun App(
             val content: @Composable () -> Unit = {
                 Scaffold(
                     floatingActionButton = {
-                        // Show FAB only on first page of each tab (Movies, TV Series, Celebrities)
-                        if (currentRoute is TopLevelRoute && currentRoute == getDefaultRouteForPage(currentPage)) {
+                        // Show FAB on all top-level routes (bottom navigation items) except detail screens
+                        if (currentRoute is TopLevelRoute) {
                             FloatingActionButton(onClick = { backStack.add(Search) }) {
                                 Icon(Icons.Filled.Search, contentDescription = "Search")
                             }
