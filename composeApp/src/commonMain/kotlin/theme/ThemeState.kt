@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.collectAsState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ui.screens.AppViewModel
 
 /**
@@ -22,7 +23,7 @@ enum class ThemeMode {
 /**
  * Theme state that holds the current theme mode and provides methods to change it
  */
-class ThemeState(
+class ThemeState @OptIn(ExperimentalCoroutinesApi::class) constructor(
     private val appViewModel: AppViewModel? = null
 ) {
     private val _themeMode = mutableStateOf(ThemeMode.SYSTEM)
@@ -30,6 +31,7 @@ class ThemeState(
     val themeMode: ThemeMode
         get() = _themeMode.value
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun setThemeMode(mode: ThemeMode) {
         appViewModel?.setThemeMode(mode)
         _themeMode.value = mode
