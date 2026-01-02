@@ -39,6 +39,7 @@ androidx-navigation3-material3-adaptive = { module = "org.jetbrains.compose.mate
 landscapist-coil = { module = "com.github.skydoves:landscapist-coil3", version.ref = "landScapist" }
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landScapist" }
 androidx-lifecycle = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }

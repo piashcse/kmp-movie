@@ -16,8 +16,7 @@
 
 package ui.component
 
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRailItemDefaults
@@ -31,7 +30,6 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import theme.FontColor
 
 /**
  * KMP Movie navigation suite scaffold with item and content slots.
@@ -52,23 +50,23 @@ fun KMPNavigationSuiteScaffold(
     val layoutType = NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(windowAdaptiveInfo)
     val navigationSuiteItemColors = NavigationSuiteItemColors(
         navigationBarItemColors = NavigationBarItemDefaults.colors(
-            selectedIconColor = KMPNavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = KMPNavigationDefaults.navigationUnselectedItemColor(),
-            selectedTextColor = KMPNavigationDefaults.navigationSelectedItemColor(),
-            unselectedTextColor = KMPNavigationDefaults.navigationUnselectedItemColor(),
+            selectedIconColor = KMPNavigationDefaults.navigationBarSelectedItemColor(),
+            unselectedIconColor = KMPNavigationDefaults.navigationBarUnselectedItemColor(),
+            selectedTextColor = KMPNavigationDefaults.navigationBarSelectedItemColor(),
+            unselectedTextColor = KMPNavigationDefaults.navigationBarUnselectedItemColor(),
             indicatorColor = Color.Transparent,
         ),
         navigationRailItemColors = NavigationRailItemDefaults.colors(
-            selectedIconColor = KMPNavigationDefaults.navigationRailItemColor(),
-            unselectedIconColor = KMPNavigationDefaults.navigationRailItemColor(),
-            selectedTextColor = KMPNavigationDefaults.navigationRailItemColor(),
-            unselectedTextColor = KMPNavigationDefaults.navigationRailItemColor(),
+            selectedIconColor = KMPNavigationDefaults.navigationRailSelectedItemColor(),
+            unselectedIconColor = KMPNavigationDefaults.navigationRailUnselectedItemColor(),
+            selectedTextColor = KMPNavigationDefaults.navigationRailSelectedItemColor(),
+            unselectedTextColor = KMPNavigationDefaults.navigationRailUnselectedItemColor(),
         ),
         navigationDrawerItemColors = NavigationDrawerItemDefaults.colors(
-            selectedIconColor = KMPNavigationDefaults.navigationRailItemColor(),
-            unselectedIconColor = KMPNavigationDefaults.navigationRailItemColor(),
-            selectedTextColor = KMPNavigationDefaults.navigationRailItemColor(),
-            unselectedTextColor = KMPNavigationDefaults.navigationRailItemColor(),
+            selectedIconColor = KMPNavigationDefaults.navigationRailSelectedItemColor(),
+            unselectedIconColor = KMPNavigationDefaults.navigationRailUnselectedItemColor(),
+            selectedTextColor = KMPNavigationDefaults.navigationRailSelectedItemColor(),
+            unselectedTextColor = KMPNavigationDefaults.navigationRailUnselectedItemColor(),
         ),
     )
 
@@ -83,7 +81,7 @@ fun KMPNavigationSuiteScaffold(
         containerColor = Color.Transparent,
         navigationSuiteColors = NavigationSuiteDefaults.colors(
             navigationBarContainerColor = KMPNavigationDefaults.navigationContainerColor(),
-            navigationRailContainerColor = Color.Transparent,
+            navigationRailContainerColor = KMPNavigationDefaults.navigationRailContainerColor(),
         ),
         modifier = modifier,
     ) {
@@ -119,15 +117,21 @@ class KMPNavigationSuiteScope internal constructor(
  */
 object KMPNavigationDefaults {
     @Composable
-    fun navigationContainerColor() = MaterialTheme.colors.primary
+    fun navigationContainerColor() = MaterialTheme.colorScheme.primary
 
     @Composable
-    fun navigationSelectedItemColor() = Color.White
+    fun navigationRailContainerColor() = MaterialTheme.colorScheme.surface
 
     @Composable
-    fun navigationUnselectedItemColor() =
-        navigationSelectedItemColor().copy(alpha = ContentAlpha.medium)
+    fun navigationBarSelectedItemColor() = MaterialTheme.colorScheme.onPrimary
 
     @Composable
-    fun navigationRailItemColor() = FontColor
+    fun navigationBarUnselectedItemColor() = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+
+    @Composable
+    fun navigationRailSelectedItemColor() = MaterialTheme.colorScheme.onSurface
+
+    @Composable
+    fun navigationRailUnselectedItemColor() = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+
 }

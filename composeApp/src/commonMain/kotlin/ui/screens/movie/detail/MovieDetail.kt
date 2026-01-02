@@ -19,9 +19,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -56,8 +57,6 @@ import kmp_movie.composeapp.generated.resources.release_date
 import kmp_movie.composeapp.generated.resources.similar_movie
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import theme.DefaultBackgroundColor
-import theme.FontColor
 import theme.cornerRadius
 import ui.component.ExpandableText
 import ui.component.base.BaseColumn
@@ -84,7 +83,7 @@ fun MovieDetail(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .background(DefaultBackgroundColor),
+            .background(MaterialTheme.colorScheme.surface),
         loading = uiState.isLoading,
         errorMessage = uiState.errorMessage
     ) {
@@ -125,7 +124,7 @@ fun UiDetail(data: MovieDetail, onBack: () -> Unit) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back",
-                tint = Color.White
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
         Column(modifier = Modifier.padding(start = 10.dp, top = 200.dp, end = 10.dp)) {
@@ -147,7 +146,7 @@ fun UiDetail(data: MovieDetail, onBack: () -> Unit) {
                 ) {
                     Text(
                         text = data.title,
-                        color = FontColor,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
                         maxLines = 1,
@@ -196,7 +195,7 @@ fun UiDetail(data: MovieDetail, onBack: () -> Unit) {
             Text(
                 modifier = Modifier.padding(top = 8.dp),
                 text = stringResource(Res.string.description),
-                color = FontColor,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -210,7 +209,7 @@ fun RecommendedMovie(recommendedMovie: List<MovieItem>, onNavigateToDetail: (Int
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
             text = stringResource(Res.string.similar_movie),
-            color = FontColor,
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 17.sp,
             fontWeight = FontWeight.SemiBold
         )
@@ -242,7 +241,7 @@ fun ArtistAndCrew(cast: List<Cast>, onNavigateToArtist: (Int) -> Unit) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
             text = stringResource(Res.string.cast),
-            color = FontColor,
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 17.sp,
             fontWeight = FontWeight.SemiBold
         )

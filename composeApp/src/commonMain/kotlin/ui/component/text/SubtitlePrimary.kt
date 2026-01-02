@@ -1,7 +1,7 @@
 package ui.component.text
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import theme.subTitlePrimary
 
@@ -9,6 +9,8 @@ import theme.subTitlePrimary
 fun SubtitlePrimary(text: String) {
     Text(
         text = text,
-        style = MaterialTheme.typography.subTitlePrimary
+        style = subTitlePrimary.copy(
+            color = MaterialTheme.colorScheme.onSurface
+        )
     )
 }

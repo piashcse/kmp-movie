@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import theme.ThemeMode
 import utils.network.UiState
 
 @ExperimentalCoroutinesApi
@@ -29,6 +30,24 @@ class AppViewModel(private val repo: Repository) : ViewModel() {
 
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading get() = _isLoading.asStateFlow()
+
+    // Theme mode state
+    private val _themeMode = MutableStateFlow(ThemeMode.SYSTEM)
+    val themeMode = _themeMode.asStateFlow()
+
+    fun setThemeMode(mode: ThemeMode) {
+        _themeMode.value = mode
+    }
+
+    fun toggleTheme() {
+        val currentMode = _themeMode.value
+        val newMode = when (currentMode) {
+            ThemeMode.LIGHT -> ThemeMode.DARK
+            ThemeMode.DARK -> ThemeMode.LIGHT
+            ThemeMode.SYSTEM -> ThemeMode.DARK // Default to dark when toggling from system
+        }
+        _themeMode.value = newMode
+    }
 
     @FlowPreview
     fun movieSearch(searchKey: String) {
