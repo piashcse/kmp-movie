@@ -92,3 +92,12 @@ data class TvSeriesDetail(val id: Int) : Route
 
 @Serializable
 data object Search : Route
+
+@Serializable
+data object Genres : TopLevelRoute {
+    override val title = "Genres"
+    override val icon = Icons.Filled.Favorite // Using favorite icon temporarily
+}
+
+@Serializable
+data class GenreContent(val genreId: Int, val genreName: String) : Route

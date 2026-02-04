@@ -36,6 +36,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import navigation.AiringTodayTvSeries
 import navigation.ArtistDetail
+import navigation.GenreContent
+import navigation.Genres
 import navigation.MovieDetail
 import navigation.NowPlayingMovie
 import navigation.OnTheAirTvSeries
@@ -72,6 +74,8 @@ import ui.screens.tv_series.on_the_air.OnTheAirTvSeriesScreen
 import ui.screens.tv_series.popular.PopularTvSeriesScreen
 import ui.screens.tv_series.top_rated.TopRatedTvSeriesScreen
 import ui.screens.search.SearchScreen
+import ui.screens.genre.GenreContentScreen
+import ui.screens.genre.GenreListScreen
 
 // Page constants for better code clarity
 private const val PAGE_MOVIES = 0
@@ -167,6 +171,13 @@ internal fun App(
                                     onNavigateToMovie = { id -> backStack.add(MovieDetail(id)) },
                                     onNavigateToTvSeries = { id -> backStack.add(TvSeriesDetail(id)) },
                                     onNavigateToArtist = { id -> backStack.add(ArtistDetail(id)) }
+                                )
+                            }
+                            entry<GenreContent> { args ->
+                                GenreContentScreen(
+                                    genreId = args.genreId,
+                                    genreName = args.genreName,
+                                    onBackClick = { backStack.removeLast() }
                                 )
                             }
                         }
@@ -302,6 +313,9 @@ private fun TabScreen(
                 // Celebrities
                 PopularCelebrity -> PopularCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
                 TrendingCelebrity -> TrendingCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
+
+                // Genres - shouldn't be reached in this context since we removed it from tabs
+                else -> NowPlayingScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
             }
         }
     }
@@ -311,6 +325,7 @@ private fun getPageForRoute(route: TopLevelRoute): Int = when (route) {
     NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie -> PAGE_MOVIES
     AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries -> PAGE_TV_SERIES
     PopularCelebrity, TrendingCelebrity -> PAGE_CELEBRITIES
+    Genres -> PAGE_MOVIES // Put Genres in the movies section
 }
 
 private fun getDefaultRouteForPage(page: Int): TopLevelRoute = when (page) {
