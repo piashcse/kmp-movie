@@ -15,12 +15,13 @@ class FavoritesViewModel(
     private val _state = MutableStateFlow<UiState<List<FavoriteItem>>>(UiState.Loading)
     val state: StateFlow<UiState<List<FavoriteItem>>> = _state
 
-    fun loadFavorites() {
+    fun loadFavorites(mediaType: data.model.local.MediaType) {
         viewModelScope.launch {
             _state.value = UiState.Loading
             try {
                 val favorites = repository.getFavorites()
-                _state.value = UiState.Success(favorites)
+                val filtered = favorites.filter { it.mediaType == mediaType }
+                _state.value = UiState.Success(filtered)
             } catch (e: Exception) {
                 _state.value = UiState.Error(e)
             }

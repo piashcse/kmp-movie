@@ -12,6 +12,7 @@ import ui.screens.artist_detail.ArtistDetailViewModel
 import ui.screens.celebrities.popular.PopularCelebritiesViewModel
 import ui.screens.celebrities.trending.TrendingCelebritiesViewModel
 import ui.screens.genre.GenreContentViewModel
+import ui.screens.favorites.FavoritesViewModel
 import ui.screens.genre.GenreListViewModel
 import ui.screens.movie.detail.MovieDetailViewModel
 import ui.screens.movie.now_playing.NowPlayingViewModel
@@ -59,4 +60,7 @@ val appModule: Module = module {
     // Genre ViewModels
     viewModel { GenreListViewModel(get()) }
     viewModel { GenreContentViewModel(get()) }
+    
+    // Favorites ViewModel
+    viewModel { FavoritesViewModel(get()) }
 }

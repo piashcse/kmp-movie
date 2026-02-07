@@ -76,12 +76,20 @@ import ui.screens.tv_series.top_rated.TopRatedTvSeriesScreen
 import ui.screens.search.SearchScreen
 import ui.screens.genre.GenreContentScreen
 import ui.screens.genre.GenreListScreen
+import navigation.FavoriteMovie
+import navigation.FavoriteTvSeries
+import navigation.FavoriteCelebrity
+import ui.screens.favorites.FavoritesScreen
+import data.model.local.MediaType
+import kmp_movie.composeapp.generated.resources.favorites
+
 
 // Page constants for better code clarity
 private const val PAGE_MOVIES = 0
 private const val PAGE_TV_SERIES = 1
 private const val PAGE_CELEBRITIES = 2
-private const val PAGE_COUNT = 3
+private const val PAGE_FAVORITES = 3
+private const val PAGE_COUNT = 4
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -139,6 +147,11 @@ internal fun App(
                             // Celebrity routes
                             entry<PopularCelebrity> { MainScreen(PopularCelebrity, backStack) }
                             entry<TrendingCelebrity> { MainScreen(TrendingCelebrity, backStack) }
+
+                            // Favorite routes
+                            entry<FavoriteMovie> { MainScreen(FavoriteMovie, backStack) }
+                            entry<FavoriteTvSeries> { MainScreen(FavoriteTvSeries, backStack) }
+                            entry<FavoriteCelebrity> { MainScreen(FavoriteCelebrity, backStack) }
 
                             // Detail screens
                             entry<MovieDetail> { args ->
@@ -265,7 +278,8 @@ private fun TabScreen(
     val tabs = listOf(
         stringResource(Res.string.movies),
         stringResource(Res.string.tv_series),
-        stringResource(Res.string.celebrities)
+        stringResource(Res.string.celebrities),
+        stringResource(Res.string.favorites)
     )
 
     Column(Modifier.fillMaxSize()) {
@@ -314,6 +328,11 @@ private fun TabScreen(
                 PopularCelebrity -> PopularCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
                 TrendingCelebrity -> TrendingCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
 
+                // Favorites
+                FavoriteMovie -> FavoritesScreen(mediaType = MediaType.MOVIE, onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
+                FavoriteTvSeries -> FavoritesScreen(mediaType = MediaType.TV, onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
+                FavoriteCelebrity -> FavoritesScreen(mediaType = MediaType.PERSON, onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
+
                 // Genres - shouldn't be reached in this context since we removed it from tabs
                 else -> NowPlayingScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
             }
@@ -325,6 +344,7 @@ private fun getPageForRoute(route: TopLevelRoute): Int = when (route) {
     NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie -> PAGE_MOVIES
     AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries -> PAGE_TV_SERIES
     PopularCelebrity, TrendingCelebrity -> PAGE_CELEBRITIES
+    FavoriteMovie, FavoriteTvSeries, FavoriteCelebrity -> PAGE_FAVORITES
     Genres -> PAGE_MOVIES // Put Genres in the movies section
 }
 
@@ -332,6 +352,7 @@ private fun getDefaultRouteForPage(page: Int): TopLevelRoute = when (page) {
     PAGE_MOVIES -> NowPlayingMovie
     PAGE_TV_SERIES -> AiringTodayTvSeries
     PAGE_CELEBRITIES -> PopularCelebrity
+    PAGE_FAVORITES -> FavoriteMovie
     else -> NowPlayingMovie
 }
 
@@ -339,5 +360,6 @@ private fun getItemsForPage(page: Int): List<TopLevelRoute> = when (page) {
     PAGE_MOVIES -> listOf(NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie)
     PAGE_TV_SERIES -> listOf(AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries)
     PAGE_CELEBRITIES -> listOf(PopularCelebrity, TrendingCelebrity)
+    PAGE_FAVORITES -> listOf(FavoriteMovie, FavoriteTvSeries, FavoriteCelebrity)
     else -> emptyList()
 }

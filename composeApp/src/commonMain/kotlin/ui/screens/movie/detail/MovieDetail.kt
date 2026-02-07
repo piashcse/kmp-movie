@@ -56,15 +56,24 @@ import kmp_movie.composeapp.generated.resources.rating
 import kmp_movie.composeapp.generated.resources.release_date
 import kmp_movie.composeapp.generated.resources.similar_movie
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import theme.cornerRadius
 import ui.component.ExpandableText
+import ui.component.FavoriteButton
 import ui.component.base.BaseColumn
 import ui.component.shimmerBackground
 import ui.component.text.SubtitlePrimary
 import ui.component.text.SubtitleSecondary
 import utils.hourMinutes
 import utils.roundTo
+import data.model.local.FavoriteItem
+import data.model.local.MediaType
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 @Composable
 fun MovieDetail(
@@ -115,6 +124,44 @@ fun UiDetail(data: MovieDetail, onBack: () -> Unit) {
                 }
                 .shimmerBackground(RoundedCornerShape(5.dp))
         )
+        
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 16.dp, end = 16.dp)
+        ) {
+            val repository = koinInject<data.repository.Repository>()
+            val scope = rememberCoroutineScope()
+            var isFavorite by remember { mutableStateOf(false) }
+            
+            LaunchedEffect(data.id) {
+                isFavorite = repository.isFavorite(data.id, MediaType.MOVIE)
+            }
+            
+            FavoriteButton(
+                isFavorite = isFavorite,
+                onClick = {
+                    isFavorite = !isFavorite
+                    scope.launch {
+                        if (isFavorite) {
+                            repository.addFavorite(
+                                FavoriteItem(
+                                    id = data.id,
+                                    mediaType = MediaType.MOVIE,
+                                    title = data.title,
+                                    posterPath = data.posterPath,
+                                    releaseDate = data.releaseDate
+                                )
+                            )
+                        } else {
+                            repository.removeFavorite(data.id, MediaType.MOVIE)
+                        }
+                    }
+                },
+                modifier = Modifier.size(32.dp)
+            )
+        }
+
         IconButton(
             onClick = onBack,
             modifier = Modifier

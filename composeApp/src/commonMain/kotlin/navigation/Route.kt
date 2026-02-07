@@ -101,3 +101,21 @@ data object Genres : TopLevelRoute {
 
 @Serializable
 data class GenreContent(val genreId: Int, val genreName: String) : Route
+
+@Serializable
+data object FavoriteMovie : TopLevelRoute {
+    override val title = "Movies"
+    override val icon = Icons.Filled.Movie
+}
+
+@Serializable
+data object FavoriteTvSeries : TopLevelRoute {
+    override val title = "TV Series"
+    override val icon = Icons.Filled.Timeline
+}
+
+@Serializable
+data object FavoriteCelebrity : TopLevelRoute {
+    override val title = "Celebrities"
+    override val icon = Icons.Filled.Star
+}

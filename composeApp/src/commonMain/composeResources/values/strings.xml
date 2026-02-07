@@ -23,4 +23,5 @@
     <string name="first_air">First Air</string>
     <string name="artist_movies">Artist's Movies &#38; TV Shows </string>
     <string name="popularity">Popularity: </string>
+    <string name="favorites">Favorites</string>
 </resources>

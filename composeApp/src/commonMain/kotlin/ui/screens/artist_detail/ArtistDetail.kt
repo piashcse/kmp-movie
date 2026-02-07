@@ -48,6 +48,15 @@ import org.koin.compose.viewmodel.koinViewModel
 import theme.cornerRadius
 import ui.component.ExpandableText
 import ui.component.base.BaseColumn
+import ui.component.FavoriteButton
+import org.koin.compose.koinInject
+import data.model.local.FavoriteItem
+import data.model.local.MediaType
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 @Composable
 fun ArtistDetail(
@@ -58,9 +67,12 @@ fun ArtistDetail(
     viewModel: ArtistDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val repository = koinInject<data.repository.Repository>()
+    var isFavorite by remember { mutableStateOf(false) }
 
     LaunchedEffect(personId) {
         viewModel.fetchArtistDetail(personId)
+        isFavorite = repository.isFavorite(personId, MediaType.PERSON)
     }
 
     BaseColumn(
@@ -115,6 +127,7 @@ fun ArtistDetail(
                             )
                         }
                     }
+
                     IconButton(
                         onClick = onBack,
                         modifier = Modifier
@@ -127,6 +140,34 @@ fun ArtistDetail(
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
+
+                    // Favorite Button
+                    val scope = rememberCoroutineScope()
+
+                    FavoriteButton(
+                        isFavorite = isFavorite,
+                        onClick = {
+                            isFavorite = !isFavorite
+                            scope.launch {
+                                if (isFavorite) {
+                                    repository.addFavorite(
+                                        data.model.local.FavoriteItem(
+                                            id = personId,
+                                            mediaType = MediaType.PERSON,
+                                            title = artist.name,
+                                            posterPath = artist.profilePath,
+                                            releaseDate = artist.birthday
+                                        )
+                                    )
+                                } else {
+                                    repository.removeFavorite(personId, MediaType.PERSON)
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(top = 8.dp, end = 8.dp)
+                    )
                 }
                 Text(
                     modifier = Modifier.padding(bottom = 8.dp),

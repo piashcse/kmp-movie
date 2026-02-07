@@ -12,39 +12,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import data.model.local.FavoriteItem
 import data.model.local.MediaType
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.MediaItemCard
 import ui.theme.AppTheme
 import utils.network.UiState
+import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.favorites
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(
+    mediaType: MediaType,
+    onNavigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: FavoritesViewModel = koinViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.loadFavorites()
+    LaunchedEffect(mediaType) {
+        viewModel.loadFavorites(mediaType)
     }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Favorites",
-                        fontWeight = FontWeight.Bold,
-                        color = AppTheme.colors.onSurface
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = AppTheme.colors.surface
-                )
-            )
-        }
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -52,20 +41,21 @@ fun FavoritesScreen(
                 .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
-            when (val uiState = viewModel.state.value) {
+            when (val uiState = viewModel.state.collectAsState().value) {
                 is UiState.Loading -> {
                     CircularProgressIndicator()
                 }
                 is UiState.Success -> {
                     val favorites = uiState.data
                     if (favorites.isEmpty()) {
-                        EmptyFavoritesView()
+                        EmptyFavoritesView(mediaType)
                     } else {
                         LazyVerticalGrid(
                             columns = GridCells.Adaptive(minSize = 128.dp),
                             contentPadding = PaddingValues(8.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxSize()
                         ) {
                             items(favorites) { favorite ->
                                 MediaItemCard(
@@ -74,14 +64,7 @@ fun FavoritesScreen(
                                     posterPath = favorite.posterPath,
                                     releaseDate = favorite.releaseDate ?: "",
                                     mediaType = favorite.mediaType,
-                                    onClick = {
-                                        // Navigate to detail based on media type
-                                        when (favorite.mediaType) {
-                                            MediaType.MOVIE -> { /* Navigate to movie detail */ }
-                                            MediaType.TV -> { /* Navigate to TV series detail */ }
-                                            MediaType.PERSON -> { /* Navigate to person detail */ }
-                                        }
-                                    }
+                                    onClick = { onNavigateToDetail(favorite.id) }
                                 )
                             }
                         }
@@ -96,7 +79,19 @@ fun FavoritesScreen(
 }
 
 @Composable
-fun EmptyFavoritesView() {
+fun EmptyFavoritesView(mediaType: MediaType) {
+    val title = when (mediaType) {
+        MediaType.MOVIE -> "No favorite movies yet"
+        MediaType.TV -> "No favorite TV series yet"
+        MediaType.PERSON -> "No favorite celebrities yet"
+    }
+
+    val subtitle = when (mediaType) {
+        MediaType.MOVIE -> "Start adding your favorite movies!"
+        MediaType.TV -> "Start adding your favorite TV series!"
+        MediaType.PERSON -> "Start adding your favorite celebrities!"
+    }
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -110,13 +105,13 @@ fun EmptyFavoritesView() {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "No favorites yet",
+            text = title,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Medium
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Start adding your favorite movies and TV shows!",
+            text = subtitle,
             style = MaterialTheme.typography.bodyMedium,
             color = AppTheme.colors.onSurfaceVariant
         )
