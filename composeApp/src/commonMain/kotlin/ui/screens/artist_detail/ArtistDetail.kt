@@ -151,7 +151,7 @@ fun ArtistDetail(
                             scope.launch {
                                 if (isFavorite) {
                                     repository.addFavorite(
-                                        data.model.local.FavoriteItem(
+                                        FavoriteItem(
                                             id = personId,
                                             mediaType = MediaType.PERSON,
                                             title = artist.name,

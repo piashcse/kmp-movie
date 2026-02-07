@@ -1,8 +1,7 @@
 package utils
 
-import kotlinx.browser.window
-import kotlin.js.Date
+private fun jsDateNow(): Double = js("Date.now()")
 
 actual fun getCurrentTimestamp(): Long {
-    return Date.now().toLong()
+    return jsDateNow().toLong()
 }

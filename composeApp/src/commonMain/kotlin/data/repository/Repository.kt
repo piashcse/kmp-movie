@@ -2,7 +2,7 @@ package data.repository
 
 import data.model.local.FavoriteItem
 import data.model.local.MediaType
-import data.model.local.WatchlistItem
+
 import data.remote.ApiService
 import utils.flowDirect
 import utils.flowWithResults
@@ -47,13 +47,7 @@ class Repository(
     suspend fun removeFavorite(id: Int, mediaType: MediaType) = localStorageManager.removeFavorite(id, mediaType)
     suspend fun isFavorite(id: Int, mediaType: MediaType) = localStorageManager.isFavorite(id, mediaType)
 
-    // Watchlist endpoints
-    suspend fun getWatchlist() = localStorageManager.getWatchlist()
-    suspend fun addToWatchlist(watchlistItem: WatchlistItem) = localStorageManager.addToWatchlist(watchlistItem)
-    suspend fun removeFromWatchlist(id: Int, mediaType: MediaType) = localStorageManager.removeFromWatchlist(id, mediaType)
-    suspend fun isInWatchlist(id: Int, mediaType: MediaType) = localStorageManager.isInWatchlist(id, mediaType)
-    suspend fun updateWatchlistStatus(id: Int, mediaType: MediaType, status: data.model.local.WatchlistStatus) =
-        localStorageManager.updateWatchlistStatus(id, mediaType, status)
+
 
     // Genre endpoints
     fun getMovieGenres() = flowDirect<List<data.model.movie_detail.Genre>> { api.movieGenres() }

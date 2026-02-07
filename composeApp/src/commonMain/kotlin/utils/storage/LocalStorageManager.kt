@@ -3,7 +3,7 @@ package utils.storage
 import com.russhwolf.settings.Settings
 import data.model.local.FavoriteItem
 import data.model.local.MediaType
-import data.model.local.WatchlistItem
+
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,7 +20,7 @@ class LocalStorageManager(
 
     companion object {
         private const val FAVORITES_KEY = "favorites_list"
-        private const val WATCHLIST_KEY = "watchlist_list"
+
     }
 
     suspend fun saveFavorites(favorites: List<FavoriteItem>) = withContext(dispatcher) {
@@ -57,50 +57,5 @@ class LocalStorageManager(
         getFavorites().any { it.id == id && it.mediaType == mediaType }
     }
 
-    suspend fun saveWatchlist(watchlist: List<WatchlistItem>) = withContext(dispatcher) {
-        val serializer = ListSerializer(WatchlistItem.serializer())
-        settings.putString(key = WATCHLIST_KEY, value = json.encodeToString(serializer, watchlist))
-    }
 
-    suspend fun getWatchlist(): List<WatchlistItem> = withContext(dispatcher) {
-        try {
-            val serializer = ListSerializer(WatchlistItem.serializer())
-            json.decodeFromString(serializer, settings.getString(WATCHLIST_KEY, "[]"))
-        } catch (e: Exception) {
-            emptyList()
-        }
-    }
-
-    suspend fun addToWatchlist(watchlistItem: WatchlistItem) = withContext(dispatcher) {
-        val currentWatchlist = getWatchlist()
-        val updatedWatchlist = if (!currentWatchlist.any { it.id == watchlistItem.id && it.mediaType == watchlistItem.mediaType }) {
-            currentWatchlist + watchlistItem
-        } else {
-            // Update existing item
-            currentWatchlist.map { if (it.id == watchlistItem.id && it.mediaType == watchlistItem.mediaType) watchlistItem else it }
-        }
-        saveWatchlist(updatedWatchlist)
-    }
-
-    suspend fun removeFromWatchlist(id: Int, mediaType: MediaType) = withContext(dispatcher) {
-        val currentWatchlist = getWatchlist()
-        val updatedWatchlist = currentWatchlist.filterNot { it.id == id && it.mediaType == mediaType }
-        saveWatchlist(updatedWatchlist)
-    }
-
-    suspend fun isInWatchlist(id: Int, mediaType: MediaType): Boolean = withContext(dispatcher) {
-        getWatchlist().any { it.id == id && it.mediaType == mediaType }
-    }
-
-    suspend fun updateWatchlistStatus(id: Int, mediaType: MediaType, status: data.model.local.WatchlistStatus) = withContext(dispatcher) {
-        val currentWatchlist = getWatchlist()
-        val updatedWatchlist = currentWatchlist.map {
-            if (it.id == id && it.mediaType == mediaType) {
-                it.copy(status = status)
-            } else {
-                it
-            }
-        }
-        saveWatchlist(updatedWatchlist)
-    }
 }

@@ -29,6 +29,9 @@ import ui.component.shimmerBackground
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
 
+import data.model.local.FavoriteItem
+
+
 @Composable
 fun MediaItemCard(
     id: Int,
@@ -44,12 +47,10 @@ fun MediaItemCard(
     val scope = rememberCoroutineScope()
 
     var isFavorite by remember { mutableStateOf(false) }
-    var isInWatchlist by remember { mutableStateOf(false) }
 
     // Load initial states
     LaunchedEffect(id, mediaType) {
         isFavorite = repository.isFavorite(id, mediaType)
-        isInWatchlist = repository.isInWatchlist(id, mediaType)
     }
 
     Card(
@@ -86,16 +87,11 @@ fun MediaItemCard(
                     FavoriteButton(
                         isFavorite = isFavorite,
                         onClick = {
-                            // Update the state optimistically
                             isFavorite = !isFavorite
-
-                            // Perform the actual operation in a coroutine
                             scope.launch {
                                 if (isFavorite) {
-                                    repository.removeFavorite(id, mediaType)
-                                } else {
                                     repository.addFavorite(
-                                        data.model.local.FavoriteItem(
+                                        FavoriteItem(
                                             id = id,
                                             mediaType = mediaType,
                                             title = title,
@@ -103,35 +99,14 @@ fun MediaItemCard(
                                             releaseDate = releaseDate
                                         )
                                     )
-                                }
-                            }
-                        }
-                    )
-
-                    WatchlistButton(
-                        isInWatchlist = isInWatchlist,
-                        onClick = {
-                            // Update the state optimistically
-                            isInWatchlist = !isInWatchlist
-
-                            // Perform the actual operation in a coroutine
-                            scope.launch {
-                                if (isInWatchlist) {
-                                    repository.removeFromWatchlist(id, mediaType)
                                 } else {
-                                    repository.addToWatchlist(
-                                        data.model.local.WatchlistItem(
-                                            id = id,
-                                            mediaType = mediaType,
-                                            title = title,
-                                            posterPath = posterPath,
-                                            releaseDate = releaseDate
-                                        )
-                                    )
+                                    repository.removeFavorite(id, mediaType)
                                 }
                             }
                         }
                     )
+
+
                 }
             }
         }
