@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import data.model.TvSeriesItem
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.GenericListScreen
 import ui.component.GenreChips

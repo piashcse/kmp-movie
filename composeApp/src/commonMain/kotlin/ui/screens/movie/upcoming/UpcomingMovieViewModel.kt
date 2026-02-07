@@ -1,8 +1,8 @@
 package ui.screens.movie.upcoming
 
 import data.model.MovieItem
-import data.repository.Repository
 import data.model.movie_detail.Genre
+import data.repository.Repository
 import kotlinx.coroutines.flow.Flow
 import ui.screens.base.GenreFilterableViewModel
 import ui.screens.movie.MovieUiState

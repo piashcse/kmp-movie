@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -15,8 +17,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -28,14 +28,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import data.model.local.MediaType
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.celebrities
+import kmp_movie.composeapp.generated.resources.favorites
 import kmp_movie.composeapp.generated.resources.movies
 import kmp_movie.composeapp.generated.resources.tv_series
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import navigation.AiringTodayTvSeries
 import navigation.ArtistDetail
+import navigation.FavoriteCelebrity
+import navigation.FavoriteMovie
+import navigation.FavoriteTvSeries
 import navigation.GenreContent
 import navigation.Genres
 import navigation.MovieDetail
@@ -62,26 +67,20 @@ import ui.component.KMPNavigationSuiteScaffold
 import ui.screens.AppViewModel
 import ui.screens.celebrities.popular.PopularCelebritiesScreen
 import ui.screens.celebrities.trending.TrendingCelebritiesScreen
+import ui.screens.favorites.FavoritesScreen
+import ui.screens.genre.GenreContentScreen
 import ui.screens.movie.now_playing.NowPlayingScreen
-import ui.screens.artist_detail.ArtistDetail as ArtistDetailScreen
-import ui.screens.movie.detail.MovieDetail as MovieDetailScreen
 import ui.screens.movie.popular.PopularMovieScreen
 import ui.screens.movie.top_rated.TopRatedMovieScreen
 import ui.screens.movie.upcoming.UpcomingMovieScreen
+import ui.screens.search.SearchScreen
 import ui.screens.tv_series.airing_today.AiringTodayTvSeriesScreen
-import ui.screens.tv_series.detail.TvSeriesDetail as TvSeriesDetailScreen
 import ui.screens.tv_series.on_the_air.OnTheAirTvSeriesScreen
 import ui.screens.tv_series.popular.PopularTvSeriesScreen
 import ui.screens.tv_series.top_rated.TopRatedTvSeriesScreen
-import ui.screens.search.SearchScreen
-import ui.screens.genre.GenreContentScreen
-import ui.screens.genre.GenreListScreen
-import navigation.FavoriteMovie
-import navigation.FavoriteTvSeries
-import navigation.FavoriteCelebrity
-import ui.screens.favorites.FavoritesScreen
-import data.model.local.MediaType
-import kmp_movie.composeapp.generated.resources.favorites
+import ui.screens.artist_detail.ArtistDetail as ArtistDetailScreen
+import ui.screens.movie.detail.MovieDetail as MovieDetailScreen
+import ui.screens.tv_series.detail.TvSeriesDetail as TvSeriesDetailScreen
 
 
 // Page constants for better code clarity

@@ -19,16 +19,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlurEffect
@@ -46,6 +50,8 @@ import com.skydoves.landscapist.components.rememberImageComponent
 import constant.AppConstant
 import data.model.MovieItem
 import data.model.artist.Cast
+import data.model.local.FavoriteItem
+import data.model.local.MediaType
 import data.model.movie_detail.MovieDetail
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.cast
@@ -55,6 +61,7 @@ import kmp_movie.composeapp.generated.resources.language
 import kmp_movie.composeapp.generated.resources.rating
 import kmp_movie.composeapp.generated.resources.release_date
 import kmp_movie.composeapp.generated.resources.similar_movie
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -67,13 +74,6 @@ import ui.component.text.SubtitlePrimary
 import ui.component.text.SubtitleSecondary
 import utils.hourMinutes
 import utils.roundTo
-import data.model.local.FavoriteItem
-import data.model.local.MediaType
-import kotlinx.coroutines.launch
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 
 @Composable
 fun MovieDetail(

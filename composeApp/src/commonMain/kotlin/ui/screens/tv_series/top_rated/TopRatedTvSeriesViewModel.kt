@@ -1,8 +1,8 @@
 package ui.screens.tv_series.top_rated
 
 import data.model.TvSeriesItem
-import data.repository.Repository
 import data.model.tv_detail.Genre
+import data.repository.Repository
 import kotlinx.coroutines.flow.Flow
 import ui.screens.base.GenreFilterableViewModel
 import ui.screens.tv_series.TvSeriesUiState

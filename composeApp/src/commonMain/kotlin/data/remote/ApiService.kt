@@ -7,10 +7,10 @@ import data.model.artist.Artist
 import data.model.artist.ArtistDetail
 import data.model.artist.ArtistMovies
 import data.model.celebrities.Celebrity
+import data.model.genre.GenreResponse
 import data.model.movie_detail.MovieDetail
 import data.model.tv_detail.TvSeriesDetail
 import data.model.tv_detail.credit.Credit
-import data.model.genre.GenreResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.encodedPath

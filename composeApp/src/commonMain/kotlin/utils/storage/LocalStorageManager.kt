@@ -3,14 +3,11 @@ package utils.storage
 import com.russhwolf.settings.Settings
 import data.model.local.FavoriteItem
 import data.model.local.MediaType
-
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
 
 class LocalStorageManager(
     private val settings: Settings,

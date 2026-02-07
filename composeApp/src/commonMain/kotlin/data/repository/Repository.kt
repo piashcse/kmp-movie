@@ -2,11 +2,9 @@ package data.repository
 
 import data.model.local.FavoriteItem
 import data.model.local.MediaType
-
 import data.remote.ApiService
 import utils.flowDirect
 import utils.flowWithResults
-import utils.network.UiState
 import utils.storage.LocalStorageManager
 
 class Repository(

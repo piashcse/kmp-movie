@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import data.model.celebrities.Celebrity
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.popularity
 import org.jetbrains.compose.resources.stringResource

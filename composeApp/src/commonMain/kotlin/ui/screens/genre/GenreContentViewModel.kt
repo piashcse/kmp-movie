@@ -2,13 +2,11 @@ package ui.screens.genre
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.BaseModel
 import data.model.MovieItem
 import data.repository.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import utils.network.UiState
 
 class GenreContentViewModel(
     private val repository: Repository
