@@ -96,4 +96,17 @@ interface ApiInterface {
         page: Int
     ): BaseModel<Celebrity>
 
+    // Genre endpoints
+    suspend fun movieGenres(): List<data.model.movie_detail.Genre>
+    suspend fun tvGenres(): List<data.model.tv_detail.Genre>
+    suspend fun moviesByGenre(
+        genreId: Int,
+        page: Int
+    ): BaseModel<MovieItem>
+
+    suspend fun tvSeriesByGenre(
+        genreId: Int,
+        page: Int
+    ): BaseModel<TvSeriesItem>
+
 }

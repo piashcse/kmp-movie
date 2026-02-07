@@ -14,19 +14,22 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,16 +40,21 @@ import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
 import constant.AppConstant
 import data.model.artist.ArtistMovie
+import data.model.local.FavoriteItem
+import data.model.local.MediaType
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.artist_detail
 import kmp_movie.composeapp.generated.resources.artist_movies
 import kmp_movie.composeapp.generated.resources.biography
 import kmp_movie.composeapp.generated.resources.birth_day
 import kmp_movie.composeapp.generated.resources.place_of_birth
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import theme.cornerRadius
 import ui.component.ExpandableText
+import ui.component.FavoriteButton
 import ui.component.base.BaseColumn
 
 @Composable
@@ -58,9 +66,12 @@ fun ArtistDetail(
     viewModel: ArtistDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val repository = koinInject<data.repository.Repository>()
+    var isFavorite by remember { mutableStateOf(false) }
 
     LaunchedEffect(personId) {
         viewModel.fetchArtistDetail(personId)
+        isFavorite = repository.isFavorite(personId, MediaType.PERSON)
     }
 
     BaseColumn(
@@ -115,6 +126,7 @@ fun ArtistDetail(
                             )
                         }
                     }
+
                     IconButton(
                         onClick = onBack,
                         modifier = Modifier
@@ -127,6 +139,34 @@ fun ArtistDetail(
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
+
+                    // Favorite Button
+                    val scope = rememberCoroutineScope()
+
+                    FavoriteButton(
+                        isFavorite = isFavorite,
+                        onClick = {
+                            isFavorite = !isFavorite
+                            scope.launch {
+                                if (isFavorite) {
+                                    repository.addFavorite(
+                                        FavoriteItem(
+                                            id = personId,
+                                            mediaType = MediaType.PERSON,
+                                            title = artist.name,
+                                            posterPath = artist.profilePath,
+                                            releaseDate = artist.birthday
+                                        )
+                                    )
+                                } else {
+                                    repository.removeFavorite(personId, MediaType.PERSON)
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(top = 8.dp, end = 8.dp)
+                    )
                 }
                 Text(
                     modifier = Modifier.padding(bottom = 8.dp),

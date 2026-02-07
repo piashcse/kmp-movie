@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -15,8 +17,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -28,14 +28,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import data.model.local.MediaType
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.celebrities
+import kmp_movie.composeapp.generated.resources.favorites
 import kmp_movie.composeapp.generated.resources.movies
 import kmp_movie.composeapp.generated.resources.tv_series
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import navigation.AiringTodayTvSeries
 import navigation.ArtistDetail
+import navigation.FavoriteCelebrity
+import navigation.FavoriteMovie
+import navigation.FavoriteTvSeries
+import navigation.GenreContent
+import navigation.Genres
 import navigation.MovieDetail
 import navigation.NowPlayingMovie
 import navigation.OnTheAirTvSeries
@@ -60,24 +67,28 @@ import ui.component.KMPNavigationSuiteScaffold
 import ui.screens.AppViewModel
 import ui.screens.celebrities.popular.PopularCelebritiesScreen
 import ui.screens.celebrities.trending.TrendingCelebritiesScreen
+import ui.screens.favorites.FavoritesScreen
+import ui.screens.genre.GenreContentScreen
 import ui.screens.movie.now_playing.NowPlayingScreen
-import ui.screens.artist_detail.ArtistDetail as ArtistDetailScreen
-import ui.screens.movie.detail.MovieDetail as MovieDetailScreen
 import ui.screens.movie.popular.PopularMovieScreen
 import ui.screens.movie.top_rated.TopRatedMovieScreen
 import ui.screens.movie.upcoming.UpcomingMovieScreen
+import ui.screens.search.SearchScreen
 import ui.screens.tv_series.airing_today.AiringTodayTvSeriesScreen
-import ui.screens.tv_series.detail.TvSeriesDetail as TvSeriesDetailScreen
 import ui.screens.tv_series.on_the_air.OnTheAirTvSeriesScreen
 import ui.screens.tv_series.popular.PopularTvSeriesScreen
 import ui.screens.tv_series.top_rated.TopRatedTvSeriesScreen
-import ui.screens.search.SearchScreen
+import ui.screens.artist_detail.ArtistDetail as ArtistDetailScreen
+import ui.screens.movie.detail.MovieDetail as MovieDetailScreen
+import ui.screens.tv_series.detail.TvSeriesDetail as TvSeriesDetailScreen
+
 
 // Page constants for better code clarity
 private const val PAGE_MOVIES = 0
 private const val PAGE_TV_SERIES = 1
 private const val PAGE_CELEBRITIES = 2
-private const val PAGE_COUNT = 3
+private const val PAGE_FAVORITES = 3
+private const val PAGE_COUNT = 4
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -136,6 +147,11 @@ internal fun App(
                             entry<PopularCelebrity> { MainScreen(PopularCelebrity, backStack) }
                             entry<TrendingCelebrity> { MainScreen(TrendingCelebrity, backStack) }
 
+                            // Favorite routes
+                            entry<FavoriteMovie> { MainScreen(FavoriteMovie, backStack) }
+                            entry<FavoriteTvSeries> { MainScreen(FavoriteTvSeries, backStack) }
+                            entry<FavoriteCelebrity> { MainScreen(FavoriteCelebrity, backStack) }
+
                             // Detail screens
                             entry<MovieDetail> { args ->
                                 MovieDetailScreen(
@@ -167,6 +183,13 @@ internal fun App(
                                     onNavigateToMovie = { id -> backStack.add(MovieDetail(id)) },
                                     onNavigateToTvSeries = { id -> backStack.add(TvSeriesDetail(id)) },
                                     onNavigateToArtist = { id -> backStack.add(ArtistDetail(id)) }
+                                )
+                            }
+                            entry<GenreContent> { args ->
+                                GenreContentScreen(
+                                    genreId = args.genreId,
+                                    genreName = args.genreName,
+                                    onBackClick = { backStack.removeLast() }
                                 )
                             }
                         }
@@ -254,7 +277,8 @@ private fun TabScreen(
     val tabs = listOf(
         stringResource(Res.string.movies),
         stringResource(Res.string.tv_series),
-        stringResource(Res.string.celebrities)
+        stringResource(Res.string.celebrities),
+        stringResource(Res.string.favorites)
     )
 
     Column(Modifier.fillMaxSize()) {
@@ -302,6 +326,14 @@ private fun TabScreen(
                 // Celebrities
                 PopularCelebrity -> PopularCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
                 TrendingCelebrity -> TrendingCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
+
+                // Favorites
+                FavoriteMovie -> FavoritesScreen(mediaType = MediaType.MOVIE, onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
+                FavoriteTvSeries -> FavoritesScreen(mediaType = MediaType.TV, onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
+                FavoriteCelebrity -> FavoritesScreen(mediaType = MediaType.PERSON, onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
+
+                // Genres - shouldn't be reached in this context since we removed it from tabs
+                else -> NowPlayingScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
             }
         }
     }
@@ -311,12 +343,15 @@ private fun getPageForRoute(route: TopLevelRoute): Int = when (route) {
     NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie -> PAGE_MOVIES
     AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries -> PAGE_TV_SERIES
     PopularCelebrity, TrendingCelebrity -> PAGE_CELEBRITIES
+    FavoriteMovie, FavoriteTvSeries, FavoriteCelebrity -> PAGE_FAVORITES
+    Genres -> PAGE_MOVIES // Put Genres in the movies section
 }
 
 private fun getDefaultRouteForPage(page: Int): TopLevelRoute = when (page) {
     PAGE_MOVIES -> NowPlayingMovie
     PAGE_TV_SERIES -> AiringTodayTvSeries
     PAGE_CELEBRITIES -> PopularCelebrity
+    PAGE_FAVORITES -> FavoriteMovie
     else -> NowPlayingMovie
 }
 
@@ -324,5 +359,6 @@ private fun getItemsForPage(page: Int): List<TopLevelRoute> = when (page) {
     PAGE_MOVIES -> listOf(NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie)
     PAGE_TV_SERIES -> listOf(AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries)
     PAGE_CELEBRITIES -> listOf(PopularCelebrity, TrendingCelebrity)
+    PAGE_FAVORITES -> listOf(FavoriteMovie, FavoriteTvSeries, FavoriteCelebrity)
     else -> emptyList()
 }
