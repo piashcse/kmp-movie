@@ -1,8 +1,8 @@
 # KMP Movie (Compose Multiplatform)
 
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-v1.10.0-green)](https://developer.android.com/jetpack/compose)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.3.0-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
-[![ktorCleint](https://img.shields.io/badge/ktor_client-3.3.3-pink)](https://ktor.io/docs/welcome.html)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.3.10-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+[![ktorCleint](https://img.shields.io/badge/ktor_client-3.4.0-pink)](https://ktor.io/docs/welcome.html)
 ![badge-Android](https://img.shields.io/badge/Platform-Android-brightgreen)
 ![badge-iOS](https://img.shields.io/badge/Platform-iOS-lightgray)
 ![badge-desktop](http://img.shields.io/badge/Platform-Desktop-4D76CD.svg?style=flat)
@@ -47,6 +47,10 @@ UI experience across all platforms, leveraging [The Movie DB API](https://www.th
 - 🌟 Popular and Trending Celebrities/Persons sections
 - 🔍 Celebrity Search functionality
 - 👤 Celebrity Detail Page with navigation from movie/tv cast
+### Favorites
+- ❤️ Add Movies, TV Series, and Celebrities to your favorites list
+- 💾 Persistent storage of favorite items across sessions
+
 ### Common Features
 - 🧭 **Bottom Navigation**
 - 🚦 **Navigation Rail**
@@ -83,6 +87,8 @@ API_KEY=59cd6896d8432f9c69aed9b86b9c2931
   Multiplatform, a modern UI framework for Kotlin that makes building performant and beautiful user
   interfaces.
 - [Navigation 3](https://developer.android.com/guide/navigation/navigation-3) - Compose Multiplatform Navigation backed by JetBrains
+- [Multiplatform Settings](https://github.com/russhwolf/multiplatform-settings) - A consistent, platform-agnostic key-value storage for Kotlin Multiplatform.
+- [kotlinx-datetime](https://github.com/Kotlin/kotlinx-datetime) - A multiplatform date and time library for Kotlin.
 - [Ktor Client](https://ktor.io/docs/welcome.html) - Ktor includes a multiplatform asynchronous HTTP
   client, which allows you to make requests and handle responses.
 - [Koin](https://insert-koin.io/) - A pragmatic lightweight dependency injection framework for Kotlin
