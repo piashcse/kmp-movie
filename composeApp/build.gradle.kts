@@ -66,7 +66,6 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.logging)
             implementation(libs.androidx.navigation3.ui)
-            implementation(libs.androidx.navigation3.material3.adaptive)
             implementation(libs.landscapist.coil)
             implementation(libs.landscapist.animation)
             implementation(libs.androidx.lifecycle)
