@@ -92,7 +92,7 @@ private const val PAGE_COUNT = 4
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-internal fun App(
+fun App(
     appViewModel: AppViewModel = koinViewModel(),
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
@@ -281,59 +281,67 @@ private fun TabScreen(
         stringResource(Res.string.favorites)
     )
 
-    Column(Modifier.fillMaxSize()) {
-        val currentTabTitle = tabs[pagerState.currentPage]
-        TopAppBar(
-            title = { Text(text = currentTabTitle) },
-            actions = {
-                ThemeModeToggle()
-            }
-        )
-
-        PrimaryTabRow(selectedTabIndex = pagerState.currentPage) {
-            tabs.forEachIndexed { index, title ->
-                Tab(
-                    selected = pagerState.currentPage == index,
-                    onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
-                    text = {
-                        Text(
-                            title,
-                            color = if (pagerState.currentPage == index)
-                                MaterialTheme.colorScheme.primary else Color.Gray
-                        )
-                    }
-                )
-            }
+    Scaffold(
+        topBar = {
+            val currentTabTitle = tabs[pagerState.currentPage]
+            TopAppBar(
+                title = { Text(text = currentTabTitle) },
+                actions = {
+                    ThemeModeToggle()
+                }
+            )
         }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            PrimaryTabRow(selectedTabIndex = pagerState.currentPage) {
+                tabs.forEachIndexed { index, title ->
+                    Tab(
+                        selected = pagerState.currentPage == index,
+                        onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+                        text = {
+                            Text(
+                                title,
+                                color = if (pagerState.currentPage == index)
+                                    MaterialTheme.colorScheme.primary else Color.Gray
+                            )
+                        }
+                    )
+                }
+            }
 
-        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-            val route = if (page == getPageForRoute(currentRoute)) currentRoute
-                       else getDefaultRouteForPage(page)
+            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+                val route = if (page == getPageForRoute(currentRoute)) currentRoute
+                           else getDefaultRouteForPage(page)
 
-            when (route) {
-                // Movies
-                NowPlayingMovie -> NowPlayingScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
-                PopularMovie -> PopularMovieScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
-                TopRatedMovie -> TopRatedMovieScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
-                UpcomingMovie -> UpcomingMovieScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
+                when (route) {
+                    // Movies
+                    NowPlayingMovie -> NowPlayingScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
+                    PopularMovie -> PopularMovieScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
+                    TopRatedMovie -> TopRatedMovieScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
+                    UpcomingMovie -> UpcomingMovieScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
 
-                // TV Series
-                AiringTodayTvSeries -> AiringTodayTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
-                OnTheAirTvSeries -> OnTheAirTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
-                PopularTvSeries -> PopularTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
-                TopRatedTvSeries -> TopRatedTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
+                    // TV Series
+                    AiringTodayTvSeries -> AiringTodayTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
+                    OnTheAirTvSeries -> OnTheAirTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
+                    PopularTvSeries -> PopularTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
+                    TopRatedTvSeries -> TopRatedTvSeriesScreen(onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
 
-                // Celebrities
-                PopularCelebrity -> PopularCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
-                TrendingCelebrity -> TrendingCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
+                    // Celebrities
+                    PopularCelebrity -> PopularCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
+                    TrendingCelebrity -> TrendingCelebritiesScreen(onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
 
-                // Favorites
-                FavoriteMovie -> FavoritesScreen(mediaType = MediaType.MOVIE, onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
-                FavoriteTvSeries -> FavoritesScreen(mediaType = MediaType.TV, onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
-                FavoriteCelebrity -> FavoritesScreen(mediaType = MediaType.PERSON, onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
+                    // Favorites
+                    FavoriteMovie -> FavoritesScreen(mediaType = MediaType.MOVIE, onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
+                    FavoriteTvSeries -> FavoritesScreen(mediaType = MediaType.TV, onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) })
+                    FavoriteCelebrity -> FavoritesScreen(mediaType = MediaType.PERSON, onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) })
 
-                // Genres - shouldn't be reached in this context since we removed it from tabs
-                else -> NowPlayingScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
+                    // Genres - shouldn't be reached in this context since we removed it from tabs
+                    else -> NowPlayingScreen(onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) })
+                }
             }
         }
     }
