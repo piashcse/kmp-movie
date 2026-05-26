@@ -33,7 +33,7 @@ fun AiringTodayTvSeriesScreen(
         ) {
             GenericListScreen(
                 uiState = viewModel.uiState,
-                loadItems = { viewModel.loadAiringTodayTvSeries() },
+                loadItems = { viewModel.loadItems() },
                 getItems = { it.tvSeriesList },
                 getIsLoading = { it.isLoading },
                 getErrorMessage = { it.errorMessage },

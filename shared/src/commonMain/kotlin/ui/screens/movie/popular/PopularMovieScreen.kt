@@ -33,7 +33,7 @@ fun PopularMovieScreen(
         ) {
             GenericListScreen(
                 uiState = viewModel.uiState,
-                loadItems = { viewModel.loadPopularMovies() },
+                loadItems = { viewModel.loadItems() },
                 getItems = { it.movieList },
                 getIsLoading = { it.isLoading },
                 getErrorMessage = { it.errorMessage },

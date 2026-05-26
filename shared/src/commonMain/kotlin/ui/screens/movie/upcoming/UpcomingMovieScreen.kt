@@ -33,7 +33,7 @@ fun UpcomingMovieScreen(
         ) {
             GenericListScreen(
                 uiState = viewModel.uiState,
-                loadItems = { viewModel.loadUpcomingMovies() },
+                loadItems = { viewModel.loadItems() },
                 getItems = { it.movieList },
                 getIsLoading = { it.isLoading },
                 getErrorMessage = { it.errorMessage },

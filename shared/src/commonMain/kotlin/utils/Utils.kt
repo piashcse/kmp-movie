@@ -29,8 +29,9 @@ class Paginator<T>(
     }
 
     fun loadNextItems() {
-        if (isMakingRequest || hasError) return  // Prevent further loading if error occurred
+        if (isMakingRequest) return
 
+        hasError = false
         isMakingRequest = true
         scope.launch {
             onLoadUpdated(true)
@@ -47,7 +48,7 @@ class Paginator<T>(
                         currentKey = nextKey
                     }
                     is UiState.Error -> {
-                        hasError = true  // STOP FURTHER PAGINATION
+                        hasError = true
                         onError(result.exception)
                     }
                 }

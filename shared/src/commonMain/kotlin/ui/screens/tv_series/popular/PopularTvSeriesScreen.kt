@@ -33,7 +33,7 @@ fun PopularTvSeriesScreen(
         ) {
             GenericListScreen(
                 uiState = viewModel.uiState,
-                loadItems = { viewModel.loadPopularTvSeries() },
+                loadItems = { viewModel.loadItems() },
                 getItems = { it.tvSeriesList },
                 getIsLoading = { it.isLoading },
                 getErrorMessage = { it.errorMessage },

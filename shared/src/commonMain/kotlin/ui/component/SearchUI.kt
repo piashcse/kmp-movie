@@ -49,7 +49,7 @@ import org.jetbrains.compose.resources.stringResource
 import theme.DefaultBackgroundColor
 import theme.FontColor
 import theme.SecondaryFontColor
-import utils.cornerRadius
+import theme.cornerRadius
 import utils.roundTo
 
 @Composable

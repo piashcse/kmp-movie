@@ -63,6 +63,7 @@ fun ArtistDetail(
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToTvSeries: (Int) -> Unit,
     onBack: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: ArtistDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -75,6 +76,7 @@ fun ArtistDetail(
     }
 
     BaseColumn(
+        modifier = modifier,
         loading = uiState.isLoading,
         errorMessage = uiState.errorMessage
     ) {

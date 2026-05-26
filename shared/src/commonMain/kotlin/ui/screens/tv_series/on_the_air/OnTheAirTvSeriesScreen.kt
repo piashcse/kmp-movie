@@ -33,7 +33,7 @@ fun OnTheAirTvSeriesScreen(
         ) {
             GenericListScreen(
                 uiState = viewModel.uiState,
-                loadItems = { viewModel.loadOnTheAirTvSeries() },
+                loadItems = { viewModel.loadItems() },
                 getItems = { it.tvSeriesList },
                 getIsLoading = { it.isLoading },
                 getErrorMessage = { it.errorMessage },

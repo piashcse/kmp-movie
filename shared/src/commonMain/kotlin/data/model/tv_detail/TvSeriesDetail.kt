@@ -1,6 +1,10 @@
 package data.model.tv_detail
 
 
+import data.model.Genre
+import data.model.ProductionCompany
+import data.model.ProductionCountry
+import data.model.SpokenLanguage
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

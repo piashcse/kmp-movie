@@ -10,16 +10,6 @@ import kotlinx.coroutines.flow.update
 import utils.Paginator
 import utils.network.UiState
 
-/**
- * Base ViewModel for paginated list screens
- * Eliminates code duplication across all list ViewModels
- * 
- * @param T The type of items in the list
- * @param S The type of UI state
- * @param initialState Initial state for the ViewModel
- * @param updateItems Function to update items in the state
- * @param getItems Function to get items from the state
- */
 abstract class PaginatedViewModel<T, S>(
     initialState: S,
     private val updateItems: (S, List<T>) -> S,
@@ -29,7 +19,7 @@ abstract class PaginatedViewModel<T, S>(
     private val _uiState = MutableStateFlow(initialState)
     val uiState: StateFlow<S> = _uiState.asStateFlow()
 
-    private val paginator = Paginator<T>(
+    protected val paginator = Paginator<T>(
         scope = viewModelScope,
         initialKey = 1,
         incrementBy = 1,
@@ -47,23 +37,16 @@ abstract class PaginatedViewModel<T, S>(
         }
     )
 
-    /**
-     * Fetch a page of items from the repository
-     */
     protected abstract fun fetchPage(page: Int): Flow<UiState<List<T>>>
 
-    /**
-     * Update the loading state
-     */
     protected abstract fun updateLoading(state: S, isLoading: Boolean): S
 
-    /**
-     * Update the error state
-     */
     protected abstract fun updateError(state: S, error: String?): S
 
-    /**
-     * Load the next page of items
-     */
     fun loadItems() = paginator.loadNextItems()
+
+    protected fun resetPagination() {
+        paginator.reset()
+        _uiState.update { updateItems(it, emptyList()) }
+    }
 }
