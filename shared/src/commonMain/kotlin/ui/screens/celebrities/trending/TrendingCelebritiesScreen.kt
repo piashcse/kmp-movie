@@ -23,7 +23,7 @@ fun TrendingCelebritiesScreen(
 ) {
     GenericListScreen(
         uiState = viewModel.uiState,
-        loadItems = { viewModel.loadTrendingCelebrities() },
+        loadItems = { viewModel.loadItems() },
         getItems = { it.celebrityList },
         getIsLoading = { it.isLoading },
         getErrorMessage = { it.errorMessage },

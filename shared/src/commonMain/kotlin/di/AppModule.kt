@@ -13,7 +13,6 @@ import ui.screens.celebrities.popular.PopularCelebritiesViewModel
 import ui.screens.celebrities.trending.TrendingCelebritiesViewModel
 import ui.screens.favorites.FavoritesViewModel
 import ui.screens.genre.GenreContentViewModel
-import ui.screens.genre.GenreListViewModel
 import ui.screens.movie.detail.MovieDetailViewModel
 import ui.screens.movie.now_playing.NowPlayingViewModel
 import ui.screens.movie.popular.PopularMovieViewModel
@@ -25,12 +24,11 @@ import ui.screens.tv_series.on_the_air.OnTheAirTvSeriesViewModel
 import ui.screens.tv_series.popular.PopularTvSeriesViewModel
 import ui.screens.tv_series.top_rated.TopRatedTvSeriesViewModel
 import utils.storage.LocalStorageManager
-import utils.storage.SimpleInMemorySettings
 
 @OptIn(ExperimentalCoroutinesApi::class)
 val appModule: Module = module {
     // Core dependencies
-    single<Settings> { SimpleInMemorySettings() }
+    single<Settings> { Settings() }
     single { LocalStorageManager(get()) }
     single { ApiService() }
     single { Repository(api = get(), localStorageManager = get()) }
@@ -58,9 +56,8 @@ val appModule: Module = module {
     viewModel { ArtistDetailViewModel(get()) }
 
     // Genre ViewModels
-    viewModel { GenreListViewModel(get()) }
     viewModel { GenreContentViewModel(get()) }
-    
+
     // Favorites ViewModel
     viewModel { FavoritesViewModel(get()) }
 }

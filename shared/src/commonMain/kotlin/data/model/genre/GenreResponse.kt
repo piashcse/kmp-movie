@@ -1,6 +1,6 @@
 package data.model.genre
 
-import data.model.movie_detail.Genre
+import data.model.Genre
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

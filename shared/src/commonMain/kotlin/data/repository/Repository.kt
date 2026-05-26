@@ -1,5 +1,6 @@
 package data.repository
 
+import data.model.Genre
 import data.model.local.FavoriteItem
 import data.model.local.MediaType
 import data.remote.ApiService
@@ -48,8 +49,8 @@ class Repository(
 
 
     // Genre endpoints
-    fun getMovieGenres() = flowDirect<List<data.model.movie_detail.Genre>> { api.movieGenres() }
-    fun getTvGenres() = flowDirect<List<data.model.tv_detail.Genre>> { api.tvGenres() }
+    fun getMovieGenres() = flowDirect<List<Genre>> { api.movieGenres() }
+    fun getTvGenres() = flowDirect<List<Genre>> { api.tvGenres() }
     fun getMoviesByGenre(genreId: Int, page: Int) = flowWithResults<data.model.MovieItem> { api.moviesByGenre(genreId, page) }
     fun getTvSeriesByGenre(genreId: Int, page: Int) = flowWithResults<data.model.TvSeriesItem> { api.tvSeriesByGenre(genreId, page) }
 }

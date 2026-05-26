@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -38,23 +37,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
-import com.skydoves.landscapist.coil3.CoilImage
-import com.skydoves.landscapist.components.rememberImageComponent
 import constant.AppConstant
 import data.model.TvSeriesItem
 import data.model.local.FavoriteItem
 import data.model.local.MediaType
 import data.model.tv_detail.TvSeriesDetail
-import data.model.tv_detail.credit.Cast
 import kmp_movie.composeapp.generated.resources.Res
-import kmp_movie.composeapp.generated.resources.cast
 import kmp_movie.composeapp.generated.resources.description
 import kmp_movie.composeapp.generated.resources.first_air
 import kmp_movie.composeapp.generated.resources.language
@@ -66,8 +58,11 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import theme.cornerRadius
+import ui.component.ArtistAndCrewSection
+import ui.component.CastMember
 import ui.component.ExpandableText
 import ui.component.FavoriteButton
+import ui.component.ImageLoad
 import ui.component.base.BaseColumn
 import ui.component.shimmerBackground
 import ui.component.text.SubtitlePrimary
@@ -103,8 +98,12 @@ fun TvSeriesDetail(
             uiState.recommendedTvSeries.takeIf { it.isNotEmpty() }?.let {
                 RecommendedTVSeries(it, onNavigateToDetail)
             }
-            uiState.creditTvSeries?.cast?.let {
-                ArtistAndCrew(it, onNavigateToArtist)
+            uiState.creditTvSeries?.cast?.let { cast ->
+                ArtistAndCrewSection(
+                    cast = cast.map { CastMember(it.id, it.name, it.profilePath) },
+                    onNavigateToArtist = onNavigateToArtist,
+                    imageBaseUrl = AppConstant.IMAGE_URL
+                )
             }
         }
     }
@@ -284,52 +283,3 @@ fun RecommendedTVSeries(recommendedMovie: List<TvSeriesItem>, onNavigateToDetail
     }
 }
 
-@Composable
-fun ArtistAndCrew(cast: List<Cast>, onNavigateToArtist: (Int) -> Unit) {
-    Column(modifier = Modifier.padding(bottom = 10.dp)) {
-        Text(
-            text = stringResource(Res.string.cast),
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-        LazyRow(modifier = Modifier.fillMaxWidth()) {
-            items(cast) { item ->
-                Column(
-                    modifier = Modifier
-                        .padding(end = 10.dp, bottom = 4.dp)
-                        .width(80.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ImageLoad(
-                        url = AppConstant.IMAGE_URL + item.profilePath,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                            .size(80.dp)
-                            .cornerRadius(40)
-                            .clickable {
-                                onNavigateToArtist(item.id)
-                            }
-                    )
-                    SubtitleSecondary(text = item.name)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ImageLoad(url: String, modifier: Modifier = Modifier) {
-    CoilImage(
-        imageModel = { url },
-        imageOptions = ImageOptions(
-            contentScale = ContentScale.Crop,
-            alignment = Alignment.Center,
-        ),
-        component = rememberImageComponent {
-            +CircularRevealPlugin(
-                duration = 800
-            )
-        },
-        modifier = modifier.shimmerBackground(RoundedCornerShape(5.dp)),
-    )
-}

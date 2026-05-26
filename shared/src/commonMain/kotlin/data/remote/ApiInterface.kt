@@ -1,6 +1,7 @@
 package data.remote
 
 import data.model.BaseModel
+import data.model.Genre
 import data.model.MovieItem
 import data.model.TvSeriesItem
 import data.model.artist.Artist
@@ -97,8 +98,8 @@ interface ApiInterface {
     ): BaseModel<Celebrity>
 
     // Genre endpoints
-    suspend fun movieGenres(): List<data.model.movie_detail.Genre>
-    suspend fun tvGenres(): List<data.model.tv_detail.Genre>
+    suspend fun movieGenres(): List<Genre>
+    suspend fun tvGenres(): List<Genre>
     suspend fun moviesByGenre(
         genreId: Int,
         page: Int

@@ -1,8 +1,7 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import com.android.build.api.dsl.LibraryExtension
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.properties.Properties
-import com.android.build.api.dsl.LibraryExtension
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -70,7 +69,7 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.no.arg)
             implementation(libs.multiplatform.settings.coroutines)
             implementation(libs.kotlinx.datetime)
         }

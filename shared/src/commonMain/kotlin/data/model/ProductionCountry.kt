@@ -1,5 +1,4 @@
-package data.model.tv_detail
-
+package data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

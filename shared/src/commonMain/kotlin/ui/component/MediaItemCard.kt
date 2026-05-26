@@ -35,8 +35,8 @@ import data.model.local.FavoriteItem
 import data.model.local.MediaType
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import theme.cornerRadius
 import ui.theme.AppTheme
-import utils.cornerRadius
 
 
 @Composable

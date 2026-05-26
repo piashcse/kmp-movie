@@ -33,7 +33,7 @@ fun NowPlayingScreen(
         ) {
             GenericListScreen(
                 uiState = viewModel.uiState,
-                loadItems = { viewModel.loadNowPlayingMovies() },
+                loadItems = { viewModel.loadItems() },
                 getItems = { it.movieList },
                 getIsLoading = { it.isLoading },
                 getErrorMessage = { it.errorMessage },

@@ -1,6 +1,7 @@
 package data.remote
 
 import data.model.BaseModel
+import data.model.Genre
 import data.model.MovieItem
 import data.model.TvSeriesItem
 import data.model.artist.Artist
@@ -76,11 +77,8 @@ class ApiService : ApiInterface {
     override suspend fun artistMoviesAndTvSeries(personId: Int) = getItem<ArtistMovies>("person/$personId/combined_credits")
 
     // Genre endpoints
-    override suspend fun movieGenres(): List<data.model.movie_detail.Genre> = apiClient.get { url { encodedPath = "genre/movie/list" } }.body<GenreResponse>().genres
-    override suspend fun tvGenres(): List<data.model.tv_detail.Genre> {
-        val response = apiClient.get { url { encodedPath = "genre/tv/list" } }.body<GenreResponse>()
-        return response.genres.map { data.model.tv_detail.Genre(it.id, it.name) }
-    }
+    override suspend fun movieGenres(): List<Genre> = apiClient.get { url { encodedPath = "genre/movie/list" } }.body<GenreResponse>().genres
+    override suspend fun tvGenres(): List<Genre> = apiClient.get { url { encodedPath = "genre/tv/list" } }.body<GenreResponse>().genres
     override suspend fun moviesByGenre(genreId: Int, page: Int): BaseModel<MovieItem> = getPaginated<MovieItem>("discover/movie", page) { url -> url.parameters.append("with_genres", genreId.toString()) }
     override suspend fun tvSeriesByGenre(genreId: Int, page: Int): BaseModel<TvSeriesItem> = getPaginated<TvSeriesItem>("discover/tv", page) { url -> url.parameters.append("with_genres", genreId.toString()) }
 }
