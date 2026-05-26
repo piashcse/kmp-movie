@@ -81,6 +81,7 @@ fun MovieDetail(
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToArtist: (Int) -> Unit,
     onBack: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: MovieDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -89,7 +90,7 @@ fun MovieDetail(
     }
 
     BaseColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.surface),

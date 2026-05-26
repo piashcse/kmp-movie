@@ -22,6 +22,7 @@ fun SearchScreen(
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToTvSeries: (Int) -> Unit,
     onNavigateToArtist: (Int) -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: AppViewModel = koinViewModel()
 ) {
     var searchFilter by remember { mutableStateOf("Movies") }
@@ -30,7 +31,7 @@ fun SearchScreen(
     val tvSeriesSearchData by viewModel.tvSeriesSearchData.collectAsState()
     val celebritySearchData by viewModel.celebritySearchData.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
         SearchBar(
             viewModel = viewModel,
             searchFilter = searchFilter,

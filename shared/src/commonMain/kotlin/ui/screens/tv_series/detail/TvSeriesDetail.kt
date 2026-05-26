@@ -80,6 +80,7 @@ fun TvSeriesDetail(
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToArtist: (Int) -> Unit,
     onBack: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: TvSeriesDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -89,7 +90,7 @@ fun TvSeriesDetail(
     }
 
     BaseColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.surface),
