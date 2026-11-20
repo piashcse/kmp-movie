@@ -21,6 +21,7 @@ fun <T, G : GenreItem> GenreFilteredListScreen(
     viewModel: GenreFilterableViewModel<T, G>,
     getImagePath: (T) -> String?,
     getItemId: (T) -> Int,
+    getContentDescription: (T) -> String,
     onNavigateToDetail: (Int) -> Unit,
     imageHeight: Dp = 250.dp,
 ) {
@@ -39,6 +40,7 @@ fun <T, G : GenreItem> GenreFilteredListScreen(
                 loadItems = viewModel::loadItems,
                 getImagePath = getImagePath,
                 getItemId = getItemId,
+                getContentDescription = getContentDescription,
                 onNavigateToDetail = onNavigateToDetail,
                 imageHeight = imageHeight,
             )

@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -22,9 +23,9 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
 import constant.AppConstant
 import kmp_movie.composeapp.generated.resources.Res
-import kmp_movie.composeapp.generated.resources.view_details
+import kmp_movie.composeapp.generated.resources.view_details_for
 import org.jetbrains.compose.resources.stringResource
-import theme.cornerRadius
+import theme.Spacing
 
 /**
  * Generic grid component for displaying media items (movies, TV series, celebrities)
@@ -44,6 +45,7 @@ fun <T> MediaGrid(
     gridState: LazyGridState,
     getImagePath: (T) -> String?,
     getItemId: (T) -> Int,
+    getContentDescription: (T) -> String,
     onClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     imageHeight: Dp = 250.dp,
@@ -53,12 +55,12 @@ fun <T> MediaGrid(
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 180.dp),
         state = gridState,
-        modifier = modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp)
+        modifier = modifier.padding(start = Spacing.sm, end = Spacing.sm, top = Spacing.md)
     ) {
         items(items, key = { getItemId(it) }) { item ->
             Column(
                 modifier = Modifier.padding(
-                    start = 5.dp, end = 5.dp, top = 0.dp, bottom = 10.dp
+                    start = Spacing.xs, end = Spacing.xs, bottom = Spacing.sm
                 )
             ) {
                 CoilImage(
@@ -66,14 +68,20 @@ fun <T> MediaGrid(
                         .height(imageHeight)
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .cornerRadius(10)
-                        .clickable(onClickLabel = stringResource(Res.string.view_details)) {
+                        .clip(MaterialTheme.shapes.medium)
+                        .clickable(
+                            onClickLabel = stringResource(
+                                Res.string.view_details_for,
+                                getContentDescription(item),
+                            )
+                        ) {
                             onClick(getItemId(item))
                         },
                     imageModel = { AppConstant.imageUrl(getImagePath(item)) },
                     imageOptions = ImageOptions(
                         contentScale = ContentScale.Crop,
                         alignment = Alignment.Center,
+                        contentDescription = getContentDescription(item),
                     ),
                 )
                 

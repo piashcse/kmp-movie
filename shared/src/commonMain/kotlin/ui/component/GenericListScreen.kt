@@ -27,6 +27,7 @@ import kmp_movie.composeapp.generated.resources.retry
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 import ui.component.base.BaseColumn
+import theme.Spacing
 import ui.screens.base.PagedListUiState
 import utils.OnGridPagination
 
@@ -39,6 +40,7 @@ fun <T> GenericListScreen(
     loadItems: () -> Unit,
     getImagePath: (T) -> String?,
     getItemId: (T) -> Int,
+    getContentDescription: (T) -> String,
     onNavigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     imageHeight: Dp = 250.dp,
@@ -73,6 +75,7 @@ fun <T> GenericListScreen(
                 gridState = gridState,
                 getImagePath = getImagePath,
                 getItemId = getItemId,
+                getContentDescription = getContentDescription,
                 onClick = onNavigateToDetail,
                 imageHeight = imageHeight,
                 additionalContent = additionalContent,
@@ -101,7 +104,7 @@ private fun LoadingFooter() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(Spacing.lg),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -116,7 +119,7 @@ private fun LoadMoreErrorFooter(message: String, onRetry: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(Spacing.lg),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -136,7 +139,7 @@ private fun EndOfListFooter() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(Spacing.lg),
         contentAlignment = Alignment.Center,
     ) {
         Text(

@@ -5,17 +5,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import constant.AppConstant
-import theme.cornerRadius
+import theme.Spacing
 
 @Composable
 fun <T> RecommendedSection(
@@ -27,21 +29,21 @@ fun <T> RecommendedSection(
 ) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
         Text(
+            modifier = Modifier.semantics { heading() },
             text = title,
             color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.titleMedium,
         )
         LazyRow(modifier = Modifier.fillMaxWidth()) {
             items(items, key = { getItemId(it) }) { item ->
                 Column(
-                    modifier = Modifier.padding(start = 0.dp, end = 8.dp, top = 5.dp, bottom = 5.dp),
+                    modifier = Modifier.padding(end = Spacing.sm, top = Spacing.xs, bottom = Spacing.xs),
                 ) {
                     ImageLoad(
                         url = AppConstant.imageUrl(getImagePath(item)),
                         modifier = Modifier
                             .size(135.dp, 180.dp)
-                            .cornerRadius(10)
+                            .clip(MaterialTheme.shapes.medium)
                             .clickable { onNavigateToDetail(getItemId(item)) },
                     )
                 }

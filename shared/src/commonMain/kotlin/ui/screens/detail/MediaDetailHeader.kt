@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -21,16 +22,17 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlurEffect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import data.model.local.FavoriteItem
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.action_back
 import org.jetbrains.compose.resources.stringResource
-import theme.cornerRadius
+import theme.Spacing
 import ui.component.ExpandableText
 import ui.component.FavoriteItemButton
 import ui.component.ImageLoad
@@ -71,15 +73,15 @@ fun MediaDetailHeader(
         Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = 12.dp, end = 12.dp),
+                .padding(top = Spacing.md, end = Spacing.md),
         ) {
-            FavoriteItemButton(item = favoriteItem, modifier = Modifier.size(36.dp))
+            FavoriteItemButton(item = favoriteItem)
         }
 
         IconButton(
             onClick = onBack,
             modifier = Modifier
-                .padding(top = 12.dp, start = 12.dp)
+                .padding(top = Spacing.md, start = Spacing.md)
                 .align(Alignment.TopStart),
         ) {
             Icon(
@@ -92,23 +94,24 @@ fun MediaDetailHeader(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp, top = 110.dp, bottom = 12.dp),
+                .padding(start = Spacing.md, end = Spacing.md, top = 110.dp, bottom = Spacing.md),
         ) {
             Row {
                 ImageLoad(
                     url = posterUrl,
                     modifier = Modifier
                         .size(110.dp, 150.dp)
-                        .cornerRadius(10)
-                        .border(1.dp, Color.White, RoundedCornerShape(10.dp)),
+                        .clip(MaterialTheme.shapes.medium)
+                        .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.medium),
                 )
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = 12.dp),
+                        .padding(start = Spacing.md),
                 ) {
                     Text(
                         text = title,
+                        modifier = Modifier.semantics { heading() },
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold,
@@ -128,7 +131,7 @@ fun MediaDetailHeader(
             }
 
             Text(
-                modifier = Modifier.padding(top = 16.dp),
+                modifier = Modifier.padding(top = Spacing.lg),
                 text = descriptionLabel,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleMedium,

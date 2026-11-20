@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import theme.Spacing
 
 @Composable
 fun EmptyState(
@@ -19,7 +19,7 @@ fun EmptyState(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(Spacing.xl),
         contentAlignment = Alignment.Center,
     ) {
         Text(

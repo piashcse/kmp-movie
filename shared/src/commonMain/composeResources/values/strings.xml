@@ -35,6 +35,7 @@
     <string name="add_favorite">Add to favorites</string>
     <string name="remove_favorite">Remove from favorites</string>
     <string name="view_details">View details</string>
+    <string name="view_details_for">View details for %1$s</string>
 
     <string name="search_movies">Search movies...</string>
     <string name="search_tv_series">Search TV series...</string>

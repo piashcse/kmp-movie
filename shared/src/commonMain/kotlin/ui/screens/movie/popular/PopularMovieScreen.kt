@@ -13,6 +13,7 @@ fun PopularMovieScreen(
         viewModel = viewModel,
         getImagePath = { it.posterPath },
         getItemId = { it.id },
+        getContentDescription = { it.title },
         onNavigateToDetail = onNavigateToDetail,
     )
 }

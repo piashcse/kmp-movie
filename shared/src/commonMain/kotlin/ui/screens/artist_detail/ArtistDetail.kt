@@ -103,7 +103,6 @@ fun ArtistDetail(
                                 modifier = Modifier.padding(start = 8.dp),
                                 text = artist.name,
                                 color = MaterialTheme.colorScheme.onSurface,
-                                fontSize = 26.sp,
                                 fontWeight = FontWeight.Medium
                             )
                             PersonalInfo(
@@ -159,7 +158,6 @@ fun ArtistDetail(
                     modifier = Modifier.padding(bottom = 8.dp),
                     text = stringResource(Res.string.biography),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 22.sp,
                     fontWeight = FontWeight.Medium
                 )
                 ExpandableText(text = artist.biography, maxLines = 12)
@@ -184,10 +182,13 @@ fun PersonalInfo(title: String, info: String) {
         Text(
             text = title,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 13.sp,
             fontWeight = FontWeight.SemiBold
         )
-        Text(text = info, color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp)
+        Text(
+            text = info,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyLarge,
+        )
     }
 }
 
@@ -198,7 +199,6 @@ fun ArtistMoviesAndTvShows(artistMovies: List<ArtistMovie>, onMovieClick: (Artis
             Text(
                 text = stringResource(Res.string.artist_movies),
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold
             )
         }
