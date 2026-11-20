@@ -98,6 +98,12 @@ compose.resources {
     packageOfResClass = "kmp_movie.composeapp.generated.resources"
 }
 
+composeCompiler {
+    // Enable Compose stability/metrics reports for performance investigations.
+    reportsDestination = layout.buildDirectory.dir("compose_reports")
+    metricsDestination = layout.buildDirectory.dir("compose_metrics")
+}
+
 buildConfig {
     packageName("kmp_movie.composeApp")
     val apiKey = loadLocalProperty("local.properties", "API_KEY")

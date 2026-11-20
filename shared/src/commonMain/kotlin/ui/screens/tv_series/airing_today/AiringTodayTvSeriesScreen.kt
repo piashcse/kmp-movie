@@ -11,9 +11,6 @@ fun AiringTodayTvSeriesScreen(
 ) {
     GenreFilteredListScreen(
         viewModel = viewModel,
-        getItems = { it.tvSeriesList },
-        getIsLoading = { it.isLoading },
-        getErrorMessage = { it.errorMessage },
         getImagePath = { it.posterPath },
         getItemId = { it.id },
         onNavigateToDetail = onNavigateToDetail,

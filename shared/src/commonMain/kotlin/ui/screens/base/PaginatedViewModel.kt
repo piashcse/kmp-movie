@@ -10,43 +10,31 @@ import kotlinx.coroutines.flow.update
 import utils.Paginator
 import utils.network.UiState
 
-abstract class PaginatedViewModel<T, S>(
-    initialState: S,
-    private val updateItems: (S, List<T>) -> S,
-    private val getItems: (S) -> List<T>,
-) : ViewModel() {
+abstract class PaginatedViewModel<T> : ViewModel() {
 
-    private val _uiState = MutableStateFlow(initialState)
-    val uiState: StateFlow<S> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(PagedListUiState<T>())
+    val uiState: StateFlow<PagedListUiState<T>> = _uiState.asStateFlow()
 
     protected val paginator = Paginator<T>(
         scope = viewModelScope,
-        initialKey = 1,
-        incrementBy = 1,
         onLoadUpdated = { isLoading ->
-            _uiState.update { updateLoading(it, isLoading) }
+            _uiState.update { it.copy(isLoading = isLoading) }
         },
         onRequest = { page -> fetchPage(page) },
         onError = { throwable ->
-            _uiState.update { updateError(it, throwable.message) }
+            _uiState.update { it.copy(errorMessage = throwable.message) }
         },
         onSuccess = { items, _ ->
-            _uiState.update { current ->
-                updateItems(current, getItems(current) + items)
-            }
-        }
+            _uiState.update { it.copy(items = it.items + items) }
+        },
     )
 
     protected abstract fun fetchPage(page: Int): Flow<UiState<List<T>>>
-
-    protected abstract fun updateLoading(state: S, isLoading: Boolean): S
-
-    protected abstract fun updateError(state: S, error: String?): S
 
     fun loadItems() = paginator.loadNextItems()
 
     protected fun resetPagination() {
         paginator.reset()
-        _uiState.update { updateItems(it, emptyList()) }
+        _uiState.update { it.copy(items = emptyList(), errorMessage = null) }
     }
 }

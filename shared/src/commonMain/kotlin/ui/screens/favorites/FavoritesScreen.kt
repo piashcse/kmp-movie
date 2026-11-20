@@ -39,7 +39,6 @@ import kmp_movie.composeapp.generated.resources.empty_tv_series_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.MediaItemCard
-import ui.theme.AppTheme
 
 @Composable
 fun FavoritesScreen(
@@ -116,7 +115,7 @@ fun EmptyFavoritesView(mediaType: MediaType) {
         Icon(
             imageVector = Icons.Default.Favorite,
             contentDescription = null,
-            tint = AppTheme.colors.primary,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(64.dp),
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -129,7 +128,7 @@ fun EmptyFavoritesView(mediaType: MediaType) {
         Text(
             text = subtitle,
             style = MaterialTheme.typography.bodyMedium,
-            color = AppTheme.colors.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

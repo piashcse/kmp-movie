@@ -2,12 +2,16 @@ package navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 
 class Navigator(
-    val initialRoute: Route,
+    initialRoute: Route,
+    restoredBackStack: List<Route> = listOf(initialRoute),
 ) {
-    internal val backStack: MutableList<Route> = mutableStateListOf(initialRoute)
+    internal val backStack: MutableList<Route> = mutableStateListOf<Route>().apply {
+        addAll(restoredBackStack.ifEmpty { listOf(initialRoute) })
+    }
 
     val currentRoute: Route get() = backStack.last()
 
@@ -54,7 +58,47 @@ class Navigator(
     }
 }
 
-@Composable
-fun rememberNavigator(initialRoute: Route): Navigator {
-    return remember { Navigator(initialRoute) }
+private val topLevelRoutesByKey: Map<String, TopLevelRoute> = listOf(
+    NowPlayingMovie,
+    PopularMovie,
+    TopRatedMovie,
+    UpcomingMovie,
+    AiringTodayTvSeries,
+    OnTheAirTvSeries,
+    PopularTvSeries,
+    TopRatedTvSeries,
+    TrendingCelebrity,
+    PopularCelebrity,
+    FavoriteMovie,
+    FavoriteTvSeries,
+    FavoriteCelebrity,
+).associateBy { it::class.simpleName.orEmpty() }
+
+internal fun Route.saveKey(): String = when (this) {
+    is MovieDetail -> "movie:$id"
+    is TvSeriesDetail -> "tv:$id"
+    is ArtistDetail -> "person:$id"
+    Search -> "search"
+    is TopLevelRoute -> "top:${this::class.simpleName}"
 }
+
+internal fun decodeRoute(key: String): Route? = when {
+    key == "search" -> Search
+    key.startsWith("movie:") -> key.removePrefix("movie:").toIntOrNull()?.let(::MovieDetail)
+    key.startsWith("tv:") -> key.removePrefix("tv:").toIntOrNull()?.let(::TvSeriesDetail)
+    key.startsWith("person:") -> key.removePrefix("person:").toIntOrNull()?.let(::ArtistDetail)
+    key.startsWith("top:") -> topLevelRoutesByKey[key.removePrefix("top:")]
+    else -> null
+}
+
+private val NavigatorSaver: Saver<Navigator, String> = Saver(
+    save = { navigator -> navigator.backStack.joinToString("|") { it.saveKey() } },
+    restore = { keys ->
+        val stack = keys.split("|").mapNotNull(::decodeRoute)
+        Navigator(NowPlayingMovie, stack.ifEmpty { listOf(NowPlayingMovie) })
+    },
+)
+
+@Composable
+fun rememberNavigator(initialRoute: Route): Navigator =
+    rememberSaveable(saver = NavigatorSaver) { Navigator(initialRoute) }

@@ -26,52 +26,26 @@ class TvSeriesDetailViewModel(private val repo: Repository) : ViewModel() {
         fetchJob?.cancel()
         _uiState.value = TvSeriesDetailUiState()
         fetchJob = viewModelScope.launch {
-            launch { fetchTvSeriesDetail(seriesId) }
-            launch { fetchRecommendedTvSeries(seriesId) }
-            launch { fetchCreditTvSeries(seriesId) }
-        }
-    }
+            repo.tvSeriesDetail(seriesId).collect { result ->
+                _uiState.update { state ->
+                    when (result) {
+                        is UiState.Loading -> state.copy(isLoading = true)
+                        is UiState.Success -> {
+                            val detail = result.data
+                            state.copy(
+                                tvSeriesDetail = detail,
+                                recommendedTvSeries = detail.recommendations?.results.orEmpty(),
+                                creditTvSeries = detail.credits,
+                                isLoading = false,
+                            )
+                        }
 
-    private suspend fun fetchTvSeriesDetail(seriesId: Int) {
-        repo.tvSeriesDetail(seriesId).collect { result ->
-            handleStateUpdate(result) { state, data ->
-                state.copy(tvSeriesDetail = data)
-            }
-        }
-    }
-
-    private suspend fun fetchRecommendedTvSeries(seriesId: Int) {
-        repo.recommendedTvSeries(seriesId).collect { result ->
-            handleStateUpdate(result) { state, data ->
-                state.copy(recommendedTvSeries = data.orEmpty())
-            }
-        }
-    }
-
-    private suspend fun fetchCreditTvSeries(seriesId: Int) {
-        repo.creditTvSeries(seriesId).collect { result ->
-            handleStateUpdate(result) { state, data ->
-                state.copy(creditTvSeries = data)
-            }
-        }
-    }
-
-    private fun <T> handleStateUpdate(
-        result: UiState<T>,
-        stateUpdater: (TvSeriesDetailUiState, T?) -> TvSeriesDetailUiState,
-    ) {
-        _uiState.update { currentState ->
-            when (result) {
-                is UiState.Loading -> currentState.copy(isLoading = true)
-                is UiState.Success -> stateUpdater(
-                    currentState,
-                    result.data,
-                ).copy(isLoading = false)
-
-                is UiState.Error -> currentState.copy(
-                    isLoading = false,
-                    errorMessage = result.exception.message,
-                )
+                        is UiState.Error -> state.copy(
+                            isLoading = false,
+                            errorMessage = result.exception.message,
+                        )
+                    }
+                }
             }
         }
     }

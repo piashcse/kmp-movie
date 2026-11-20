@@ -2,10 +2,10 @@ package ui.screens.celebrities.trending
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,14 +19,11 @@ import utils.roundTo
 @Composable
 fun TrendingCelebritiesScreen(
     onNavigateToDetail: (Int) -> Unit,
-    viewModel: TrendingCelebritiesViewModel = koinViewModel()
+    viewModel: TrendingCelebritiesViewModel = koinViewModel(),
 ) {
     GenericListScreen(
         uiState = viewModel.uiState,
-        loadItems = { viewModel.loadItems() },
-        getItems = { it.celebrityList },
-        getIsLoading = { it.isLoading },
-        getErrorMessage = { it.errorMessage },
+        loadItems = viewModel::loadItems,
         getImagePath = { it.profilePath },
         getItemId = { it.id },
         onNavigateToDetail = onNavigateToDetail,
@@ -36,14 +33,15 @@ fun TrendingCelebritiesScreen(
                 Text(
                     text = celebrity.name,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = "${stringResource(Res.string.popularity)} ${celebrity.popularity.roundTo(1)}",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-        }
+        },
     )
 }

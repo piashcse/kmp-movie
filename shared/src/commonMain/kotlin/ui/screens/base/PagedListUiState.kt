@@ -1,11 +1,10 @@
-package ui.screens.movie
+package ui.screens.base
 
 import androidx.compose.runtime.Immutable
-import data.model.MovieItem
 
 @Immutable
-data class MovieUiState(
-    val movieList: List<MovieItem> = emptyList(),
+data class PagedListUiState<T>(
+    val items: List<T> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
 )

@@ -8,6 +8,17 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+val releaseKeystore = providers.environmentVariable("KEYSTORE_PATH").orNull
+val releaseStorePassword = providers.environmentVariable("KEYSTORE_PASSWORD").orNull
+val releaseKeyAlias = providers.environmentVariable("KEY_ALIAS").orNull
+val releaseKeyPassword = providers.environmentVariable("KEY_PASSWORD").orNull
+val hasReleaseSigning = listOf(
+    releaseKeystore,
+    releaseStorePassword,
+    releaseKeyAlias,
+    releaseKeyPassword,
+).all { !it.isNullOrBlank() }
+
 extensions.configure<ApplicationExtension> {
     namespace = "piashcse.kmp.movie"
     compileSdk = libs.versions.android.compile.sdk.get().toInt()
@@ -25,6 +36,16 @@ extensions.configure<ApplicationExtension> {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = file(releaseKeystore!!)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
@@ -33,6 +54,9 @@ extensions.configure<ApplicationExtension> {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {
