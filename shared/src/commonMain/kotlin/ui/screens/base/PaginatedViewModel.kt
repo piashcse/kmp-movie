@@ -13,7 +13,7 @@ import utils.network.UiState
 abstract class PaginatedViewModel<T, S>(
     initialState: S,
     private val updateItems: (S, List<T>) -> S,
-    private val getItems: (S) -> List<T>?
+    private val getItems: (S) -> List<T>,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(initialState)
@@ -32,7 +32,7 @@ abstract class PaginatedViewModel<T, S>(
         },
         onSuccess = { items, _ ->
             _uiState.update { current ->
-                updateItems(current, getItems(current).orEmpty() + items)
+                updateItems(current, getItems(current) + items)
             }
         }
     )

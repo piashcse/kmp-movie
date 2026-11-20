@@ -12,7 +12,7 @@ import utils.network.UiState
 abstract class GenreFilterableViewModel<T, G : GenreItem, S>(
     initialState: S,
     updateItems: (S, List<T>) -> S,
-    getItems: (S) -> List<T>?
+    getItems: (S) -> List<T>,
 ) : PaginatedViewModel<T, S>(initialState, updateItems, getItems) {
 
     protected val _availableGenres = MutableStateFlow<List<G>>(emptyList())

@@ -34,7 +34,7 @@ import utils.OnGridPagination
 fun <T, S> GenericListScreen(
     uiState: StateFlow<S>,
     loadItems: () -> Unit,
-    getItems: (S) -> List<T>?,
+    getItems: (S) -> List<T>,
     getIsLoading: (S) -> Boolean,
     getErrorMessage: (S) -> String?,
     getImagePath: (T) -> String?,
@@ -52,7 +52,7 @@ fun <T, S> GenericListScreen(
     LaunchedEffect(Unit) {
         // Re-entering a tab must not trigger another page load when the ViewModel already
         // holds data (previously every recomposition of the screen fetched the next page).
-        if (items.isNullOrEmpty()) {
+        if (items.isEmpty()) {
             loadItems()
         }
     }
@@ -60,24 +60,22 @@ fun <T, S> GenericListScreen(
     // Only show the full-screen spinner before the first page arrives; appending more
     // pages must not replace the grid the user is scrolling.
     BaseColumn(
-        loading = getIsLoading(state) && items.isNullOrEmpty(),
+        loading = getIsLoading(state) && items.isEmpty(),
         errorMessage = getErrorMessage(state),
         modifier = modifier
     ) {
-        items?.let { items ->
-            MediaGrid(
-                items = items,
-                gridState = gridState,
-                getImagePath = getImagePath,
-                getItemId = getItemId,
-                onClick = onNavigateToDetail,
-                imageHeight = imageHeight,
-                additionalContent = additionalContent
-            )
-            
-            OnGridPagination(gridState = gridState) {
-                loadItems()
-            }
+        MediaGrid(
+            items = items,
+            gridState = gridState,
+            getImagePath = getImagePath,
+            getItemId = getItemId,
+            onClick = onNavigateToDetail,
+            imageHeight = imageHeight,
+            additionalContent = additionalContent
+        )
+
+        OnGridPagination(gridState = gridState) {
+            loadItems()
         }
     }
 }

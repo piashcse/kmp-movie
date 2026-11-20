@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -46,6 +47,7 @@ fun ImageLoad(url: String, modifier: Modifier = Modifier) {
     )
 }
 
+@Immutable
 data class CastMember(val id: Int, val name: String, val profilePath: String?)
 
 @Composable

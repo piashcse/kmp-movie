@@ -12,7 +12,6 @@ import ui.screens.artist_detail.ArtistDetailViewModel
 import ui.screens.celebrities.popular.PopularCelebritiesViewModel
 import ui.screens.celebrities.trending.TrendingCelebritiesViewModel
 import ui.screens.favorites.FavoritesViewModel
-import ui.screens.genre.GenreContentViewModel
 import ui.screens.movie.detail.MovieDetailViewModel
 import ui.screens.movie.now_playing.NowPlayingViewModel
 import ui.screens.movie.popular.PopularMovieViewModel
@@ -54,9 +53,6 @@ val appModule: Module = module {
     viewModel { PopularCelebritiesViewModel(get()) }
     viewModel { TrendingCelebritiesViewModel(get()) }
     viewModel { ArtistDetailViewModel(get()) }
-
-    // Genre ViewModels
-    viewModel { GenreContentViewModel(get()) }
 
     // Favorites ViewModel
     viewModel { FavoritesViewModel(get()) }

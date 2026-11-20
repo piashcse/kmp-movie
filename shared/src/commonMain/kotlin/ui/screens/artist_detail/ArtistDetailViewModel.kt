@@ -30,7 +30,7 @@ class ArtistDetailViewModel(private val repo: Repository) : ViewModel() {
 
     private suspend fun artistMoviesAndTvShows(personId: Int) {
         repo.artistMoviesAndTvShows(personId).collect { result ->
-            handleStateUpdate(result) { state, data -> state.copy(artistMovies = data?.cast) }
+            handleStateUpdate(result) { state, data -> state.copy(artistMovies = data?.cast.orEmpty()) }
         }
     }
 

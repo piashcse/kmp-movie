@@ -9,11 +9,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -35,7 +31,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationEventHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
@@ -51,7 +46,6 @@ import navigation.ArtistDetail
 import navigation.FavoriteCelebrity
 import navigation.FavoriteMovie
 import navigation.FavoriteTvSeries
-import navigation.GenreContent
 import navigation.MovieDetail
 import navigation.NowPlayingMovie
 import navigation.OnTheAirTvSeries
@@ -78,7 +72,6 @@ import ui.screens.AppViewModel
 import ui.screens.celebrities.popular.PopularCelebritiesScreen
 import ui.screens.celebrities.trending.TrendingCelebritiesScreen
 import ui.screens.favorites.FavoritesScreen
-import ui.screens.genre.GenreContentScreen
 import ui.screens.movie.now_playing.NowPlayingScreen
 import ui.screens.movie.popular.PopularMovieScreen
 import ui.screens.movie.top_rated.TopRatedMovieScreen
@@ -100,15 +93,14 @@ private const val PAGE_COUNT = 4
 private const val TOP_LEVEL_STATE_KEY = "top_level"
 
 private val pageTabs = listOf(
-    PageTab(Res.string.movies, Icons.Filled.Movie),
-    PageTab(Res.string.tv_series, Icons.Filled.Timeline),
-    PageTab(Res.string.celebrities, Icons.Filled.Star),
-    PageTab(Res.string.favorites, Icons.Filled.Favorite),
+    PageTab(Res.string.movies),
+    PageTab(Res.string.tv_series),
+    PageTab(Res.string.celebrities),
+    PageTab(Res.string.favorites),
 )
 
 private data class PageTab(
     val titleRes: org.jetbrains.compose.resources.StringResource,
-    val icon: ImageVector,
 )
 
 @Composable
@@ -219,13 +211,6 @@ private fun DetailScreen(
             onNavigateToMovie = { id -> navigator.navigate(MovieDetail(id)) },
             onNavigateToTvSeries = { id -> navigator.navigate(TvSeriesDetail(id)) },
             onNavigateToArtist = { id -> navigator.navigate(ArtistDetail(id)) },
-            modifier = modifier,
-        )
-        is GenreContent -> GenreContentScreen(
-            genreId = currentRoute.genreId,
-            genreName = currentRoute.genreName,
-            onBackClick = { navigator.popBackStack() },
-            onNavigateToDetail = { id -> navigator.navigate(MovieDetail(id)) },
             modifier = modifier,
         )
         else -> {}
@@ -450,10 +435,15 @@ private fun getDefaultRouteForPage(page: Int): TopLevelRoute = when (page) {
     else -> NowPlayingMovie
 }
 
+private val movieRoutes = listOf(NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie)
+private val tvSeriesRoutes = listOf(AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries)
+private val celebrityRoutes = listOf(PopularCelebrity, TrendingCelebrity)
+private val favoriteRoutes = listOf(FavoriteMovie, FavoriteTvSeries, FavoriteCelebrity)
+
 private fun getItemsForPage(page: Int): List<TopLevelRoute> = when (page) {
-    PAGE_MOVIES -> listOf(NowPlayingMovie, PopularMovie, TopRatedMovie, UpcomingMovie)
-    PAGE_TV_SERIES -> listOf(AiringTodayTvSeries, OnTheAirTvSeries, PopularTvSeries, TopRatedTvSeries)
-    PAGE_CELEBRITIES -> listOf(PopularCelebrity, TrendingCelebrity)
-    PAGE_FAVORITES -> listOf(FavoriteMovie, FavoriteTvSeries, FavoriteCelebrity)
+    PAGE_MOVIES -> movieRoutes
+    PAGE_TV_SERIES -> tvSeriesRoutes
+    PAGE_CELEBRITIES -> celebrityRoutes
+    PAGE_FAVORITES -> favoriteRoutes
     else -> emptyList()
 }
