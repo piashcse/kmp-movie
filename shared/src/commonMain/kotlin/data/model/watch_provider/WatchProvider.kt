@@ -19,10 +19,8 @@ data class WatchProviderRegion(
     val providers: List<WatchProvider>
         get() = (flatrate + rent + buy).distinctBy { it.providerId }
 
-    val hasProviders: Boolean get() = providers.isNotEmpty()
-
-    /** Streaming services only; useful when there is a subscription option. */
-    val streamingProviders: List<WatchProvider> get() = flatrate
+    val hasProviders: Boolean
+        get() = flatrate.isNotEmpty() || rent.isNotEmpty() || buy.isNotEmpty()
 }
 
 /** Region detection differs per platform; returns an ISO 3166-1 alpha-2 code when known. */

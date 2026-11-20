@@ -3,7 +3,6 @@ package ui
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,16 +29,17 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.SaveableStateHolder
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationEventHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
+import androidx.window.core.layout.WindowSizeClass
 import data.model.local.MediaType
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.action_search
@@ -100,7 +100,6 @@ private const val PAGE_CELEBRITIES = 2
 private const val PAGE_FAVORITES = 3
 private const val PAGE_COUNT = 4
 private const val TOP_LEVEL_STATE_KEY = "top_level"
-private val TwoPaneMinWidth = 840.dp
 
 private val pageTabs = listOf(
     PageTab(Res.string.movies),
@@ -123,7 +122,10 @@ fun App(
             val deepLinkController = rememberDeepLinkController()
             // On the web the route is restored from the URL (and survives refresh); elsewhere this
             // is simply the default start destination.
-            val navigator = rememberNavigator(deepLinkController.initialRoute() ?: NowPlayingMovie)
+            val startRoute = remember(deepLinkController) {
+                deepLinkController.initialRoute() ?: NowPlayingMovie
+            }
+            val navigator = rememberNavigator(startRoute)
             val isDetailScreen = navigator.isDetailScreen
             // Keeps list/pager state (scroll position, selected tab) while a detail screen is open.
             val saveableStateHolder = rememberSaveableStateHolder()
@@ -146,71 +148,73 @@ fun App(
             val currentTopLevelRoute = navigator.currentTopLevelRoute
             val currentPage = getPageForRoute(currentTopLevelRoute)
             val currentItems = getItemsForPage(currentPage)
+            val twoPane = windowAdaptiveInfo.windowSizeClass
+                .isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND)
 
-            BoxWithConstraints {
-                val twoPane = maxWidth >= TwoPaneMinWidth
-
-                if (isDetailScreen && !twoPane) {
-                    Crossfade(
-                        targetState = navigator.currentRoute,
-                        animationSpec = tween(300),
-                        label = "detail_transition",
-                    ) { currentRoute ->
-                        DetailRoute(
-                            navigator = navigator,
-                            currentRoute = currentRoute,
-                            saveableStateHolder = saveableStateHolder,
-                        )
-                    }
-                } else {
-                    KMPNavigationSuiteScaffold(
-                        windowAdaptiveInfo = windowAdaptiveInfo,
-                        navigationSuiteItems = {
-                            currentItems.forEach { item ->
-                                item(
-                                    selected = currentTopLevelRoute == item,
-                                    onClick = { navigator.navigateToTopLevel(item) },
-                                    icon = {
-                                        Icon(
-                                            imageVector = item.icon,
-                                            contentDescription = stringResource(item.titleRes),
-                                        )
-                                    },
-                                    label = { Text(text = stringResource(item.titleRes)) },
-                                )
-                            }
-                        },
-                    ) {
-                        if (isDetailScreen && twoPane) {
-                            Row(modifier = Modifier.fillMaxSize()) {
-                                Box(modifier = Modifier.weight(0.45f)) {
-                                    TopLevelRouteState(
-                                        navigator = navigator,
-                                        activeRoute = currentTopLevelRoute,
-                                        currentPage = currentPage,
-                                        saveableStateHolder = saveableStateHolder,
+            if (isDetailScreen && !twoPane) {
+                Crossfade(
+                    targetState = navigator.currentRoute,
+                    animationSpec = tween(300),
+                    label = "detail_transition",
+                ) { currentRoute ->
+                    DetailRoute(
+                        navigator = navigator,
+                        currentRoute = currentRoute,
+                        saveableStateHolder = saveableStateHolder,
+                    )
+                }
+            } else {
+                KMPNavigationSuiteScaffold(
+                    windowAdaptiveInfo = windowAdaptiveInfo,
+                    navigationSuiteItems = {
+                        currentItems.forEach { item ->
+                            item(
+                                selected = currentTopLevelRoute == item,
+                                onClick = { navigator.navigateToTopLevel(item) },
+                                icon = {
+                                    Icon(
+                                        imageVector = item.icon,
+                                        contentDescription = stringResource(item.titleRes),
                                     )
-                                }
-                                VerticalDivider()
-                                Box(modifier = Modifier.weight(0.55f)) {
-                                    DetailRoute(
-                                        navigator = navigator,
-                                        currentRoute = navigator.currentRoute,
-                                        saveableStateHolder = saveableStateHolder,
-                                    )
-                                }
-                            }
-                        } else {
-                            TopLevelRouteState(
-                                navigator = navigator,
-                                activeRoute = currentTopLevelRoute,
-                                currentPage = currentPage,
-                                saveableStateHolder = saveableStateHolder,
+                                },
+                                label = { Text(text = stringResource(item.titleRes)) },
                             )
                         }
-                    }
+                    },
+                ) {
+                    NavigationContent(
+                        showSplit = isDetailScreen && twoPane,
+                        navigator = navigator,
+                        activeRoute = currentTopLevelRoute,
+                        currentPage = currentPage,
+                        saveableStateHolder = saveableStateHolder,
+                    )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun NavigationContent(
+    showSplit: Boolean,
+    navigator: navigation.Navigator,
+    activeRoute: TopLevelRoute,
+    currentPage: Int,
+    saveableStateHolder: SaveableStateHolder,
+) {
+    if (!showSplit) {
+        TopLevelRouteState(navigator, activeRoute, currentPage, saveableStateHolder)
+        return
+    }
+
+    Row(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.weight(0.45f)) {
+            TopLevelRouteState(navigator, activeRoute, currentPage, saveableStateHolder)
+        }
+        VerticalDivider()
+        Box(modifier = Modifier.weight(0.55f)) {
+            DetailRoute(navigator, navigator.currentRoute, saveableStateHolder)
         }
     }
 }

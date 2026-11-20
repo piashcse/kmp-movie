@@ -25,11 +25,11 @@ class Navigator(
 
     val currentTopLevelRoute: TopLevelRoute
         get() {
-            val last = backStack.lastOrNull()
-            if (last is TopLevelRoute) return last
-            return backStack.dropLast(1).lastOrNull { it is TopLevelRoute } as? TopLevelRoute
-                ?: (backStack.firstOrNull() as? TopLevelRoute)
-                ?: error("No TopLevelRoute in back stack")
+            for (index in backStack.indices.reversed()) {
+                val route = backStack[index]
+                if (route is TopLevelRoute) return route
+            }
+            error("No TopLevelRoute in back stack")
         }
 
     val isDetailScreen: Boolean

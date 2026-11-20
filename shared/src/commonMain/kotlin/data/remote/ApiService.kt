@@ -14,6 +14,11 @@ import io.ktor.client.request.get
 import io.ktor.http.encodedPath
 
 class ApiService {
+
+    private companion object {
+        const val DETAIL_APPEND_TO_RESPONSE =
+            "credits,recommendations,videos,watch/providers"
+    }
     
     // Helper function for paginated endpoints with reified
     private suspend inline fun <reified T> getPaginated(
@@ -56,7 +61,7 @@ class ApiService {
     suspend fun topRatedMovies(page: Int) = getPaginated<MovieItem>("movie/top_rated", page, null)
     suspend fun upcomingMovies(page: Int) = getPaginated<MovieItem>("movie/upcoming", page, null)
     suspend fun movieDetail(movieId: Int) = getItem<MovieDetail>("movie/$movieId") {
-        it.parameters.append("append_to_response", "credits,recommendations,videos,watch/providers")
+        it.parameters.append("append_to_response", DETAIL_APPEND_TO_RESPONSE)
     }
     suspend fun movieSearch(searchKey: String) = search<MovieItem>("search/movie", searchKey)
 
@@ -66,7 +71,7 @@ class ApiService {
     suspend fun popularTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/popular", page, null)
     suspend fun topRatedTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/top_rated", page, null)
     suspend fun tvSeriesDetail(seriesId: Int) = getItem<TvSeriesDetail>("tv/$seriesId") {
-        it.parameters.append("append_to_response", "credits,recommendations,videos,watch/providers")
+        it.parameters.append("append_to_response", DETAIL_APPEND_TO_RESPONSE)
     }
     suspend fun tvSeriesSearch(searchKey: String) = search<TvSeriesItem>("search/tv", searchKey)
 

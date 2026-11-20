@@ -24,6 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextOverflow
+import data.model.video.VideoResults
+import data.model.video.bestTrailer
+import data.model.video.watchUrl
+import data.model.watch_provider.WatchProviders
+import data.model.watch_provider.deviceRegionCode
+import data.model.watch_provider.regionFor
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.link_copied
 import kmp_movie.composeapp.generated.resources.share
@@ -34,11 +40,11 @@ import theme.Spacing
 import utils.rememberShareLauncher
 
 /**
- * Primary actions for a movie/series detail page: open the trailer when one exists and share
+ * Primary buttons for a movie/series detail page: play the trailer when one exists and share
  * (or copy on platforms without a share sheet) a canonical link.
  */
 @Composable
-fun DetailActions(
+private fun DetailActionButtons(
     title: String,
     shareUrl: String,
     trailerUrl: String?,
@@ -93,5 +99,34 @@ fun DetailActions(
                 overflow = TextOverflow.Ellipsis,
             )
         }
+    }
+}
+
+/**
+ * Trailer/share actions plus the region's watch providers, derived once per loaded detail.
+ */
+@Composable
+fun MediaDetailActions(
+    title: String,
+    shareUrl: String,
+    videos: VideoResults?,
+    watchProviders: WatchProviders?,
+    modifier: Modifier = Modifier,
+) {
+    val trailerUrl = remember(videos) { videos?.results.orEmpty().bestTrailer()?.watchUrl() }
+    val region = remember(watchProviders) {
+        watchProviders?.regionFor(deviceRegionCode())
+    }
+    // Keep the merged list stable across recompositions (e.g. while the detail page scrolls).
+    val providers = remember(region) { region?.providers.orEmpty() }
+
+    DetailActionButtons(
+        title = title,
+        shareUrl = shareUrl,
+        trailerUrl = trailerUrl,
+        modifier = modifier,
+    )
+    if (providers.isNotEmpty()) {
+        WatchProvidersSection(providers = providers, link = region?.link)
     }
 }

@@ -20,6 +20,13 @@ interface DeepLinkController {
 @Composable
 expect fun rememberDeepLinkController(): DeepLinkController
 
+/** Shared implementation for platforms without URL routing. */
+internal object NoOpDeepLinkController : DeepLinkController {
+    override fun initialRoute(): Route? = null
+    override fun onRouteChanged(route: Route) = Unit
+    override fun observe(onRoute: (Route) -> Unit): () -> Unit = {}
+}
+
 private val topLevelDeepLinks: Map<String, TopLevelRoute> = mapOf(
     "movies/now-playing" to NowPlayingMovie,
     "movies/popular" to PopularMovie,
@@ -36,13 +43,16 @@ private val topLevelDeepLinks: Map<String, TopLevelRoute> = mapOf(
     "favorites/celebrities" to FavoriteCelebrity,
 )
 
+private val topLevelDeepLinkPaths: Map<TopLevelRoute, String> =
+    topLevelDeepLinks.entries.associate { (path, route) -> route to path }
+
 /** URL fragment for a route, for example `#/movie/27205` or `#/movies/popular`. */
 fun Route.toDeepLink(): String = when (this) {
     is MovieDetail -> "movie/$id"
     is TvSeriesDetail -> "series/$id"
     is ArtistDetail -> "person/$id"
     Search -> "search"
-    is TopLevelRoute -> topLevelDeepLinks.entries.firstOrNull { it.value == this }?.key.orEmpty()
+    is TopLevelRoute -> topLevelDeepLinkPaths[this].orEmpty()
 }
 
 /** Parses a URL fragment (with or without the leading `#`) back into a route. */

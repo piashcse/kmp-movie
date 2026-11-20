@@ -21,10 +21,6 @@ import constant.AppConstant
 import data.model.local.FavoriteItem
 import data.model.local.MediaType
 import data.model.tv_detail.TvSeriesDetail
-import data.model.video.bestTrailer
-import data.model.video.watchUrl
-import data.model.watch_provider.deviceRegionCode
-import data.model.watch_provider.regionFor
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.description
 import kmp_movie.composeapp.generated.resources.first_air
@@ -39,8 +35,7 @@ import ui.component.CastMember
 import ui.component.RecommendedSection
 import ui.component.SeasonsSection
 import ui.component.base.BaseColumn
-import ui.component.detail.DetailActions
-import ui.component.detail.WatchProvidersSection
+import ui.component.detail.MediaDetailActions
 import ui.component.skeleton.MediaDetailSkeleton
 import ui.screens.detail.DetailInfo
 import ui.screens.detail.MediaDetailHeader
@@ -73,15 +68,12 @@ fun TvSeriesDetail(
     ) {
         uiState.tvSeriesDetail?.let { data ->
             UiDetail(data, onBack)
-            DetailActions(
+            MediaDetailActions(
                 title = data.name,
                 shareUrl = "https://www.themoviedb.org/tv/${data.id}",
-                trailerUrl = data.videos?.results.orEmpty().bestTrailer()?.watchUrl(),
+                videos = data.videos,
+                watchProviders = data.watchProviders,
             )
-            val region = data.watchProviders?.regionFor(deviceRegionCode())
-            if (region != null) {
-                WatchProvidersSection(providers = region.providers, link = region.link)
-            }
         }
         Spacer(modifier = Modifier.height(10.dp))
         Column(modifier = Modifier.padding(horizontal = 10.dp)) {
