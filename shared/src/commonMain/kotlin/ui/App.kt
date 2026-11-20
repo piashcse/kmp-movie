@@ -361,6 +361,9 @@ private fun MainScreen(
     }
 
     LaunchedEffect(pagerState.settledPage) {
+        // In the two-pane layout the list stays composed while a detail is open. Recomposition
+        // there must not treat the detail route as "the pager moved" and pop back to the tab.
+        if (navigator.isDetailScreen) return@LaunchedEffect
         val page = pagerState.settledPage
         val targetRoute = routeForPage(page)
         if (navigator.currentRoute != targetRoute) {
