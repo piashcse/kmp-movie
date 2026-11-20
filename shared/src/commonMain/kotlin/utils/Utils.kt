@@ -44,7 +44,7 @@ class Paginator<T>(
                     when (result) {
                         is UiState.Loading -> Unit
                         is UiState.Success -> {
-                            val items = result.data.orEmpty()
+                            val items = result.data
                             if (items.isEmpty()) {
                                 // TMDB returns an empty page once the last page is exceeded.
                                 endReached = true

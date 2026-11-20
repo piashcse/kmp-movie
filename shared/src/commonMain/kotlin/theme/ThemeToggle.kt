@@ -1,17 +1,9 @@
 package theme
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.BrightnessAuto
 import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -23,9 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun ThemeModeToggle(
@@ -91,39 +81,5 @@ fun ThemeModeToggle(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
-    }
-}
-
-@Composable
-fun ThemeModePreview() {
-    val themeMode = LocalThemeMode.current
-    val setThemeMode = LocalSetThemeMode.current
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            text = "Current Theme: ${themeMode.name}",
-            style = MaterialTheme.typography.headlineSmall,
-        )
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Theme Mode: ")
-            Spacer(modifier = Modifier.width(8.dp))
-            ThemeModeToggle(showText = true)
-        }
-
-        Button(
-            onClick = {
-                setThemeMode(
-                    if (themeMode == ThemeMode.DARK) ThemeMode.LIGHT else ThemeMode.DARK
-                )
-            }
-        ) {
-            Text("Toggle Theme")
-        }
     }
 }

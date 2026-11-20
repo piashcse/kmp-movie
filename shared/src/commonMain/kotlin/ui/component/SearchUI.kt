@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -111,6 +112,10 @@ fun SearchResults(
     onNavigateToTvSeries: (Int) -> Unit,
     onNavigateToCelebrity: (Int) -> Unit,
 ) {
+    val movies = remember(movieSearchData) { movieSearchData.take(MAX_SEARCH_RESULTS) }
+    val tvSeries = remember(tvSeriesSearchData) { tvSeriesSearchData.take(MAX_SEARCH_RESULTS) }
+    val celebrities = remember(celebritySearchData) { celebritySearchData.take(MAX_SEARCH_RESULTS) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -135,24 +140,15 @@ fun SearchResults(
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             when (currentFilter) {
-                SearchFilter.MOVIES -> items(
-                    items = movieSearchData.take(MAX_SEARCH_RESULTS),
-                    key = { it.id },
-                ) { item ->
+                SearchFilter.MOVIES -> items(items = movies, key = { it.id }) { item ->
                     SearchMovieItem(item = item, onNavigateToMovie = onNavigateToMovie)
                 }
 
-                SearchFilter.TV_SERIES -> items(
-                    items = tvSeriesSearchData.take(MAX_SEARCH_RESULTS),
-                    key = { it.id },
-                ) { item ->
+                SearchFilter.TV_SERIES -> items(items = tvSeries, key = { it.id }) { item ->
                     SearchTvSeriesItem(item = item, onNavigateToTvSeries = onNavigateToTvSeries)
                 }
 
-                SearchFilter.CELEBRITIES -> items(
-                    items = celebritySearchData.take(MAX_SEARCH_RESULTS),
-                    key = { it.id },
-                ) { item ->
+                SearchFilter.CELEBRITIES -> items(items = celebrities, key = { it.id }) { item ->
                     SearchCelebrityItem(item = item, onNavigateToCelebrity = onNavigateToCelebrity)
                 }
             }

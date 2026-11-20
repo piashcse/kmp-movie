@@ -36,7 +36,6 @@ import constant.AppConstant
 import data.model.artist.ArtistMovie
 import data.model.local.FavoriteItem
 import data.model.local.MediaType
-import data.repository.FavoritesStore
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.action_back
 import kmp_movie.composeapp.generated.resources.artist_movies
@@ -46,11 +45,10 @@ import kmp_movie.composeapp.generated.resources.gender
 import kmp_movie.composeapp.generated.resources.know_for
 import kmp_movie.composeapp.generated.resources.place_of_birth
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import theme.cornerRadius
 import ui.component.ExpandableText
-import ui.component.FavoriteButton
+import ui.component.FavoriteItemButton
 import ui.component.base.BaseColumn
 
 @Composable
@@ -63,9 +61,6 @@ fun ArtistDetail(
     viewModel: ArtistDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val favoritesStore = koinInject<FavoritesStore>()
-    val favorites by favoritesStore.favorites.collectAsState()
-    val isFavorite = favorites.any { it.id == personId && it.mediaType == MediaType.PERSON }
 
     LaunchedEffect(personId) {
         viewModel.fetchArtistDetail(personId)
@@ -135,19 +130,14 @@ fun ArtistDetail(
                         )
                     }
 
-                    FavoriteButton(
-                        isFavorite = isFavorite,
-                        onClick = {
-                            favoritesStore.toggle(
-                                FavoriteItem(
-                                    id = personId,
-                                    mediaType = MediaType.PERSON,
-                                    title = artist.name,
-                                    posterPath = artist.profilePath,
-                                    releaseDate = artist.birthday,
-                                )
-                            )
-                        },
+                    FavoriteItemButton(
+                        item = FavoriteItem(
+                            id = personId,
+                            mediaType = MediaType.PERSON,
+                            title = artist.name,
+                            posterPath = artist.profilePath,
+                            releaseDate = artist.birthday,
+                        ),
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .padding(top = 8.dp, end = 8.dp),
@@ -161,8 +151,8 @@ fun ArtistDetail(
                     fontWeight = FontWeight.Medium
                 )
                 ExpandableText(text = artist.biography, maxLines = 12)
-                uiState.artistMovies?.let {
-                    ArtistMoviesAndTvShows(it) { item ->
+                if (uiState.artistMovies.isNotEmpty()) {
+                    ArtistMoviesAndTvShows(uiState.artistMovies) { item ->
                         if (item.mediaType == "movie") {
                             onNavigateToMovie(item.id)
                         } else {
