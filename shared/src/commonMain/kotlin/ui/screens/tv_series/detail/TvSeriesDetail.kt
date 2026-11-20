@@ -35,6 +35,7 @@ import ui.component.CastMember
 import ui.component.RecommendedSection
 import ui.component.SeasonsSection
 import ui.component.base.BaseColumn
+import ui.component.skeleton.MediaDetailSkeleton
 import ui.screens.detail.DetailInfo
 import ui.screens.detail.MediaDetailHeader
 import utils.roundTo
@@ -60,6 +61,7 @@ fun TvSeriesDetail(
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.surface),
         onRetry = { viewModel.fetchTvSeriesDetails(seriesId) },
+        loadingContent = { MediaDetailSkeleton() },
         loading = uiState.isLoading && uiState.tvSeriesDetail == null,
         errorMessage = uiState.errorMessage
     ) {

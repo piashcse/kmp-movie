@@ -27,6 +27,7 @@ import kmp_movie.composeapp.generated.resources.retry
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 import ui.component.base.BaseColumn
+import ui.component.skeleton.MediaGridSkeleton
 import theme.Spacing
 import ui.screens.base.PagedListUiState
 import utils.OnGridPagination
@@ -66,6 +67,7 @@ fun <T> GenericListScreen(
         errorMessage = state.errorMessage.takeIf { items.isEmpty() },
         onRetry = loadItems,
         modifier = modifier,
+        loadingContent = { MediaGridSkeleton(imageHeight = imageHeight) },
     ) {
         if (items.isEmpty()) {
             EmptyState(stringResource(Res.string.no_results))

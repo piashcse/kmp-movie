@@ -54,6 +54,7 @@ import theme.cornerRadius
 import ui.component.ExpandableText
 import ui.component.FavoriteItemButton
 import ui.component.base.BaseColumn
+import ui.component.skeleton.MediaDetailSkeleton
 
 @Composable
 fun ArtistDetail(
@@ -73,6 +74,7 @@ fun ArtistDetail(
     BaseColumn(
         modifier = modifier,
         onRetry = { viewModel.fetchArtistDetail(personId) },
+        loadingContent = { MediaDetailSkeleton() },
         loading = uiState.isLoading && uiState.artistDetail == null,
         errorMessage = uiState.errorMessage
     ) {

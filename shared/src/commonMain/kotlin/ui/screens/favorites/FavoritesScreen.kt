@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -47,6 +46,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.MediaItemCard
+import ui.component.skeleton.MediaGridSkeleton
 
 @Composable
 fun FavoritesScreen(
@@ -76,7 +76,7 @@ fun FavoritesScreen(
             contentAlignment = Alignment.Center,
         ) {
             when {
-                !isLoaded -> CircularProgressIndicator()
+                !isLoaded -> MediaGridSkeleton(imageHeight = 200.dp)
                 filtered.isEmpty() -> EmptyFavoritesView(mediaType)
                 else -> LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 180.dp),

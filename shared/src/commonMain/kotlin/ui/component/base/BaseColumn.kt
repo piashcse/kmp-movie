@@ -1,6 +1,7 @@
 package ui.component.base
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,15 +24,20 @@ fun BaseColumn(
     errorMessage: String?,
     modifier: Modifier = Modifier,
     onRetry: (() -> Unit)? = null,
+    loadingContent: @Composable () -> Unit = {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    },
     content: @Composable () -> Unit,
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = if (loading) Arrangement.Center else Arrangement.Top,
+        verticalArrangement = Arrangement.Top,
     ) {
         when {
-            loading -> CircularProgressIndicator()
+            loading -> loadingContent()
             errorMessage != null -> ErrorState(
                 message = errorMessage,
                 onRetry = onRetry,
