@@ -8,6 +8,9 @@ import data.model.ProductionCompany
 import data.model.ProductionCountry
 import data.model.SpokenLanguage
 import data.model.tv_detail.credit.Credit
+import data.model.video.VideoResults
+import data.model.watch_provider.WatchProviders
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -48,4 +51,8 @@ data class TvSeriesDetail(
     val credits: Credit? = null,
 
     val recommendations: BaseModel<TvSeriesItem>? = null,
+
+    val videos: VideoResults? = null,
+
+    @SerialName("watch/providers") val watchProviders: WatchProviders? = null,
 )

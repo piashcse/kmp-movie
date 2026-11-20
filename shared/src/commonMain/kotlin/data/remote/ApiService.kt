@@ -56,7 +56,7 @@ class ApiService {
     suspend fun topRatedMovies(page: Int) = getPaginated<MovieItem>("movie/top_rated", page, null)
     suspend fun upcomingMovies(page: Int) = getPaginated<MovieItem>("movie/upcoming", page, null)
     suspend fun movieDetail(movieId: Int) = getItem<MovieDetail>("movie/$movieId") {
-        it.parameters.append("append_to_response", "credits,recommendations")
+        it.parameters.append("append_to_response", "credits,recommendations,videos,watch/providers")
     }
     suspend fun movieSearch(searchKey: String) = search<MovieItem>("search/movie", searchKey)
 
@@ -66,7 +66,7 @@ class ApiService {
     suspend fun popularTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/popular", page, null)
     suspend fun topRatedTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/top_rated", page, null)
     suspend fun tvSeriesDetail(seriesId: Int) = getItem<TvSeriesDetail>("tv/$seriesId") {
-        it.parameters.append("append_to_response", "credits,recommendations")
+        it.parameters.append("append_to_response", "credits,recommendations,videos,watch/providers")
     }
     suspend fun tvSeriesSearch(searchKey: String) = search<TvSeriesItem>("search/tv", searchKey)
 

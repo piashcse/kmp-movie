@@ -2,9 +2,13 @@ package ui
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -22,6 +26,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +36,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationEventHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
@@ -61,6 +67,8 @@ import navigation.TopRatedTvSeries
 import navigation.TrendingCelebrity
 import navigation.TvSeriesDetail
 import navigation.UpcomingMovie
+import navigation.openDeepLink
+import navigation.rememberDeepLinkController
 import navigation.rememberNavigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -92,6 +100,7 @@ private const val PAGE_CELEBRITIES = 2
 private const val PAGE_FAVORITES = 3
 private const val PAGE_COUNT = 4
 private const val TOP_LEVEL_STATE_KEY = "top_level"
+private val TwoPaneMinWidth = 840.dp
 
 private val pageTabs = listOf(
     PageTab(Res.string.movies),
@@ -111,10 +120,21 @@ fun App(
 ) {
     ProvideThemeState(appViewModel = appViewModel) {
         KmpMovieTheme(darkTheme = shouldUseDarkTheme()) {
-            val navigator = rememberNavigator(NowPlayingMovie)
+            val deepLinkController = rememberDeepLinkController()
+            // On the web the route is restored from the URL (and survives refresh); elsewhere this
+            // is simply the default start destination.
+            val navigator = rememberNavigator(deepLinkController.initialRoute() ?: NowPlayingMovie)
             val isDetailScreen = navigator.isDetailScreen
             // Keeps list/pager state (scroll position, selected tab) while a detail screen is open.
             val saveableStateHolder = rememberSaveableStateHolder()
+
+            DisposableEffect(deepLinkController, navigator) {
+                val unsubscribe = deepLinkController.observe { route -> navigator.openDeepLink(route) }
+                onDispose { unsubscribe() }
+            }
+            LaunchedEffect(navigator.currentRoute) {
+                deepLinkController.onRouteChanged(navigator.currentRoute)
+            }
 
             val backState = rememberNavigationEventState(NavigationEventInfo.None)
             NavigationEventHandler(
@@ -123,58 +143,109 @@ fun App(
                 onBackCompleted = { navigator.popBackStack() },
             )
 
-            if (isDetailScreen) {
-                Crossfade(
-                    targetState = navigator.currentRoute,
-                    animationSpec = tween(300),
-                    label = "detail_transition",
-                ) { currentRoute ->
-                    saveableStateHolder.SaveableStateProvider(currentRoute.toString()) {
-                        Scaffold { paddingValues ->
-                            DetailScreen(
-                                navigator = navigator,
-                                currentRoute = currentRoute,
-                                modifier = Modifier.padding(paddingValues),
-                            )
-                        }
-                    }
-                }
-            } else {
-                val currentTopLevelRoute = navigator.currentTopLevelRoute
-                val currentPage = getPageForRoute(currentTopLevelRoute)
-                val currentItems = getItemsForPage(currentPage)
+            val currentTopLevelRoute = navigator.currentTopLevelRoute
+            val currentPage = getPageForRoute(currentTopLevelRoute)
+            val currentItems = getItemsForPage(currentPage)
 
-                KMPNavigationSuiteScaffold(
-                    windowAdaptiveInfo = windowAdaptiveInfo,
-                    navigationSuiteItems = {
-                        currentItems.forEach { item ->
-                            item(
-                                selected = navigator.currentRoute == item,
-                                onClick = { navigator.navigateToTopLevel(item) },
-                                icon = {
-                                    Icon(
-                                        imageVector = item.icon,
-                                        contentDescription = stringResource(item.titleRes),
-                                    )
-                                },
-                                label = { Text(text = stringResource(item.titleRes)) },
-                            )
-                        }
-                    }
-                ) {
-                    // One stable pager for all top-level routes. Previously this was wrapped in a
-                    // Crossfade keyed by the route, so every tab/sub-tab switch recreated the
-                    // pager and re-entered every list screen.
-                    saveableStateHolder.SaveableStateProvider(TOP_LEVEL_STATE_KEY) {
-                        ListScaffold(
+            BoxWithConstraints {
+                val twoPane = maxWidth >= TwoPaneMinWidth
+
+                if (isDetailScreen && !twoPane) {
+                    Crossfade(
+                        targetState = navigator.currentRoute,
+                        animationSpec = tween(300),
+                        label = "detail_transition",
+                    ) { currentRoute ->
+                        DetailRoute(
                             navigator = navigator,
-                            activeRoute = currentTopLevelRoute,
-                            currentPage = currentPage,
+                            currentRoute = currentRoute,
                             saveableStateHolder = saveableStateHolder,
                         )
                     }
+                } else {
+                    KMPNavigationSuiteScaffold(
+                        windowAdaptiveInfo = windowAdaptiveInfo,
+                        navigationSuiteItems = {
+                            currentItems.forEach { item ->
+                                item(
+                                    selected = currentTopLevelRoute == item,
+                                    onClick = { navigator.navigateToTopLevel(item) },
+                                    icon = {
+                                        Icon(
+                                            imageVector = item.icon,
+                                            contentDescription = stringResource(item.titleRes),
+                                        )
+                                    },
+                                    label = { Text(text = stringResource(item.titleRes)) },
+                                )
+                            }
+                        },
+                    ) {
+                        if (isDetailScreen && twoPane) {
+                            Row(modifier = Modifier.fillMaxSize()) {
+                                Box(modifier = Modifier.weight(0.45f)) {
+                                    TopLevelRouteState(
+                                        navigator = navigator,
+                                        activeRoute = currentTopLevelRoute,
+                                        currentPage = currentPage,
+                                        saveableStateHolder = saveableStateHolder,
+                                    )
+                                }
+                                VerticalDivider()
+                                Box(modifier = Modifier.weight(0.55f)) {
+                                    DetailRoute(
+                                        navigator = navigator,
+                                        currentRoute = navigator.currentRoute,
+                                        saveableStateHolder = saveableStateHolder,
+                                    )
+                                }
+                            }
+                        } else {
+                            TopLevelRouteState(
+                                navigator = navigator,
+                                activeRoute = currentTopLevelRoute,
+                                currentPage = currentPage,
+                                saveableStateHolder = saveableStateHolder,
+                            )
+                        }
+                    }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun TopLevelRouteState(
+    navigator: navigation.Navigator,
+    activeRoute: TopLevelRoute,
+    currentPage: Int,
+    saveableStateHolder: SaveableStateHolder,
+) {
+    saveableStateHolder.SaveableStateProvider(TOP_LEVEL_STATE_KEY) {
+        ListScaffold(
+            navigator = navigator,
+            activeRoute = activeRoute,
+            currentPage = currentPage,
+            saveableStateHolder = saveableStateHolder,
+        )
+    }
+}
+
+@Composable
+private fun DetailRoute(
+    navigator: navigation.Navigator,
+    currentRoute: Route,
+    saveableStateHolder: SaveableStateHolder,
+    modifier: Modifier = Modifier,
+) {
+    saveableStateHolder.SaveableStateProvider(currentRoute.toString()) {
+        Scaffold(modifier = modifier) { paddingValues ->
+            DetailScreen(
+                navigator = navigator,
+                currentRoute = currentRoute,
+                modifier = Modifier.padding(paddingValues),
+            )
         }
     }
 }

@@ -7,6 +7,9 @@ import data.model.ProductionCompany
 import data.model.ProductionCountry
 import data.model.SpokenLanguage
 import data.model.artist.Artist
+import data.model.video.VideoResults
+import data.model.watch_provider.WatchProviders
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -64,4 +67,8 @@ data class MovieDetail(
     val credits: Artist? = null,
 
     val recommendations: BaseModel<MovieItem>? = null,
+
+    val videos: VideoResults? = null,
+
+    @SerialName("watch/providers") val watchProviders: WatchProviders? = null,
 )

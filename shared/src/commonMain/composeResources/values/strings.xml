@@ -76,4 +76,10 @@
     <string name="gender_female">Female</string>
     <string name="gender_male">Male</string>
     <string name="gender_non_binary">Non-binary</string>
+    <string name="watch_trailer">Watch trailer</string>
+    <string name="share">Share</string>
+    <string name="where_to_watch">Where to watch</string>
+    <string name="streaming">Streaming</string>
+    <string name="rent_or_buy">Rent or buy</string>
+    <string name="link_copied">Link copied to clipboard</string>
 </resources>
