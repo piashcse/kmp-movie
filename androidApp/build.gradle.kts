@@ -11,13 +11,13 @@ plugins {
 
 extensions.configure<ApplicationExtension> {
     namespace = "piashcse.kmp.movie"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    compileSdkMinor = libs.versions.android.compileSdkMinor.get().toInt()
+    compileSdk = libs.versions.android.compile.sdk.get().toInt()
+    compileSdkMinor = libs.versions.android.compile.minor.get().toInt()
 
     defaultConfig {
         applicationId = "piashcse.kmp.movie"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk = libs.versions.android.min.sdk.get().toInt()
+        targetSdk = libs.versions.android.target.sdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
     }

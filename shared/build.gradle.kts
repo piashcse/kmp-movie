@@ -51,9 +51,9 @@ kotlin {
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.backhandler)
-            implementation(libs.compose.materialIconsExtended)
+            implementation(libs.compose.material.icons.extended)
             implementation(libs.compose.components.resources)
-            implementation(libs.compose.components.uiToolingPreview)
+            implementation(libs.compose.components.ui.tooling.preview)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.content.negotiation)
@@ -63,7 +63,7 @@ kotlin {
             implementation(libs.landscapist.animation)
             implementation(libs.androidx.lifecycle)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.compose.material3.windowSizeClass)
+            implementation(libs.compose.material3.window.size)
             implementation(libs.compose.material3.adaptive.navigation)
             implementation(libs.compose.material3.adaptive)
             implementation(libs.compose.material3.adaptive.layout)
@@ -91,11 +91,11 @@ kotlin {
 
 extensions.configure<LibraryExtension> {
     namespace = "piashcse.kmp.movie"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    compileSdkMinor = libs.versions.android.compileSdkMinor.get().toInt()
+    compileSdk = libs.versions.android.compile.sdk.get().toInt()
+    compileSdkMinor = libs.versions.android.compile.minor.get().toInt()
 
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk = libs.versions.android.min.sdk.get().toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
