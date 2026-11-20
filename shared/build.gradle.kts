@@ -50,6 +50,7 @@ kotlin {
             implementation(libs.compose.material)
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
+            implementation(libs.compose.ui.backhandler)
             implementation(libs.compose.materialIconsExtended)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.components.uiToolingPreview)
@@ -74,6 +75,10 @@ kotlin {
             implementation(libs.multiplatform.settings.no.arg)
             implementation(libs.multiplatform.settings.coroutines)
             implementation(libs.kotlinx.datetime)
+        }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
         }
         desktopMain.dependencies {
             implementation(libs.kotlinx.coroutines.swing)

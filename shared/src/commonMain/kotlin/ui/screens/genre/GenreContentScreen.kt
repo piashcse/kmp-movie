@@ -27,11 +27,12 @@ fun GenreContentScreen(
     genreId: Int,
     genreName: String,
     onBackClick: () -> Unit,
+    onNavigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: GenreContentViewModel = koinViewModel()
+    viewModel: GenreContentViewModel = koinViewModel(),
 ) {
     LaunchedEffect(genreId) {
-        viewModel.setGenre(genreId, genreName)
+        viewModel.setGenre(genreId)
     }
 
     Scaffold(
@@ -73,7 +74,7 @@ fun GenreContentScreen(
                 getErrorMessage = { it.errorMessage },
                 getImagePath = { it.posterPath },
                 getItemId = { it.id },
-                onNavigateToDetail = { /* Handle navigation to movie detail */ }
+                onNavigateToDetail = onNavigateToDetail,
             )
         }
     }

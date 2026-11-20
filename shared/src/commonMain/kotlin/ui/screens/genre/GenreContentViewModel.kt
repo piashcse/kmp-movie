@@ -15,11 +15,11 @@ class GenreContentViewModel(
     val uiState: StateFlow<GenreUiState> = _uiState
 
     private var currentGenreId: Int = 0
-    private var currentGenreName: String = ""
 
-    fun setGenre(genreId: Int, genreName: String) {
+    fun setGenre(genreId: Int) {
+        if (currentGenreId == genreId) return
         currentGenreId = genreId
-        currentGenreName = genreName
+        _uiState.value = GenreUiState()
     }
 
     fun loadMoviesByGenre() {
@@ -39,7 +39,7 @@ class GenreContentViewModel(
                         is utils.network.UiState.Success -> {
                             val newPage = _uiState.value.currentPage + 1
                             val updatedMovies = _uiState.value.movieList.toMutableList()
-                            updatedMovies.addAll(state.data ?: emptyList())
+                            updatedMovies.addAll(state.data)
 
                             _uiState.value = _uiState.value.copy(
                                 movieList = updatedMovies,

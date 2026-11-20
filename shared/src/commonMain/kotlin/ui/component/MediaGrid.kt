@@ -21,6 +21,9 @@ import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
 import constant.AppConstant
+import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.view_details
+import org.jetbrains.compose.resources.stringResource
 import theme.cornerRadius
 
 /**
@@ -51,7 +54,7 @@ fun <T> MediaGrid(
         state = gridState,
         modifier = modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp)
     ) {
-        items(items) { item ->
+        items(items, key = { getItemId(it) }) { item ->
             Column(
                 modifier = Modifier.padding(
                     start = 5.dp, end = 5.dp, top = 0.dp, bottom = 10.dp
@@ -63,8 +66,10 @@ fun <T> MediaGrid(
                         .fillMaxWidth()
                         .cornerRadius(10)
                         .shimmerBackground(RoundedCornerShape(10.dp))
-                        .clickable { onClick(getItemId(item)) },
-                    imageModel = { AppConstant.IMAGE_URL + (getImagePath(item) ?: "") },
+                        .clickable(onClickLabel = stringResource(Res.string.view_details)) {
+                            onClick(getItemId(item))
+                        },
+                    imageModel = { AppConstant.imageUrl(getImagePath(item)) },
                     imageOptions = ImageOptions(
                         contentScale = ContentScale.Crop,
                         alignment = Alignment.Center,

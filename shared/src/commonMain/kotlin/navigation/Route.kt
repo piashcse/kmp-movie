@@ -15,10 +15,7 @@ sealed interface Route
 @Serializable
 sealed interface TopLevelRoute : Route {
     val title: String
-    // We can't serialize ImageVector directly easily if we want to persist state fully, 
-    // but for now we can use a property that returns it, or just use an object that maps to it.
-    // Since these are objects, it's fine.
-    val icon: ImageVector?
+    val icon: ImageVector
 }
 
 @Serializable
@@ -92,12 +89,6 @@ data class TvSeriesDetail(val id: Int) : Route
 
 @Serializable
 data object Search : Route
-
-@Serializable
-data object Genres : TopLevelRoute {
-    override val title = "Genres"
-    override val icon = Icons.Filled.Favorite // Using favorite icon temporarily
-}
 
 @Serializable
 data class GenreContent(val genreId: Int, val genreName: String) : Route

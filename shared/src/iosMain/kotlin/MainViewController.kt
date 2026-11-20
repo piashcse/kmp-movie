@@ -1,12 +1,12 @@
 import androidx.compose.ui.window.ComposeUIViewController
 import di.initKoinPlatform
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import platform.UIKit.UIViewController
 import ui.App
 
-@OptIn(ExperimentalCoroutinesApi::class)
-fun MainViewController(): UIViewController = ComposeUIViewController {
-    App()
-}.also {
+fun MainViewController(): UIViewController {
+    // Start Koin before the composition runs so ViewModels can be resolved on first frame.
     initKoinPlatform()
+    return ComposeUIViewController {
+        App()
+    }
 }

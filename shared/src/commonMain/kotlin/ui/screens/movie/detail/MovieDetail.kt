@@ -28,10 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlurEffect
@@ -46,14 +42,15 @@ import data.model.MovieItem
 import data.model.local.FavoriteItem
 import data.model.local.MediaType
 import data.model.movie_detail.MovieDetail
+import data.repository.FavoritesStore
 import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.action_back
 import kmp_movie.composeapp.generated.resources.description
 import kmp_movie.composeapp.generated.resources.duration
 import kmp_movie.composeapp.generated.resources.language
 import kmp_movie.composeapp.generated.resources.rating
 import kmp_movie.composeapp.generated.resources.release_date
 import kmp_movie.composeapp.generated.resources.similar_movie
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -89,7 +86,7 @@ fun MovieDetail(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.surface),
-        loading = uiState.isLoading,
+        loading = uiState.isLoading && uiState.movieDetail == null,
         errorMessage = uiState.errorMessage
     ) {
         uiState.movieDetail?.let { UiDetail(it, onBack) }
@@ -102,7 +99,6 @@ fun MovieDetail(
                 ArtistAndCrewSection(
                     cast = cast.map { CastMember(it.id, it.name, it.profilePath) },
                     onNavigateToArtist = onNavigateToArtist,
-                    imageBaseUrl = AppConstant.IMAGE_URL
                 )
             }
         }
@@ -113,7 +109,7 @@ fun MovieDetail(
 fun UiDetail(data: MovieDetail, onBack: () -> Unit) {
     Box {
         ImageLoad(
-            url = AppConstant.IMAGE_URL + data.backdropPath,
+            url = AppConstant.imageUrl(data.backdropPath, size = "w780"),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(270.dp)
@@ -130,35 +126,24 @@ fun UiDetail(data: MovieDetail, onBack: () -> Unit) {
                 .align(Alignment.TopEnd)
                 .padding(top = 16.dp, end = 16.dp)
         ) {
-            val repository = koinInject<data.repository.Repository>()
-            val scope = rememberCoroutineScope()
-            var isFavorite by remember { mutableStateOf(false) }
-            
-            LaunchedEffect(data.id) {
-                isFavorite = repository.isFavorite(data.id, MediaType.MOVIE)
-            }
-            
+            val favoritesStore = koinInject<FavoritesStore>()
+            val favorites by favoritesStore.favorites.collectAsState()
+            val isFavorite = favorites.any { it.id == data.id && it.mediaType == MediaType.MOVIE }
+
             FavoriteButton(
                 isFavorite = isFavorite,
                 onClick = {
-                    isFavorite = !isFavorite
-                    scope.launch {
-                        if (isFavorite) {
-                            repository.addFavorite(
-                                FavoriteItem(
-                                    id = data.id,
-                                    mediaType = MediaType.MOVIE,
-                                    title = data.title,
-                                    posterPath = data.posterPath,
-                                    releaseDate = data.releaseDate
-                                )
-                            )
-                        } else {
-                            repository.removeFavorite(data.id, MediaType.MOVIE)
-                        }
-                    }
+                    favoritesStore.toggle(
+                        FavoriteItem(
+                            id = data.id,
+                            mediaType = MediaType.MOVIE,
+                            title = data.title,
+                            posterPath = data.posterPath,
+                            releaseDate = data.releaseDate,
+                        )
+                    )
                 },
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(32.dp),
             )
         }
 
@@ -170,14 +155,14 @@ fun UiDetail(data: MovieDetail, onBack: () -> Unit) {
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back",
+                contentDescription = stringResource(Res.string.action_back),
                 tint = MaterialTheme.colorScheme.onSurface
             )
         }
         Column(modifier = Modifier.padding(start = 10.dp, top = 200.dp, end = 10.dp)) {
             Row {
                 ImageLoad(
-                    url = AppConstant.IMAGE_URL + data.posterPath,
+                    url = AppConstant.imageUrl(data.posterPath),
                     modifier = Modifier
                         .size(135.dp, 180.dp)
                         .cornerRadius(10)
@@ -261,14 +246,14 @@ fun RecommendedMovie(recommendedMovie: List<MovieItem>, onNavigateToDetail: (Int
             fontWeight = FontWeight.SemiBold
         )
         LazyRow(modifier = Modifier.fillMaxWidth()) {
-            items(recommendedMovie) { item ->
+            items(recommendedMovie, key = { it.id }) { item ->
                 Column(
                     modifier = Modifier.padding(
                         start = 0.dp, end = 8.dp, top = 5.dp, bottom = 5.dp
                     )
                 ) {
                     ImageLoad(
-                        url = AppConstant.IMAGE_URL + item.posterPath,
+                        url = AppConstant.imageUrl(item.posterPath),
                         modifier = Modifier
                             .size(135.dp, 180.dp)
                             .cornerRadius(10)

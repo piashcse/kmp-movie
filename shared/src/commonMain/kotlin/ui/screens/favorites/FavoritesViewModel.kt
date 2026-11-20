@@ -1,30 +1,13 @@
 package ui.screens.favorites
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import data.model.local.FavoriteItem
-import data.repository.Repository
-import kotlinx.coroutines.flow.MutableStateFlow
+import data.repository.FavoritesStore
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import utils.network.UiState
 
 class FavoritesViewModel(
-    private val repository: Repository
+    store: FavoritesStore,
 ) : ViewModel() {
-    private val _state = MutableStateFlow<UiState<List<FavoriteItem>>>(UiState.Loading)
-    val state: StateFlow<UiState<List<FavoriteItem>>> = _state
-
-    fun loadFavorites(mediaType: data.model.local.MediaType) {
-        viewModelScope.launch {
-            _state.value = UiState.Loading
-            try {
-                val favorites = repository.getFavorites()
-                val filtered = favorites.filter { it.mediaType == mediaType }
-                _state.value = UiState.Success(filtered)
-            } catch (e: Exception) {
-                _state.value = UiState.Error(e)
-            }
-        }
-    }
+    val favorites: StateFlow<List<FavoriteItem>> = store.favorites
+    val isLoaded: StateFlow<Boolean> = store.isLoaded
 }

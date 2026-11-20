@@ -7,8 +7,8 @@
     <string name="celebrities">Celebrities</string>
     <string name="artist_detail">Artist Detail</string>
     <string name="know_for">Known for</string>
-    <string name="biography">Biography</string>
     <string name="gender">Gender</string>
+    <string name="biography">Biography</string>
     <string name="birth_day">Birthday</string>
     <string name="place_of_birth">Place of Birth</string>
     <string name="similar_movie">Similar Movie</string>
@@ -24,4 +24,26 @@
     <string name="artist_movies">Artist's Movies &#38; TV Shows </string>
     <string name="popularity">Popularity: </string>
     <string name="favorites">Favorites</string>
+
+    <string name="action_back">Back</string>
+    <string name="action_clear">Clear search</string>
+    <string name="action_search">Search</string>
+    <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
+    <string name="error_title">Error</string>
+    <string name="action_ok">OK</string>
+    <string name="add_favorite">Add to favorites</string>
+    <string name="remove_favorite">Remove from favorites</string>
+    <string name="view_details">View details</string>
+
+    <string name="search_movies">Search movies...</string>
+    <string name="search_tv_series">Search TV series...</string>
+    <string name="search_celebrities">Search celebrities...</string>
+
+    <string name="empty_movies_title">No favorite movies yet</string>
+    <string name="empty_movies_subtitle">Start adding your favorite movies!</string>
+    <string name="empty_tv_series_title">No favorite TV series yet</string>
+    <string name="empty_tv_series_subtitle">Start adding your favorite TV series!</string>
+    <string name="empty_celebrities_title">No favorite celebrities yet</string>
+    <string name="empty_celebrities_subtitle">Start adding your favorite celebrities!</string>
 </resources>

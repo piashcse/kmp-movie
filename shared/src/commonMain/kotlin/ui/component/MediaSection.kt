@@ -1,6 +1,8 @@
 package ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,6 +24,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
+import constant.AppConstant
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.cast
 import org.jetbrains.compose.resources.stringResource
@@ -30,6 +33,12 @@ import ui.component.text.SubtitleSecondary
 
 @Composable
 fun ImageLoad(url: String, modifier: Modifier = Modifier) {
+    if (url.isBlank()) {
+        Box(
+            modifier = modifier.background(MaterialTheme.colorScheme.surfaceVariant),
+        )
+        return
+    }
     CoilImage(
         imageModel = { url },
         imageOptions = ImageOptions(
@@ -49,8 +58,7 @@ data class CastMember(val id: Int, val name: String, val profilePath: String?)
 fun ArtistAndCrewSection(
     cast: List<CastMember>,
     onNavigateToArtist: (Int) -> Unit,
-    imageBaseUrl: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.padding(bottom = 10.dp)) {
         Text(
@@ -60,7 +68,7 @@ fun ArtistAndCrewSection(
             fontWeight = FontWeight.SemiBold
         )
         LazyRow(modifier = Modifier.fillMaxWidth()) {
-            items(cast) { item ->
+            items(cast, key = { it.id }) { item ->
                 Column(
                     modifier = Modifier
                         .padding(end = 10.dp, bottom = 4.dp)
@@ -68,7 +76,7 @@ fun ArtistAndCrewSection(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CoilImage(
-                        imageModel = { imageBaseUrl + item.profilePath },
+                        imageModel = { AppConstant.imageUrl(item.profilePath, size = "w185") },
                         imageOptions = ImageOptions(
                             contentScale = ContentScale.Crop,
                             alignment = Alignment.Center,
