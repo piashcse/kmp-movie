@@ -24,10 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -42,13 +38,15 @@ import constant.AppConstant
 import data.model.artist.ArtistMovie
 import data.model.local.FavoriteItem
 import data.model.local.MediaType
+import data.repository.FavoritesStore
 import kmp_movie.composeapp.generated.resources.Res
-import kmp_movie.composeapp.generated.resources.artist_detail
+import kmp_movie.composeapp.generated.resources.action_back
 import kmp_movie.composeapp.generated.resources.artist_movies
 import kmp_movie.composeapp.generated.resources.biography
 import kmp_movie.composeapp.generated.resources.birth_day
+import kmp_movie.composeapp.generated.resources.gender
+import kmp_movie.composeapp.generated.resources.know_for
 import kmp_movie.composeapp.generated.resources.place_of_birth
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -67,17 +65,17 @@ fun ArtistDetail(
     viewModel: ArtistDetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val repository = koinInject<data.repository.Repository>()
-    var isFavorite by remember { mutableStateOf(false) }
+    val favoritesStore = koinInject<FavoritesStore>()
+    val favorites by favoritesStore.favorites.collectAsState()
+    val isFavorite = favorites.any { it.id == personId && it.mediaType == MediaType.PERSON }
 
     LaunchedEffect(personId) {
         viewModel.fetchArtistDetail(personId)
-        isFavorite = repository.isFavorite(personId, MediaType.PERSON)
     }
 
     BaseColumn(
         modifier = modifier,
-        loading = uiState.isLoading,
+        loading = uiState.isLoading && uiState.artistDetail == null,
         errorMessage = uiState.errorMessage
     ) {
         Column(
@@ -96,7 +94,7 @@ fun ArtistDetail(
                                 .height(250.dp)
                                 .width(190.dp)
                                 .cornerRadius(10),
-                            imageModel = { AppConstant.IMAGE_URL + artist.profilePath },
+                            imageModel = { AppConstant.imageUrl(artist.profilePath) },
                             imageOptions = ImageOptions(
                                 contentScale = ContentScale.Crop,
                                 alignment = Alignment.Center,
@@ -114,11 +112,11 @@ fun ArtistDetail(
                                 fontWeight = FontWeight.Medium
                             )
                             PersonalInfo(
-                                stringResource(Res.string.artist_detail),
-                                artist.knownForDepartment
+                                stringResource(Res.string.know_for),
+                                artist.knownForDepartment.orEmpty()
                             )
                             PersonalInfo(
-                                stringResource(Res.string.artist_detail),
+                                stringResource(Res.string.gender),
                                 artist.gender.toString()
                             )
                             PersonalInfo(stringResource(Res.string.birth_day), artist.birthday ?: "")
@@ -137,37 +135,27 @@ fun ArtistDetail(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(Res.string.action_back),
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
-                    // Favorite Button
-                    val scope = rememberCoroutineScope()
-
                     FavoriteButton(
                         isFavorite = isFavorite,
                         onClick = {
-                            isFavorite = !isFavorite
-                            scope.launch {
-                                if (isFavorite) {
-                                    repository.addFavorite(
-                                        FavoriteItem(
-                                            id = personId,
-                                            mediaType = MediaType.PERSON,
-                                            title = artist.name,
-                                            posterPath = artist.profilePath,
-                                            releaseDate = artist.birthday
-                                        )
-                                    )
-                                } else {
-                                    repository.removeFavorite(personId, MediaType.PERSON)
-                                }
-                            }
+                            favoritesStore.toggle(
+                                FavoriteItem(
+                                    id = personId,
+                                    mediaType = MediaType.PERSON,
+                                    title = artist.name,
+                                    posterPath = artist.profilePath,
+                                    releaseDate = artist.birthday,
+                                )
+                            )
                         },
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(top = 8.dp, end = 8.dp)
+                            .padding(top = 8.dp, end = 8.dp),
                     )
                 }
                 Text(
@@ -218,7 +206,7 @@ fun ArtistMoviesAndTvShows(artistMovies: List<ArtistMovie>, onMovieClick: (Artis
             )
         }
         LazyRow(modifier = Modifier.fillMaxHeight()) {
-            items(artistMovies, itemContent = { item ->
+            items(artistMovies, key = { it.id }, itemContent = { item ->
                 Column(
                     modifier = Modifier.padding(
                         start = 0.dp, end = 8.dp, top = 5.dp, bottom = 5.dp
@@ -232,7 +220,7 @@ fun ArtistMoviesAndTvShows(artistMovies: List<ArtistMovie>, onMovieClick: (Artis
                             .clickable {
                                 onMovieClick(item)
                             },
-                        imageModel = { AppConstant.IMAGE_URL.plus(item.posterPath) },
+                        imageModel = { AppConstant.imageUrl(item.posterPath) },
                         imageOptions = ImageOptions(
                             contentScale = ContentScale.Crop,
                             alignment = Alignment.Center,

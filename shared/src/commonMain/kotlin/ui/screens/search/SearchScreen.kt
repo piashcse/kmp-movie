@@ -9,13 +9,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.SearchBar
+import ui.component.SearchFilter
 import ui.component.SearchResults
 import ui.screens.AppViewModel
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun SearchScreen(
     onBack: () -> Unit,
@@ -23,9 +22,9 @@ fun SearchScreen(
     onNavigateToTvSeries: (Int) -> Unit,
     onNavigateToArtist: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: AppViewModel = koinViewModel()
+    viewModel: AppViewModel = koinViewModel(),
 ) {
-    var searchFilter by remember { mutableStateOf("Movies") }
+    var searchFilter by remember { mutableStateOf(SearchFilter.MOVIES) }
     val isLoading by viewModel.isLoading.collectAsState()
     val movieSearchData by viewModel.movieSearchData.collectAsState()
     val tvSeriesSearchData by viewModel.tvSeriesSearchData.collectAsState()
@@ -36,7 +35,7 @@ fun SearchScreen(
             viewModel = viewModel,
             searchFilter = searchFilter,
             isLoading = isLoading,
-            pressOnBack = onBack
+            onBack = onBack,
         )
         SearchResults(
             movieSearchData = movieSearchData,
@@ -44,10 +43,9 @@ fun SearchScreen(
             celebritySearchData = celebritySearchData,
             currentFilter = searchFilter,
             onFilterChange = { searchFilter = it },
-            onResultClick = {},
             onNavigateToMovie = onNavigateToMovie,
             onNavigateToTvSeries = onNavigateToTvSeries,
-            onNavigateToCelebrity = onNavigateToArtist
+            onNavigateToCelebrity = onNavigateToArtist,
         )
     }
 }

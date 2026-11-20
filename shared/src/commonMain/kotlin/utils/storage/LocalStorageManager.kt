@@ -17,7 +17,7 @@ class LocalStorageManager(
 
     companion object {
         private const val FAVORITES_KEY = "favorites_list"
-
+        private const val THEME_MODE_KEY = "theme_mode"
     }
 
     suspend fun saveFavorites(favorites: List<FavoriteItem>) = withContext(dispatcher) {
@@ -54,5 +54,11 @@ class LocalStorageManager(
         getFavorites().any { it.id == id && it.mediaType == mediaType }
     }
 
+    suspend fun getThemeMode(): String? = withContext(dispatcher) {
+        settings.getStringOrNull(THEME_MODE_KEY)
+    }
 
+    suspend fun saveThemeMode(mode: String) = withContext(dispatcher) {
+        settings.putString(THEME_MODE_KEY, mode)
+    }
 }

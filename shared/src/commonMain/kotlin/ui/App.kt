@@ -24,20 +24,21 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationEventHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import data.model.local.MediaType
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.celebrities
 import kmp_movie.composeapp.generated.resources.favorites
 import kmp_movie.composeapp.generated.resources.movies
 import kmp_movie.composeapp.generated.resources.tv_series
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import navigation.AiringTodayTvSeries
 import navigation.ArtistDetail
@@ -45,7 +46,6 @@ import navigation.FavoriteCelebrity
 import navigation.FavoriteMovie
 import navigation.FavoriteTvSeries
 import navigation.GenreContent
-import navigation.Genres
 import navigation.MovieDetail
 import navigation.NowPlayingMovie
 import navigation.OnTheAirTvSeries
@@ -93,28 +93,33 @@ private const val PAGE_FAVORITES = 3
 private const val PAGE_COUNT = 4
 
 private val pageTabs = listOf(
-    PageTab("Movies", Res.string.movies, Icons.Filled.Movie),
-    PageTab("TV Series", Res.string.tv_series, Icons.Filled.Timeline),
-    PageTab("Celebrities", Res.string.celebrities, Icons.Filled.Star),
-    PageTab("Favorites", Res.string.favorites, Icons.Filled.Favorite),
+    PageTab(Res.string.movies, Icons.Filled.Movie),
+    PageTab(Res.string.tv_series, Icons.Filled.Timeline),
+    PageTab(Res.string.celebrities, Icons.Filled.Star),
+    PageTab(Res.string.favorites, Icons.Filled.Favorite),
 )
 
 private data class PageTab(
-    val title: String,
     val titleRes: org.jetbrains.compose.resources.StringResource,
     val icon: ImageVector,
 )
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun App(
     appViewModel: AppViewModel = koinViewModel(),
-    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfoV2(),
 ) {
     ProvideThemeState(appViewModel = appViewModel) {
         KmpMovieTheme(darkTheme = shouldUseDarkTheme()) {
             val navigator = rememberNavigator(NowPlayingMovie)
             val isDetailScreen = navigator.isDetailScreen
+
+            val backState = rememberNavigationEventState(NavigationEventInfo.None)
+            NavigationEventHandler(
+                state = backState,
+                isBackEnabled = navigator.canGoBack,
+                onBackCompleted = { navigator.popBackStack() },
+            )
 
             if (isDetailScreen) {
                 Crossfade(
@@ -136,6 +141,7 @@ fun App(
                 val currentItems = getItemsForPage(currentPage)
 
                 KMPNavigationSuiteScaffold(
+                    windowAdaptiveInfo = windowAdaptiveInfo,
                     navigationSuiteItems = {
                         currentItems.forEach { item ->
                             item(
@@ -143,7 +149,7 @@ fun App(
                                 onClick = { navigator.navigateToTopLevel(item) },
                                 icon = {
                                     Icon(
-                                        imageVector = item.icon!!,
+                                        imageVector = item.icon,
                                         contentDescription = item.title,
                                     )
                                 },
@@ -211,6 +217,7 @@ private fun DetailScreen(
             genreId = currentRoute.genreId,
             genreName = currentRoute.genreName,
             onBackClick = { navigator.popBackStack() },
+            onNavigateToDetail = { id -> navigator.navigate(MovieDetail(id)) },
             modifier = modifier,
         )
         else -> {}
@@ -306,8 +313,11 @@ private fun TabScreen(
                         text = {
                             Text(
                                 stringResource(tab.titleRes),
-                                color = if (pagerState.currentPage == index)
-                                    MaterialTheme.colorScheme.primary else Color.Gray,
+                                color = if (pagerState.currentPage == index) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                },
                             )
                         },
                     )
@@ -361,9 +371,6 @@ private fun TabScreen(
                         mediaType = MediaType.PERSON,
                         onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) },
                     )
-                    else -> NowPlayingScreen(
-                        onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
-                    )
                 }
             }
         }
@@ -375,7 +382,6 @@ private fun getPageForRoute(route: TopLevelRoute): Int = when (route) {
     is AiringTodayTvSeries, is OnTheAirTvSeries, is PopularTvSeries, is TopRatedTvSeries -> PAGE_TV_SERIES
     is PopularCelebrity, is TrendingCelebrity -> PAGE_CELEBRITIES
     is FavoriteMovie, is FavoriteTvSeries, is FavoriteCelebrity -> PAGE_FAVORITES
-    is Genres -> PAGE_MOVIES
 }
 
 private fun getDefaultRouteForPage(page: Int): TopLevelRoute = when (page) {

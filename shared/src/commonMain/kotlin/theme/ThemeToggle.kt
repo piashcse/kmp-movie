@@ -30,108 +30,99 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ThemeModeToggle(
     modifier: Modifier = Modifier,
-    showText: Boolean = false
+    showText: Boolean = false,
 ) {
-    val themeState = LocalThemeState.current
+    val themeMode = LocalThemeMode.current
+    val setThemeMode = LocalSetThemeMode.current
     var expanded by remember { mutableStateOf(false) }
-    
+
     IconButton(
         onClick = { expanded = true },
-        modifier = modifier
+        modifier = modifier,
     ) {
         Icon(
-            imageVector = when (themeState.themeMode) {
+            imageVector = when (themeMode) {
                 ThemeMode.LIGHT -> Icons.Default.LightMode
                 ThemeMode.DARK -> Icons.Default.Brightness4
                 ThemeMode.SYSTEM -> Icons.Default.BrightnessAuto
             },
             contentDescription = "Theme Mode Toggle",
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.primary,
         )
     }
-    
+
     DropdownMenu(
         expanded = expanded,
-        onDismissRequest = { expanded = false }
+        onDismissRequest = { expanded = false },
     ) {
         DropdownMenuItem(
             text = { Text("Light Mode") },
             onClick = {
-                themeState.setThemeMode(ThemeMode.LIGHT)
+                setThemeMode(ThemeMode.LIGHT)
                 expanded = false
             },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.LightMode,
-                    contentDescription = null
-                )
-            }
+            leadingIcon = { Icon(Icons.Default.LightMode, contentDescription = null) },
         )
         DropdownMenuItem(
             text = { Text("Dark Mode") },
             onClick = {
-                themeState.setThemeMode(ThemeMode.DARK)
+                setThemeMode(ThemeMode.DARK)
                 expanded = false
             },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Brightness4,
-                    contentDescription = null
-                )
-            }
+            leadingIcon = { Icon(Icons.Default.Brightness4, contentDescription = null) },
         )
         DropdownMenuItem(
             text = { Text("System Default") },
             onClick = {
-                themeState.setThemeMode(ThemeMode.SYSTEM)
+                setThemeMode(ThemeMode.SYSTEM)
                 expanded = false
             },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.BrightnessAuto,
-                    contentDescription = null
-                )
-            }
+            leadingIcon = { Icon(Icons.Default.BrightnessAuto, contentDescription = null) },
         )
     }
-    
+
     if (showText) {
         Text(
-            text = when (themeState.themeMode) {
+            text = when (themeMode) {
                 ThemeMode.LIGHT -> "Light"
                 ThemeMode.DARK -> "Dark"
                 ThemeMode.SYSTEM -> "System"
             },
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
 
 @Composable
 fun ThemeModePreview() {
-    val themeState = LocalThemeState.current
-    
+    val themeMode = LocalThemeMode.current
+    val setThemeMode = LocalSetThemeMode.current
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = "Current Theme: ${themeState.themeMode.name}",
-            style = MaterialTheme.typography.headlineSmall
+            text = "Current Theme: ${themeMode.name}",
+            style = MaterialTheme.typography.headlineSmall,
         )
-        
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Theme Mode: ")
             Spacer(modifier = Modifier.width(8.dp))
             ThemeModeToggle(showText = true)
         }
-        
-        Button(onClick = { themeState.toggleTheme() }) {
+
+        Button(
+            onClick = {
+                setThemeMode(
+                    if (themeMode == ThemeMode.DARK) ThemeMode.LIGHT else ThemeMode.DARK
+                )
+            }
+        ) {
             Text("Toggle Theme")
         }
     }

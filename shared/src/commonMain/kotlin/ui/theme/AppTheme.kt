@@ -1,18 +1,22 @@
 package ui.theme
 
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import theme.ThemeColors
 
 /**
- * AppTheme object to provide easy access to theme properties
+ * Convenience accessors for the Material 3 theme. Kept as a single object so screens read
+ * `AppTheme.colors` consistently instead of mixing Material 2 and Material 3 APIs.
  */
 object AppTheme {
-    val colors: androidx.compose.material3.ColorScheme
-        @Composable get() = ThemeColors.current
+    val colors: ColorScheme
+        @Composable get() = MaterialTheme.colorScheme
 
-    val typography: androidx.compose.material3.Typography
-        @Composable get() = ThemeColors.typography
+    val typography: Typography
+        @Composable get() = MaterialTheme.typography
 
-    val shapes: androidx.compose.material3.Shapes
-        @Composable get() = ThemeColors.shapes
+    val shapes: Shapes
+        @Composable get() = MaterialTheme.shapes
 }

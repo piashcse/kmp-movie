@@ -2,8 +2,8 @@ package di
 
 import com.russhwolf.settings.Settings
 import data.remote.ApiService
+import data.repository.FavoritesStore
 import data.repository.Repository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -25,13 +25,13 @@ import ui.screens.tv_series.popular.PopularTvSeriesViewModel
 import ui.screens.tv_series.top_rated.TopRatedTvSeriesViewModel
 import utils.storage.LocalStorageManager
 
-@OptIn(ExperimentalCoroutinesApi::class)
 val appModule: Module = module {
     // Core dependencies
     single<Settings> { Settings() }
     single { LocalStorageManager(get()) }
     single { ApiService() }
     single { Repository(api = get(), localStorageManager = get()) }
+    single { FavoritesStore(get()) }
 
     // App-level ViewModels
     viewModel { AppViewModel(get()) }

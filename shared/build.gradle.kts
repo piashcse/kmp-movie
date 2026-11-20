@@ -1,11 +1,10 @@
-import com.android.build.api.dsl.LibraryExtension
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.serialization)
     alias(libs.plugins.compose.compiler)
@@ -18,9 +17,26 @@ kotlin {
         browser()
     }
 
-    androidTarget {
+    android {
+        // Must differ from :androidApp's namespace; AGP 9 enforces unique package names.
+        namespace = "piashcse.kmp.movie.shared"
+        compileSdk {
+            version = release(libs.versions.android.compile.sdk.get().toInt()) {
+                minorApiLevel = libs.versions.android.compile.minor.get().toInt()
+            }
+        }
+        minSdk = libs.versions.android.min.sdk.get().toInt()
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
+        }
+        // Compose Multiplatform resources are packaged as Android assets. The Android-KMP
+        // plugin disables Android resource/asset processing by default, so opt in.
+        androidResources {
+            enable = true
+        }
+        // Compose Preview needs the compiled Android resources on a host-test component.
+        withHostTest {
+            isIncludeAndroidResources = true
         }
     }
 
@@ -37,8 +53,6 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
-
         androidMain.dependencies {
             // Android platform-specific library dependencies (if any)
         }
@@ -48,9 +62,10 @@ kotlin {
             implementation(libs.compose.material)
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
-            implementation(libs.compose.materialIconsExtended)
+            implementation(libs.compose.ui.backhandler)
+            implementation(libs.compose.material.icons.extended)
             implementation(libs.compose.components.resources)
-            implementation(libs.compose.components.uiToolingPreview)
+            implementation(libs.compose.components.ui.tooling.preview)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.content.negotiation)
@@ -60,7 +75,7 @@ kotlin {
             implementation(libs.landscapist.animation)
             implementation(libs.androidx.lifecycle)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.compose.material3.windowSizeClass)
+            implementation(libs.compose.material3.window.size)
             implementation(libs.compose.material3.adaptive.navigation)
             implementation(libs.compose.material3.adaptive)
             implementation(libs.compose.material3.adaptive.layout)
@@ -73,32 +88,15 @@ kotlin {
             implementation(libs.multiplatform.settings.coroutines)
             implementation(libs.kotlinx.datetime)
         }
-        desktopMain.dependencies {
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
+        }
+        getByName("desktopMain").dependencies {
             implementation(libs.kotlinx.coroutines.swing)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-        }
-    }
-}
-
-extensions.configure<LibraryExtension> {
-    namespace = "piashcse.kmp.movie"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    compileSdkMinor = libs.versions.android.compileSdkMinor.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    testOptions {
-        unitTests {
-            // Compose Preview resolution (and Robolectric-based UI tests) need the
-            // compiled Android resources on the unit-test classpath.
-            isIncludeAndroidResources = true
         }
     }
 }

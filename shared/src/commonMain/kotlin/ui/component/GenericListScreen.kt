@@ -45,17 +45,20 @@ fun <T, S> GenericListScreen(
 ) {
     val state by uiState.collectAsState()
     val gridState = rememberLazyGridState()
+    val items = getItems(state)
 
     LaunchedEffect(Unit) {
         loadItems()
     }
 
+    // Only show the full-screen spinner before the first page arrives; appending more
+    // pages must not replace the grid the user is scrolling.
     BaseColumn(
-        loading = getIsLoading(state),
+        loading = getIsLoading(state) && items.isNullOrEmpty(),
         errorMessage = getErrorMessage(state),
         modifier = modifier
     ) {
-        getItems(state)?.let { items ->
+        items?.let { items ->
             MediaGrid(
                 items = items,
                 gridState = gridState,

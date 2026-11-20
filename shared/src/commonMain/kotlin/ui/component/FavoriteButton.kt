@@ -8,11 +8,15 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.add_favorite
+import kmp_movie.composeapp.generated.resources.remove_favorite
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun FavoriteButton(
@@ -21,9 +25,10 @@ fun FavoriteButton(
     modifier: Modifier = Modifier
 ) {
     val tint by animateColorAsState(
-        targetValue = if (isFavorite) Color.Red else Color.White,
+        targetValue = if (isFavorite) MaterialTheme.colorScheme.error
+        else MaterialTheme.colorScheme.onSurfaceVariant,
         animationSpec = tween(durationMillis = 300),
-        label = "favorite_tint_animation"
+        label = "favorite_tint_animation",
     )
 
     IconButton(
@@ -32,7 +37,9 @@ fun FavoriteButton(
     ) {
         Icon(
             imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder,
-            contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+            contentDescription = stringResource(
+                if (isFavorite) Res.string.remove_favorite else Res.string.add_favorite
+            ),
             tint = tint
         )
     }

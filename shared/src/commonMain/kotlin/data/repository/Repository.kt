@@ -1,8 +1,6 @@
 package data.repository
 
 import data.model.Genre
-import data.model.local.FavoriteItem
-import data.model.local.MediaType
 import data.remote.ApiService
 import utils.flowDirect
 import utils.flowWithResults
@@ -40,13 +38,9 @@ class Repository(
     fun artistDetail(personId: Int) = flowDirect { api.artistDetail(personId) }
     fun artistMoviesAndTvShows(personId: Int) = flowDirect { api.artistMoviesAndTvSeries(personId) }
 
-    // Favorites endpoints
-    suspend fun getFavorites() = localStorageManager.getFavorites()
-    suspend fun addFavorite(favoriteItem: FavoriteItem) = localStorageManager.addFavorite(favoriteItem)
-    suspend fun removeFavorite(id: Int, mediaType: MediaType) = localStorageManager.removeFavorite(id, mediaType)
-    suspend fun isFavorite(id: Int, mediaType: MediaType) = localStorageManager.isFavorite(id, mediaType)
-
-
+    // Local preferences
+    suspend fun getThemeMode(): String? = localStorageManager.getThemeMode()
+    suspend fun setThemeMode(mode: String) = localStorageManager.saveThemeMode(mode)
 
     // Genre endpoints
     fun getMovieGenres() = flowDirect<List<Genre>> { api.movieGenres() }

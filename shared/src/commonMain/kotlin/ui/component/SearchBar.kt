@@ -1,21 +1,21 @@
 package ui.component
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.primarySurface
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,95 +27,118 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import theme.Blue
+import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.action_back
+import kmp_movie.composeapp.generated.resources.action_clear
+import kmp_movie.composeapp.generated.resources.action_search
+import kmp_movie.composeapp.generated.resources.search_celebrities
+import kmp_movie.composeapp.generated.resources.search_movies
+import kmp_movie.composeapp.generated.resources.search_tv_series
+import org.jetbrains.compose.resources.stringResource
 import ui.screens.AppViewModel
 
-@OptIn(FlowPreview::class, ExperimentalFoundationApi::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun SearchBar(
     viewModel: AppViewModel,
-    searchFilter: String,
+    searchFilter: SearchFilter,
     isLoading: Boolean,
-    pressOnBack: () -> Unit
+    onBack: () -> Unit,
 ) {
     var text by remember { mutableStateOf("") }
-    val focusRequester = FocusRequester()
+    val focusRequester = remember { FocusRequester() }
+    val placeholder = stringResource(
+        when (searchFilter) {
+            SearchFilter.MOVIES -> Res.string.search_movies
+            SearchFilter.TV_SERIES -> Res.string.search_tv_series
+            SearchFilter.CELEBRITIES -> Res.string.search_celebrities
+        }
+    )
+    val contentColor = MaterialTheme.colorScheme.onPrimary
+
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
-    Row(Modifier.background(color = Blue)) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primary),
+    ) {
+        IconButton(onClick = onBack) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(Res.string.action_back),
+                tint = contentColor,
+            )
+        }
         TextField(
-            modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
+            modifier = Modifier
+                .weight(1f)
+                .focusRequester(focusRequester),
             value = text,
             placeholder = {
-                androidx.compose.material.Text(
-                    text = when (searchFilter) {
-                        "Movies" -> "Search movies..."
-                        "TV Series" -> "Search TV series..."
-                        "Celebrities" -> "Search celebrities..."
-                        else -> "Search movies, TV series, celebrities..."
-                    },
-                    color = Color.White.copy(alpha = 0.7f)
+                Text(
+                    text = placeholder,
+                    color = contentColor.copy(alpha = 0.7f),
                 )
             },
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.primarySurface,
-                cursorColor = Color.White,
-                disabledLabelColor = Blue,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+                cursorColor = contentColor,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.White
+                focusedTextColor = contentColor,
+                unfocusedTextColor = contentColor,
             ),
             onValueChange = { newValue ->
                 text = newValue
-                // Perform search based on the active filter
                 when (searchFilter) {
-                    "Movies" -> viewModel.movieSearch(newValue)
-                    "TV Series" -> viewModel.tvSeriesSearch(newValue)
-                    "Celebrities" -> viewModel.celebritySearch(newValue)
-                    else -> {
-                        // Default to movies for "All" filter
-                        viewModel.movieSearch(newValue)
-                    }
+                    SearchFilter.MOVIES -> viewModel.movieSearch(newValue)
+                    SearchFilter.TV_SERIES -> viewModel.tvSeriesSearch(newValue)
+                    SearchFilter.CELEBRITIES -> viewModel.celebritySearch(newValue)
                 }
             },
             singleLine = true,
             leadingIcon = {
                 Icon(
-                    Icons.Filled.Search,
-                    contentDescription = "search",
-                    tint = Color.White.copy(alpha = 0.7f),
-                    modifier = Modifier.padding(start = 8.dp)
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = stringResource(Res.string.action_search),
+                    tint = contentColor.copy(alpha = 0.7f),
+                    modifier = Modifier.padding(start = 8.dp),
                 )
             },
             trailingIcon = {
                 if (text.trim().isNotEmpty()) {
                     if (isLoading) {
-                        // Show loading indicator when search is in progress
                         CircularProgressIndicator(
                             modifier = Modifier
                                 .padding(end = 8.dp)
                                 .size(24.dp),
-                            color = Color.White,
-                            strokeWidth = 2.dp
+                            color = contentColor,
+                            strokeWidth = 2.dp,
                         )
                     } else {
-                        // Show clear icon when not loading
-                        Icon(
-                            Icons.Filled.Clear,
-                            contentDescription = "clear text",
-                            tint = Color.White,
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .clickable {
-                                    text = ""
+                        IconButton(
+                            onClick = {
+                                text = ""
+                                when (searchFilter) {
+                                    SearchFilter.MOVIES -> viewModel.movieSearch("")
+                                    SearchFilter.TV_SERIES -> viewModel.tvSeriesSearch("")
+                                    SearchFilter.CELEBRITIES -> viewModel.celebritySearch("")
                                 }
-                        )
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = stringResource(Res.string.action_clear),
+                                tint = contentColor,
+                            )
+                        }
                     }
                 }
-            }
+            },
         )
     }
 }

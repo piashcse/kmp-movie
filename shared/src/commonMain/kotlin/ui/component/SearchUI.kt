@@ -21,14 +21,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -44,41 +39,56 @@ import data.model.MovieItem
 import data.model.TvSeriesItem
 import data.model.celebrities.Celebrity
 import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.celebrities
+import kmp_movie.composeapp.generated.resources.movies
 import kmp_movie.composeapp.generated.resources.rating_
+import kmp_movie.composeapp.generated.resources.tv_series
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
-import theme.DefaultBackgroundColor
-import theme.FontColor
-import theme.SecondaryFontColor
-import theme.cornerRadius
 import utils.roundTo
+
+/**
+ * The three searchable content types. Using an enum instead of raw strings keeps the
+ * filter, the ViewModel call and the UI copy in sync.
+ */
+enum class SearchFilter(val labelRes: StringResource) {
+    MOVIES(Res.string.movies),
+    TV_SERIES(Res.string.tv_series),
+    CELEBRITIES(Res.string.celebrities),
+}
 
 @Composable
 fun FilterButton(
     text: String,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFFE0E0E0),
-            contentColor = if (isSelected) Color.White else FontColor
+            containerColor = if (isSelected) MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary
+            else MaterialTheme.colorScheme.onSurfaceVariant,
         ),
         modifier = Modifier
             .padding(horizontal = 4.dp, vertical = 8.dp)
             .width(110.dp)
             .height(40.dp),
-        shape = RoundedCornerShape(20.dp) // More rounded corners
+        shape = RoundedCornerShape(20.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             if (isSelected) {
                 Icon(
                     imageVector = Icons.Default.Check,
-                    contentDescription = "Selected",
-                    modifier = Modifier.padding(end = 4.dp).width(16.dp).height(16.dp)
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(end = 4.dp)
+                        .width(16.dp)
+                        .height(16.dp),
                 )
             }
             Text(
@@ -86,7 +96,7 @@ fun FilterButton(
                 fontSize = 13.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }
@@ -97,300 +107,163 @@ fun SearchResults(
     movieSearchData: List<MovieItem>,
     tvSeriesSearchData: List<TvSeriesItem>,
     celebritySearchData: List<Celebrity>,
-    currentFilter: String = "Movies",
-    onFilterChange: (String) -> Unit = {},
-    onResultClick: () -> Unit,
+    currentFilter: SearchFilter = SearchFilter.MOVIES,
+    onFilterChange: (SearchFilter) -> Unit = {},
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToTvSeries: (Int) -> Unit,
-    onNavigateToCelebrity: (Int) -> Unit
+    onNavigateToCelebrity: (Int) -> Unit,
 ) {
-    var selectedFilter by remember { mutableStateOf(currentFilter) }
-    
-    // Update the selected filter when currentFilter changes
-    if (selectedFilter != currentFilter) {
-        selectedFilter = currentFilter
-    }
-    
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(0.dp, 600.dp)
             .clip(RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp))
-            .background(color = DefaultBackgroundColor)
+            .background(color = MaterialTheme.colorScheme.surface),
     ) {
-        // Filter buttons
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp, vertical = 4.dp),
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.Start,
         ) {
-            FilterButton(
-                text = "Movies",
-                isSelected = selectedFilter == "Movies",
-                onClick = { 
-                    selectedFilter = "Movies"
-                    onFilterChange("Movies")
-                }
-            )
-            FilterButton(
-                text = "TV Series",
-                isSelected = selectedFilter == "TV Series",
-                onClick = { 
-                    selectedFilter = "TV Series"
-                    onFilterChange("TV Series")
-                }
-            )
-            FilterButton(
-                text = "Celebrities",
-                isSelected = selectedFilter == "Celebrities",
-                onClick = { 
-                    selectedFilter = "Celebrities"
-                    onFilterChange("Celebrities")
-                }
-            )
+            SearchFilter.entries.forEach { filter ->
+                FilterButton(
+                    text = stringResource(filter.labelRes),
+                    isSelected = currentFilter == filter,
+                    onClick = { onFilterChange(filter) },
+                )
+            }
         }
-        
-        // Search results based on filter
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            when (selectedFilter) {
-                "Movies" -> {
-                    items(items = movieSearchData.take(10), itemContent = { item ->
-                        SearchMovieItem(
-                            item = item,
-                            onResultClick = onResultClick,
-                            onNavigateToMovie = onNavigateToMovie
-                        )
-                    })
+
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            when (currentFilter) {
+                SearchFilter.MOVIES -> items(
+                    items = movieSearchData.take(MAX_SEARCH_RESULTS),
+                    key = { it.id },
+                ) { item ->
+                    SearchMovieItem(item = item, onNavigateToMovie = onNavigateToMovie)
                 }
-                "TV Series" -> {
-                    items(items = tvSeriesSearchData.take(10), itemContent = { item ->
-                        SearchTvSeriesItem(
-                            item = item,
-                            onResultClick = onResultClick,
-                            onNavigateToTvSeries = onNavigateToTvSeries
-                        )
-                    })
+
+                SearchFilter.TV_SERIES -> items(
+                    items = tvSeriesSearchData.take(MAX_SEARCH_RESULTS),
+                    key = { it.id },
+                ) { item ->
+                    SearchTvSeriesItem(item = item, onNavigateToTvSeries = onNavigateToTvSeries)
                 }
-                "Celebrities" -> {
-                    items(items = celebritySearchData.take(10), itemContent = { item ->
-                        SearchCelebrityItem(
-                            item = item,
-                            onResultClick = onResultClick,
-                            onNavigateToCelebrity = onNavigateToCelebrity
-                        )
-                    })
-                }
-                else -> {
-                    // Default to movies
-                    items(items = movieSearchData.take(10), itemContent = { item ->
-                        SearchMovieItem(
-                            item = item,
-                            onResultClick = onResultClick,
-                            onNavigateToMovie = onNavigateToMovie
-                        )
-                    })
+
+                SearchFilter.CELEBRITIES -> items(
+                    items = celebritySearchData.take(MAX_SEARCH_RESULTS),
+                    key = { it.id },
+                ) { item ->
+                    SearchCelebrityItem(item = item, onNavigateToCelebrity = onNavigateToCelebrity)
                 }
             }
         }
     }
 }
 
+private const val MAX_SEARCH_RESULTS = 10
+
 @Composable
 fun SearchMovieItem(
     item: MovieItem,
-    onResultClick: () -> Unit,
-    onNavigateToMovie: (Int) -> Unit
+    onNavigateToMovie: (Int) -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
-            .clickable {
-                onResultClick.invoke()
-                onNavigateToMovie(item.id)
-            }
-    ) {
-        CoilImage(
-            imageModel = {
-                AppConstant.IMAGE_URL.plus(
-                    item.backdropPath ?: item.posterPath ?: ""
-                )
-            },
-            imageOptions = ImageOptions(
-                contentScale = ContentScale.Crop,
-                alignment = Alignment.Center,
-                contentDescription = "Movie item",
-                colorFilter = null,
-            ),
-            component = rememberImageComponent {
-                +CircularRevealPlugin(
-                    duration = 800
-                )
-            },
-            modifier = Modifier
-                .height(120.dp)
-                .width(100.dp)
-                .cornerRadius(8)
-                .shimmerBackground(RoundedCornerShape(5.dp)),
-        )
-        Column(
-            modifier = Modifier.padding(start = 12.dp)
-        ) {
-            Text(
-                text = item.title,
-                modifier = Modifier.padding(top = 4.dp),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp,
-                color = FontColor
-            )
-            Text(
-                text = item.releaseDate,
-                color = SecondaryFontColor,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-            Text(
-                text = "${stringResource(Res.string.rating_)} ${
-                    item.voteAverage.roundTo(
-                        1
-                    )
-                }",
-                color = SecondaryFontColor,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
-    }
+    SearchResultRow(
+        imagePath = item.backdropPath ?: item.posterPath,
+        title = item.title,
+        subtitle = item.releaseDate,
+        meta = ratingText(item.voteAverage),
+        contentDescription = item.title,
+        onClick = { onNavigateToMovie(item.id) },
+    )
 }
 
 @Composable
 fun SearchTvSeriesItem(
     item: TvSeriesItem,
-    onResultClick: () -> Unit,
-    onNavigateToTvSeries: (Int) -> Unit
+    onNavigateToTvSeries: (Int) -> Unit,
+) {
+    SearchResultRow(
+        imagePath = item.backdropPath ?: item.posterPath,
+        title = item.name,
+        subtitle = item.firstAirDate,
+        meta = ratingText(item.voteAverage),
+        contentDescription = item.name,
+        onClick = { onNavigateToTvSeries(item.id) },
+    )
+}
+
+@Composable
+fun SearchCelebrityItem(
+    item: Celebrity,
+    onNavigateToCelebrity: (Int) -> Unit,
+) {
+    SearchResultRow(
+        imagePath = item.profilePath,
+        title = item.name,
+        subtitle = item.knownForDepartment.orEmpty(),
+        meta = item.popularity.roundTo(1).toString(),
+        contentDescription = item.name,
+        onClick = { onNavigateToCelebrity(item.id) },
+    )
+}
+
+@Composable
+private fun SearchResultRow(
+    imagePath: String?,
+    title: String,
+    subtitle: String,
+    meta: String,
+    contentDescription: String,
+    onClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
-            .clickable {
-                onResultClick.invoke()
-                onNavigateToTvSeries(item.id)
-            }
+            .clickable(onClick = onClick),
     ) {
         CoilImage(
-            imageModel = {
-                AppConstant.IMAGE_URL.plus(
-                    item.backdropPath ?: item.posterPath ?: ""
-                )
-            },
+            imageModel = { AppConstant.imageUrl(imagePath, size = "w185") },
             imageOptions = ImageOptions(
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.Center,
-                contentDescription = "TV Series item",
+                contentDescription = contentDescription,
                 colorFilter = null,
             ),
             component = rememberImageComponent {
-                +CircularRevealPlugin(
-                    duration = 800
-                )
+                +CircularRevealPlugin(duration = 800)
             },
             modifier = Modifier
                 .height(120.dp)
                 .width(100.dp)
-                .cornerRadius(8)
-                .shimmerBackground(RoundedCornerShape(5.dp)),
+                .clip(RoundedCornerShape(8.dp))
+                .shimmerBackground(RoundedCornerShape(8.dp)),
         )
-        Column(
-            modifier = Modifier.padding(start = 12.dp)
-        ) {
+        Column(modifier = Modifier.padding(start = 12.dp)) {
             Text(
-                text = item.name,
+                text = title,
                 modifier = Modifier.padding(top = 4.dp),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
-                color = FontColor
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
-                text = item.firstAirDate,
-                color = SecondaryFontColor,
+                text = subtitle,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 14.sp,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = 4.dp),
             )
             Text(
-                text = "${stringResource(Res.string.rating_)} ${
-                    item.voteAverage.roundTo(
-                        1
-                    )
-                }",
-                color = SecondaryFontColor,
+                text = meta,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 12.sp,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = 4.dp),
             )
         }
     }
 }
 
 @Composable
-fun SearchCelebrityItem(
-    item: Celebrity,
-    onResultClick: () -> Unit,
-    onNavigateToCelebrity: (Int) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
-            .clickable {
-                onResultClick.invoke()
-                onNavigateToCelebrity(item.id)
-            }
-    ) {
-        CoilImage(
-            imageModel = {
-                AppConstant.IMAGE_URL.plus(
-                    item.profilePath ?: ""
-                )
-            },
-            imageOptions = ImageOptions(
-                contentScale = ContentScale.Crop,
-                alignment = Alignment.Center,
-                contentDescription = "Celebrity item",
-                colorFilter = null,
-            ),
-            component = rememberImageComponent {
-                +CircularRevealPlugin(
-                    duration = 800
-                )
-            },
-            modifier = Modifier
-                .height(120.dp)
-                .width(100.dp)
-                .cornerRadius(8)
-                .shimmerBackground(RoundedCornerShape(5.dp)),
-        )
-        Column(
-            modifier = Modifier.padding(start = 12.dp)
-        ) {
-            Text(
-                text = item.name,
-                modifier = Modifier.padding(top = 4.dp),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp,
-                color = FontColor
-            )
-            Text(
-                text = item.knownForDepartment ?: "",
-                color = SecondaryFontColor,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-            Text(
-                text = "Popularity: ${item.popularity.roundTo(1)}",
-                color = SecondaryFontColor,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
-    }
-}
+private fun ratingText(voteAverage: Double): String =
+    "${stringResource(Res.string.rating_)} ${voteAverage.roundTo(1)}"
