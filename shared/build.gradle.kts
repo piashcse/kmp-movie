@@ -29,6 +29,11 @@ kotlin {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
         }
+        // Compose Multiplatform resources are packaged as Android assets. The Android-KMP
+        // plugin disables Android resource/asset processing by default, so opt in.
+        androidResources {
+            enable = true
+        }
         // Compose Preview needs the compiled Android resources on a host-test component.
         withHostTest {
             isIncludeAndroidResources = true
