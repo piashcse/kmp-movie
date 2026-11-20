@@ -13,6 +13,7 @@ fun TopRatedTvSeriesScreen(
         viewModel = viewModel,
         getImagePath = { it.posterPath },
         getItemId = { it.id },
+        getContentDescription = { it.name },
         onNavigateToDetail = onNavigateToDetail,
     )
 }

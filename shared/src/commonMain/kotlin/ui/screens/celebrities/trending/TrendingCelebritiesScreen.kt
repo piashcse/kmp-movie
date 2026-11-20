@@ -26,19 +26,20 @@ fun TrendingCelebritiesScreen(
         loadItems = viewModel::loadItems,
         getImagePath = { it.profilePath },
         getItemId = { it.id },
+        getContentDescription = { it.name },
         onNavigateToDetail = onNavigateToDetail,
         imageHeight = 230.dp,
         additionalContent = { celebrity ->
             Column(Modifier.padding(start = 4.dp, end = 4.dp, top = 4.dp)) {
                 Text(
                     text = celebrity.name,
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = "${stringResource(Res.string.popularity)} ${celebrity.popularity.roundTo(1)}",
-                    fontSize = 14.sp,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }

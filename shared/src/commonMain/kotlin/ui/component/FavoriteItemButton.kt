@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import data.model.local.FavoriteItem
 import data.repository.FavoritesStore
 import org.koin.compose.koinInject
@@ -16,6 +17,7 @@ import org.koin.compose.koinInject
 fun FavoriteItemButton(
     item: FavoriteItem,
     modifier: Modifier = Modifier,
+    tint: Color? = null,
 ) {
     val store = koinInject<FavoritesStore>()
     val favorites by store.favorites.collectAsState()
@@ -24,5 +26,6 @@ fun FavoriteItemButton(
         isFavorite = favorites.any { it.id == item.id && it.mediaType == item.mediaType },
         onClick = { store.toggle(item) },
         modifier = modifier,
+        tint = tint,
     )
 }

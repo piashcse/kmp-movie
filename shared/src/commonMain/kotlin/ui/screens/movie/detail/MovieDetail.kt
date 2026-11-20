@@ -34,6 +34,7 @@ import ui.component.ArtistAndCrewSection
 import ui.component.CastMember
 import ui.component.RecommendedSection
 import ui.component.base.BaseColumn
+import ui.component.skeleton.MediaDetailSkeleton
 import ui.screens.detail.DetailInfo
 import ui.screens.detail.MediaDetailHeader
 import utils.hourMinutes
@@ -58,6 +59,8 @@ fun MovieDetail(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.surface),
+        onRetry = { viewModel.fetchMovieDetails(movieId) },
+        loadingContent = { MediaDetailSkeleton() },
         loading = uiState.isLoading && uiState.movieDetail == null,
         errorMessage = uiState.errorMessage
     ) {

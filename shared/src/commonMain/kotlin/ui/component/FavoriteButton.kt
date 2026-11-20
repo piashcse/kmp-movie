@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.add_favorite
@@ -22,10 +23,11 @@ import org.jetbrains.compose.resources.stringResource
 fun FavoriteButton(
     isFavorite: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    tint: Color? = null,
 ) {
     val tint by animateColorAsState(
-        targetValue = if (isFavorite) MaterialTheme.colorScheme.error
+        targetValue = tint ?: if (isFavorite) MaterialTheme.colorScheme.error
         else MaterialTheme.colorScheme.onSurfaceVariant,
         animationSpec = tween(durationMillis = 300),
         label = "favorite_tint_animation",

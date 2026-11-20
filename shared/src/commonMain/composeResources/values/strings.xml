@@ -35,6 +35,7 @@
     <string name="add_favorite">Add to favorites</string>
     <string name="remove_favorite">Remove from favorites</string>
     <string name="view_details">View details</string>
+    <string name="view_details_for">View details for %1$s</string>
 
     <string name="search_movies">Search movies...</string>
     <string name="search_tv_series">Search TV series...</string>
@@ -48,6 +49,15 @@
     <string name="empty_celebrities_subtitle">Start adding your favorite celebrities!</string>
 
     <string name="all">All</string>
+    <string name="retry">Retry</string>
+    <string name="seasons">Seasons</string>
+    <string name="episodes_count">%1$d episodes</string>
+    <string name="no_results">No results found</string>
+    <string name="no_results_for">No results for “%1$s”</string>
+    <string name="end_of_list">You&#39;ve reached the end</string>
+    <string name="search_prompt">Search for movies, TV series or celebrities</string>
+    <string name="removed_from_favorites">Removed from favorites</string>
+    <string name="undo">Undo</string>
     <string name="now_playing">Now playing</string>
     <string name="popular">Popular</string>
     <string name="top_rated">Top rated</string>

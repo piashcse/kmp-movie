@@ -17,7 +17,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.ImageOptions
@@ -43,7 +44,7 @@ fun ImageLoad(url: String, modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop,
             alignment = Alignment.Center,
         ),
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colorScheme.surfaceVariant),
     )
 }
 
@@ -58,10 +59,10 @@ fun ArtistAndCrewSection(
 ) {
     Column(modifier = modifier.padding(bottom = 10.dp)) {
         Text(
+            modifier = Modifier.semantics { heading() },
             text = stringResource(Res.string.cast),
             color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold
+            style = MaterialTheme.typography.titleMedium,
         )
         LazyRow(modifier = Modifier.fillMaxWidth()) {
             items(cast, key = { it.id }) { item ->

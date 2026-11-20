@@ -33,7 +33,9 @@ import org.koin.compose.viewmodel.koinViewModel
 import ui.component.ArtistAndCrewSection
 import ui.component.CastMember
 import ui.component.RecommendedSection
+import ui.component.SeasonsSection
 import ui.component.base.BaseColumn
+import ui.component.skeleton.MediaDetailSkeleton
 import ui.screens.detail.DetailInfo
 import ui.screens.detail.MediaDetailHeader
 import utils.roundTo
@@ -58,12 +60,17 @@ fun TvSeriesDetail(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.surface),
+        onRetry = { viewModel.fetchTvSeriesDetails(seriesId) },
+        loadingContent = { MediaDetailSkeleton() },
         loading = uiState.isLoading && uiState.tvSeriesDetail == null,
         errorMessage = uiState.errorMessage
     ) {
         uiState.tvSeriesDetail?.let { UiDetail(it, onBack) }
         Spacer(modifier = Modifier.height(10.dp))
         Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+            uiState.tvSeriesDetail?.seasons?.takeIf { it.isNotEmpty() }?.let { seasons ->
+                SeasonsSection(seasons = seasons)
+            }
             if (uiState.recommendedTvSeries.isNotEmpty()) {
                 RecommendedSection(
                     title = stringResource(Res.string.similar_movie),

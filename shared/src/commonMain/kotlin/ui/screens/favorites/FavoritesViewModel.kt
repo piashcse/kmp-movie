@@ -12,4 +12,6 @@ class FavoritesViewModel(
     val isLoaded: StateFlow<Boolean> = store.isLoaded
 
     fun remove(item: FavoriteItem) = store.remove(item.id, item.mediaType)
+
+    fun restore(item: FavoriteItem) = store.add(item)
 }

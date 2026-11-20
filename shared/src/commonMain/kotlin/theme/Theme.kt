@@ -66,7 +66,7 @@ fun KmpMovieTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) {
+    val colorScheme = dynamicColorScheme(darkTheme) ?: if (darkTheme) {
         DarkColors
     } else {
         LightColors

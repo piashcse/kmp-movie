@@ -3,14 +3,16 @@ package ui.component.text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import theme.subTitleSecondary
+import androidx.compose.ui.graphics.Color
 
 @Composable
-fun SubtitleSecondary(text: String) {
+fun SubtitleSecondary(
+    text: String,
+    color: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+) {
     Text(
         text = text,
-        style = subTitleSecondary.copy(
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        style = MaterialTheme.typography.bodySmall,
+        color = color,
     )
 }

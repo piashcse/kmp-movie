@@ -20,7 +20,8 @@ class Paginator<T>(
     private val onLoadUpdated: (Boolean) -> Unit,
     private val onRequest: suspend (nextKey: Int) -> Flow<UiState<List<T>>>,
     private val onError: suspend (Throwable) -> Unit,
-    private val onSuccess: suspend (items: List<T>, newKey: Int) -> Unit
+    private val onSuccess: suspend (items: List<T>, newKey: Int) -> Unit,
+    private val onEndReached: () -> Unit = {},
 ) {
     private var currentKey = initialKey
     private var loadJob: Job? = null
@@ -48,6 +49,7 @@ class Paginator<T>(
                             if (items.isEmpty()) {
                                 // TMDB returns an empty page once the last page is exceeded.
                                 endReached = true
+                                onEndReached()
                             } else {
                                 val nextKey = currentKey + incrementBy
                                 onSuccess(items, nextKey)

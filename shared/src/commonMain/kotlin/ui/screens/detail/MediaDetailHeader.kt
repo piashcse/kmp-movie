@@ -1,7 +1,6 @@
 package ui.screens.detail
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -26,13 +26,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import data.model.local.FavoriteItem
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.action_back
 import org.jetbrains.compose.resources.stringResource
-import theme.cornerRadius
+import theme.Spacing
 import ui.component.ExpandableText
 import ui.component.FavoriteItemButton
 import ui.component.ImageLoad
@@ -43,8 +45,8 @@ import ui.component.text.SubtitleSecondary
 data class DetailInfo(val label: String, val value: String)
 
 /**
- * Shared header used by the movie and TV detail screens: blurred backdrop, poster, title,
- * a 2x2 info grid, favorite toggle and the expandable overview.
+ * Shared header used by the movie and TV detail screens. The content flows below the
+ * backdrop instead of using a fixed overlay height, so it stays readable with large fonts.
  */
 @Composable
 fun MediaDetailHeader(
@@ -62,7 +64,7 @@ fun MediaDetailHeader(
             url = backdropUrl,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(270.dp)
+                .height(260.dp)
                 .graphicsLayer {
                     alpha = 0.8f
                     shadowElevation = 10f
@@ -73,46 +75,54 @@ fun MediaDetailHeader(
         Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = 16.dp, end = 16.dp),
+                .padding(top = Spacing.md, end = Spacing.md),
         ) {
-            FavoriteItemButton(item = favoriteItem, modifier = Modifier.size(32.dp))
+            FavoriteItemButton(item = favoriteItem, tint = Color.White)
         }
 
         IconButton(
             onClick = onBack,
             modifier = Modifier
-                .padding(top = 16.dp, start = 16.dp)
+                .padding(top = Spacing.md, start = Spacing.md)
                 .align(Alignment.TopStart),
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(Res.string.action_back),
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = Color.White,
             )
         }
 
-        Column(modifier = Modifier.padding(start = 10.dp, top = 200.dp, end = 10.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = Spacing.md, end = Spacing.md, top = 100.dp, bottom = Spacing.md),
+        ) {
             Row {
                 ImageLoad(
                     url = posterUrl,
                     modifier = Modifier
-                        .size(135.dp, 180.dp)
-                        .cornerRadius(10)
-                        .border(1.dp, Color.White, RoundedCornerShape(10.dp)),
+                        .size(110.dp, 150.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .border(1.dp, Color.White.copy(alpha = 0.85f), MaterialTheme.shapes.medium),
                 )
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .padding(start = 10.dp),
-                    verticalArrangement = Arrangement.Bottom,
+                        .weight(1f)
+                        .padding(start = Spacing.md),
                 ) {
                     Text(
                         text = title,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 18.sp,
+                        modifier = Modifier.semantics { heading() },
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            shadow = Shadow(
+                                color = Color.Black.copy(alpha = 0.6f),
+                                blurRadius = 8f,
+                            )
+                        ),
                         fontWeight = FontWeight.SemiBold,
-                        maxLines = 1,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -126,14 +136,15 @@ fun MediaDetailHeader(
                     }
                 }
             }
+
             Text(
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier.padding(top = Spacing.lg),
                 text = descriptionLabel,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 17.sp,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
-            ExpandableText(text = overview, maxLines = 2)
+            ExpandableText(text = overview, maxLines = 3)
         }
     }
 }
@@ -141,7 +152,7 @@ fun MediaDetailHeader(
 @Composable
 private fun InfoCell(info: DetailInfo, modifier: Modifier = Modifier) {
     Column(modifier) {
-        SubtitlePrimary(text = info.label)
-        SubtitleSecondary(text = info.value)
+        SubtitlePrimary(text = info.label, color = Color.White.copy(alpha = 0.8f))
+        SubtitleSecondary(text = info.value, color = Color.White)
     }
 }
