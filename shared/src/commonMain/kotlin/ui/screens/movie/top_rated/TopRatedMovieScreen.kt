@@ -11,9 +11,6 @@ fun TopRatedMovieScreen(
 ) {
     GenreFilteredListScreen(
         viewModel = viewModel,
-        getItems = { it.movieList },
-        getIsLoading = { it.isLoading },
-        getErrorMessage = { it.errorMessage },
         getImagePath = { it.posterPath },
         getItemId = { it.id },
         onNavigateToDetail = onNavigateToDetail,

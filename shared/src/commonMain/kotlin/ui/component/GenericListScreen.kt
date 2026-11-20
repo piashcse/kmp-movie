@@ -11,43 +11,27 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.StateFlow
 import ui.component.base.BaseColumn
+import ui.screens.base.PagedListUiState
 import utils.OnGridPagination
 
 /**
- * Generic list screen component that handles common list screen logic
- * Works with existing UI state structures (MovieUiState, TvSeriesUiState, etc.)
- * 
- * @param T The type of items to display
- * @param S The type of UI state
- * @param uiState StateFlow of the UI state
- * @param loadItems Function to load items
- * @param getItems Function to extract items list from UI state
- * @param getIsLoading Function to extract loading state from UI state
- * @param getErrorMessage Function to extract error message from UI state
- * @param getImagePath Function to extract image path from item
- * @param getItemId Function to extract ID from item
- * @param onNavigateToDetail Callback when an item is clicked
- * @param imageHeight Height of the image (default 250.dp)
- * @param additionalContent Optional composable to display below each item
+ * Paginated media grid used by every list screen.
  */
 @Composable
-fun <T, S> GenericListScreen(
-    uiState: StateFlow<S>,
+fun <T> GenericListScreen(
+    uiState: StateFlow<PagedListUiState<T>>,
     loadItems: () -> Unit,
-    getItems: (S) -> List<T>,
-    getIsLoading: (S) -> Boolean,
-    getErrorMessage: (S) -> String?,
     getImagePath: (T) -> String?,
     getItemId: (T) -> Int,
     onNavigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     imageHeight: Dp = 250.dp,
-    additionalContent: @Composable (T) -> Unit = {}
+    additionalContent: @Composable (T) -> Unit = {},
 ) {
     val state by uiState.collectAsState()
     // Saveable so the scroll position survives navigating to a detail screen and back.
     val gridState = rememberSaveable(saver = LazyGridState.Saver) { LazyGridState() }
-    val items = getItems(state)
+    val items = state.items
 
     LaunchedEffect(Unit) {
         // Re-entering a tab must not trigger another page load when the ViewModel already
@@ -60,9 +44,9 @@ fun <T, S> GenericListScreen(
     // Only show the full-screen spinner before the first page arrives; appending more
     // pages must not replace the grid the user is scrolling.
     BaseColumn(
-        loading = getIsLoading(state) && items.isEmpty(),
-        errorMessage = getErrorMessage(state),
-        modifier = modifier
+        loading = state.isLoading && items.isEmpty(),
+        errorMessage = state.errorMessage,
+        modifier = modifier,
     ) {
         MediaGrid(
             items = items,
@@ -71,7 +55,7 @@ fun <T, S> GenericListScreen(
             getItemId = getItemId,
             onClick = onNavigateToDetail,
             imageHeight = imageHeight,
-            additionalContent = additionalContent
+            additionalContent = additionalContent,
         )
 
         OnGridPagination(gridState = gridState) {

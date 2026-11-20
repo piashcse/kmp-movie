@@ -9,13 +9,9 @@ import kotlinx.coroutines.launch
 import ui.component.GenreItem
 import utils.network.UiState
 
-abstract class GenreFilterableViewModel<T, G : GenreItem, S>(
-    initialState: S,
-    updateItems: (S, List<T>) -> S,
-    getItems: (S) -> List<T>,
-) : PaginatedViewModel<T, S>(initialState, updateItems, getItems) {
+abstract class GenreFilterableViewModel<T, G : GenreItem> : PaginatedViewModel<T>() {
 
-    protected val _availableGenres = MutableStateFlow<List<G>>(emptyList())
+    private val _availableGenres = MutableStateFlow<List<G>>(emptyList())
     val availableGenres: StateFlow<List<G>> = _availableGenres.asStateFlow()
 
     private val _selectedGenreId = MutableStateFlow<Int?>(null)
@@ -25,17 +21,13 @@ abstract class GenreFilterableViewModel<T, G : GenreItem, S>(
 
     protected abstract fun fetchPageByGenre(genreId: Int, page: Int): Flow<UiState<List<T>>>
 
+    protected abstract fun fetchPageUnfiltered(page: Int): Flow<UiState<List<T>>>
+
     fun initialize() {
         viewModelScope.launch {
             loadGenres().collect { result ->
-                when (result) {
-                    is UiState.Loading -> Unit
-                    is UiState.Success -> {
-                        _availableGenres.value = result.data
-                        loadItems()
-                    }
-
-                    is UiState.Error -> loadItems()
+                if (result is UiState.Success) {
+                    _availableGenres.value = result.data
                 }
             }
         }
@@ -49,8 +41,6 @@ abstract class GenreFilterableViewModel<T, G : GenreItem, S>(
             fetchPageUnfiltered(page)
         }
     }
-
-    protected abstract fun fetchPageUnfiltered(page: Int): Flow<UiState<List<T>>>
 
     fun selectGenre(genreId: Int?) {
         if (genreId == _selectedGenreId.value) return

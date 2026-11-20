@@ -3,14 +3,7 @@ package ui.screens.celebrities.popular
 import data.model.celebrities.Celebrity
 import data.repository.Repository
 import ui.screens.base.PaginatedViewModel
-import ui.screens.celebrities.CelebrityUiState
 
-class PopularCelebritiesViewModel(private val repo: Repository) : PaginatedViewModel<Celebrity, CelebrityUiState>(
-    initialState = CelebrityUiState(),
-    updateItems = { state, items -> state.copy(celebrityList = items) },
-    getItems = { it.celebrityList }
-) {
+class PopularCelebritiesViewModel(private val repo: Repository) : PaginatedViewModel<Celebrity>() {
     override fun fetchPage(page: Int) = repo.popularCelebrities(page)
-    override fun updateLoading(state: CelebrityUiState, isLoading: Boolean) = state.copy(isLoading = isLoading)
-    override fun updateError(state: CelebrityUiState, error: String?) = state.copy(errorMessage = error)
 }

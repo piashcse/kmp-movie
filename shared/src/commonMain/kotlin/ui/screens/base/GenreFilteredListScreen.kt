@@ -15,14 +15,10 @@ import ui.component.GenreItem
 
 /**
  * Shared layout for the paginated movie/TV screens: a genre filter row above a media grid.
- * Subclasses only provide their ViewModel and state accessors.
  */
 @Composable
-fun <T, G : GenreItem, S> GenreFilteredListScreen(
-    viewModel: GenreFilterableViewModel<T, G, S>,
-    getItems: (S) -> List<T>,
-    getIsLoading: (S) -> Boolean,
-    getErrorMessage: (S) -> String?,
+fun <T, G : GenreItem> GenreFilteredListScreen(
+    viewModel: GenreFilterableViewModel<T, G>,
     getImagePath: (T) -> String?,
     getItemId: (T) -> Int,
     onNavigateToDetail: (Int) -> Unit,
@@ -41,9 +37,6 @@ fun <T, G : GenreItem, S> GenreFilteredListScreen(
             GenericListScreen(
                 uiState = viewModel.uiState,
                 loadItems = viewModel::loadItems,
-                getItems = getItems,
-                getIsLoading = getIsLoading,
-                getErrorMessage = getErrorMessage,
                 getImagePath = getImagePath,
                 getItemId = getItemId,
                 onNavigateToDetail = onNavigateToDetail,
