@@ -1,4 +1,6 @@
 import com.android.build.api.dsl.LibraryExtension
+import com.android.build.api.variant.HostTestBuilder
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.properties.Properties
@@ -99,6 +101,18 @@ extensions.configure<LibraryExtension> {
             // Compose Preview resolution (and Robolectric-based UI tests) need the
             // compiled Android resources on the unit-test classpath.
             isIncludeAndroidResources = true
+        }
+    }
+}
+
+// Compose Preview needs a unit-test component for every variant to package Android XML
+// resources and themes for Layoutlib. The Kotlin Multiplatform plugin disables unit tests
+// for the release variant, which makes preview sync fail, so enable them explicitly.
+extensions.configure<LibraryAndroidComponentsExtension> {
+    beforeVariants(selector().all()) { variant ->
+        variant.hostTests[HostTestBuilder.UNIT_TEST_TYPE]?.apply {
+            enable = true
+            includeAndroidResources = true
         }
     }
 }

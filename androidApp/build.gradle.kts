@@ -1,4 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.HostTestBuilder
 
 plugins {
     alias(libs.plugins.android.application)
@@ -44,6 +46,17 @@ extensions.configure<ApplicationExtension> {
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
+
+// Compose Preview packages Android XML resources through the unit-test component for
+// every variant; ensure it exists and includes resources.
+extensions.configure<ApplicationAndroidComponentsExtension> {
+    beforeVariants(selector().all()) { variant ->
+        variant.hostTests[HostTestBuilder.UNIT_TEST_TYPE]?.apply {
+            enable = true
+            includeAndroidResources = true
+        }
     }
 }
 
