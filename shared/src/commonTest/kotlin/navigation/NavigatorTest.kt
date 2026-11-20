@@ -37,4 +37,21 @@ class NavigatorTest {
         assertEquals(null, decodeRoute("unknown:1"))
         assertEquals(null, decodeRoute("movie:not-an-int"))
     }
+
+    @Test
+    fun `deep link starting on a detail screen keeps a top level base`() {
+        val navigator = Navigator(MovieDetail(11))
+
+        assertEquals(MovieDetail(11), navigator.currentRoute)
+        assertEquals(NowPlayingMovie, navigator.currentTopLevelRoute)
+        assertEquals(true, navigator.canGoBack)
+    }
+
+    @Test
+    fun `deep link starting on search keeps a top level base`() {
+        val navigator = Navigator(Search)
+
+        assertEquals(Search, navigator.currentRoute)
+        assertEquals(NowPlayingMovie, navigator.currentTopLevelRoute)
+    }
 }

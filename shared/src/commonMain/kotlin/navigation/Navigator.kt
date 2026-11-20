@@ -10,7 +10,13 @@ class Navigator(
     restoredBackStack: List<Route> = listOf(initialRoute),
 ) {
     internal val backStack: MutableList<Route> = mutableStateListOf<Route>().apply {
-        addAll(restoredBackStack.ifEmpty { listOf(initialRoute) })
+        val restored = restoredBackStack.ifEmpty { listOf(initialRoute) }
+        // A deep link can start on a detail/search screen, but navigation always needs a
+        // top-level destination underneath it for the tabs and back handling.
+        if (restored.firstOrNull() !is TopLevelRoute) {
+            add(NowPlayingMovie)
+        }
+        addAll(restored)
     }
 
     val currentRoute: Route get() = backStack.last()
