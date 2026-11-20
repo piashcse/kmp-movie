@@ -1,5 +1,6 @@
 package utils
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.flow
 import utils.network.UiState
 
@@ -11,6 +12,8 @@ inline fun <T> flowWithResults(
         emit(UiState.Loading)
         val result = apiCall()
         emit(UiState.Success(result.results))
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: Exception) {
         emit(UiState.Error(e))
     }
@@ -24,6 +27,8 @@ inline fun <T> flowDirect(
         emit(UiState.Loading)
         val result = apiCall()
         emit(UiState.Success(result))
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: Exception) {
         emit(UiState.Error(e))
     }
