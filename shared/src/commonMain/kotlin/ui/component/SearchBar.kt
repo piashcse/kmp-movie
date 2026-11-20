@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
@@ -18,14 +20,14 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.action_back
@@ -35,17 +37,18 @@ import kmp_movie.composeapp.generated.resources.search_celebrities
 import kmp_movie.composeapp.generated.resources.search_movies
 import kmp_movie.composeapp.generated.resources.search_tv_series
 import org.jetbrains.compose.resources.stringResource
-import ui.screens.AppViewModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
-    viewModel: AppViewModel,
+    query: String,
+    onQueryChange: (String) -> Unit,
     searchFilter: SearchFilter,
     isLoading: Boolean,
     onBack: () -> Unit,
 ) {
-    var text by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
     val placeholder = stringResource(
         when (searchFilter) {
             SearchFilter.MOVIES -> Res.string.search_movies
@@ -75,7 +78,7 @@ fun SearchBar(
             modifier = Modifier
                 .weight(1f)
                 .focusRequester(focusRequester),
-            value = text,
+            value = query,
             placeholder = {
                 Text(
                     text = placeholder,
@@ -92,15 +95,10 @@ fun SearchBar(
                 focusedTextColor = contentColor,
                 unfocusedTextColor = contentColor,
             ),
-            onValueChange = { newValue ->
-                text = newValue
-                when (searchFilter) {
-                    SearchFilter.MOVIES -> viewModel.movieSearch(newValue)
-                    SearchFilter.TV_SERIES -> viewModel.tvSeriesSearch(newValue)
-                    SearchFilter.CELEBRITIES -> viewModel.celebritySearch(newValue)
-                }
-            },
+            onValueChange = onQueryChange,
             singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = { keyboardController?.hide() }),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Filled.Search,
@@ -110,7 +108,7 @@ fun SearchBar(
                 )
             },
             trailingIcon = {
-                if (text.trim().isNotEmpty()) {
+                if (query.trim().isNotEmpty()) {
                     if (isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier
@@ -122,12 +120,8 @@ fun SearchBar(
                     } else {
                         IconButton(
                             onClick = {
-                                text = ""
-                                when (searchFilter) {
-                                    SearchFilter.MOVIES -> viewModel.movieSearch("")
-                                    SearchFilter.TV_SERIES -> viewModel.tvSeriesSearch("")
-                                    SearchFilter.CELEBRITIES -> viewModel.celebritySearch("")
-                                }
+                                onQueryChange("")
+                                keyboardController?.hide()
                             },
                         ) {
                             Icon(

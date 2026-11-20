@@ -2,6 +2,7 @@ package ui.screens.search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,15 +25,32 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     viewModel: AppViewModel = koinViewModel(),
 ) {
+    var query by remember { mutableStateOf("") }
     var searchFilter by remember { mutableStateOf(SearchFilter.MOVIES) }
     val isLoading by viewModel.isLoading.collectAsState()
     val movieSearchData by viewModel.movieSearchData.collectAsState()
     val tvSeriesSearchData by viewModel.tvSeriesSearchData.collectAsState()
     val celebritySearchData by viewModel.celebritySearchData.collectAsState()
 
-    Column(modifier = modifier.fillMaxSize()) {
+    fun search(term: String, filter: SearchFilter) {
+        when (filter) {
+            SearchFilter.MOVIES -> viewModel.movieSearch(term)
+            SearchFilter.TV_SERIES -> viewModel.tvSeriesSearch(term)
+            SearchFilter.CELEBRITIES -> viewModel.celebritySearch(term)
+        }
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .imePadding(),
+    ) {
         SearchBar(
-            viewModel = viewModel,
+            query = query,
+            onQueryChange = {
+                query = it
+                search(it, searchFilter)
+            },
             searchFilter = searchFilter,
             isLoading = isLoading,
             onBack = onBack,
@@ -42,7 +60,13 @@ fun SearchScreen(
             tvSeriesSearchData = tvSeriesSearchData,
             celebritySearchData = celebritySearchData,
             currentFilter = searchFilter,
-            onFilterChange = { searchFilter = it },
+            onFilterChange = { filter ->
+                searchFilter = filter
+                // Re-run the current term for the newly selected content type.
+                search(query, filter)
+            },
+            query = query,
+            isLoading = isLoading,
             onNavigateToMovie = onNavigateToMovie,
             onNavigateToTvSeries = onNavigateToTvSeries,
             onNavigateToCelebrity = onNavigateToArtist,

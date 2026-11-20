@@ -2,6 +2,7 @@ package ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -40,7 +42,9 @@ import data.model.celebrities.Celebrity
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.celebrities
 import kmp_movie.composeapp.generated.resources.movies
+import kmp_movie.composeapp.generated.resources.no_results_for
 import kmp_movie.composeapp.generated.resources.rating_
+import kmp_movie.composeapp.generated.resources.search_prompt
 import kmp_movie.composeapp.generated.resources.tv_series
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -72,8 +76,7 @@ fun FilterButton(
         ),
         modifier = Modifier
             .padding(horizontal = 4.dp, vertical = 8.dp)
-            .width(110.dp)
-            .height(40.dp),
+            .heightIn(min = 40.dp),
         shape = RoundedCornerShape(20.dp),
     ) {
         Row(
@@ -108,6 +111,8 @@ fun SearchResults(
     celebritySearchData: List<Celebrity>,
     currentFilter: SearchFilter = SearchFilter.MOVIES,
     onFilterChange: (SearchFilter) -> Unit = {},
+    query: String = "",
+    isLoading: Boolean = false,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToTvSeries: (Int) -> Unit,
     onNavigateToCelebrity: (Int) -> Unit,
@@ -126,6 +131,7 @@ fun SearchResults(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
                 .padding(horizontal = 8.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.Start,
         ) {
@@ -138,18 +144,30 @@ fun SearchResults(
             }
         }
 
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            when (currentFilter) {
-                SearchFilter.MOVIES -> items(items = movies, key = { it.id }) { item ->
-                    SearchMovieItem(item = item, onNavigateToMovie = onNavigateToMovie)
-                }
+        val currentItems = when (currentFilter) {
+            SearchFilter.MOVIES -> movies
+            SearchFilter.TV_SERIES -> tvSeries
+            SearchFilter.CELEBRITIES -> celebrities
+        }
 
-                SearchFilter.TV_SERIES -> items(items = tvSeries, key = { it.id }) { item ->
-                    SearchTvSeriesItem(item = item, onNavigateToTvSeries = onNavigateToTvSeries)
-                }
+        when {
+            query.isBlank() -> SearchMessage(stringResource(Res.string.search_prompt))
+            !isLoading && currentItems.isEmpty() ->
+                SearchMessage(stringResource(Res.string.no_results_for, query))
 
-                SearchFilter.CELEBRITIES -> items(items = celebrities, key = { it.id }) { item ->
-                    SearchCelebrityItem(item = item, onNavigateToCelebrity = onNavigateToCelebrity)
+            else -> LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                when (currentFilter) {
+                    SearchFilter.MOVIES -> items(items = movies, key = { it.id }) { item ->
+                        SearchMovieItem(item = item, onNavigateToMovie = onNavigateToMovie)
+                    }
+
+                    SearchFilter.TV_SERIES -> items(items = tvSeries, key = { it.id }) { item ->
+                        SearchTvSeriesItem(item = item, onNavigateToTvSeries = onNavigateToTvSeries)
+                    }
+
+                    SearchFilter.CELEBRITIES -> items(items = celebrities, key = { it.id }) { item ->
+                        SearchCelebrityItem(item = item, onNavigateToCelebrity = onNavigateToCelebrity)
+                    }
                 }
             }
         }
@@ -157,6 +175,18 @@ fun SearchResults(
 }
 
 private const val MAX_SEARCH_RESULTS = 10
+
+@Composable
+private fun SearchMessage(text: String) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(32.dp),
+        textAlign = TextAlign.Center,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+}
 
 @Composable
 fun SearchMovieItem(
@@ -228,6 +258,7 @@ private fun SearchResultRow(
             modifier = Modifier
                 .height(120.dp)
                 .width(100.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .clip(RoundedCornerShape(8.dp)),
         )
         Column(modifier = Modifier.padding(start = 12.dp)) {
