@@ -1,5 +1,6 @@
 package ui.screens.detail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -22,6 +24,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlurEffect
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -70,10 +74,27 @@ fun MediaDetailHeader(
                 },
         )
 
+        // Scrim so titles/info stay readable over bright (especially light-theme) backdrops.
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(240.dp)
+                .background(
+                    Brush.verticalGradient(
+                        0f to Color.Transparent,
+                        0.3f to MaterialTheme.colorScheme.surface.copy(alpha = 0.45f),
+                        0.6f to MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+                        0.8f to MaterialTheme.colorScheme.surface,
+                        1f to MaterialTheme.colorScheme.surface,
+                    )
+                ),
+        )
+
         Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = Spacing.md, end = Spacing.md),
+                .padding(top = Spacing.md, end = Spacing.md)
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.75f), CircleShape),
         ) {
             FavoriteItemButton(item = favoriteItem)
         }
@@ -82,7 +103,8 @@ fun MediaDetailHeader(
             onClick = onBack,
             modifier = Modifier
                 .padding(top = Spacing.md, start = Spacing.md)
-                .align(Alignment.TopStart),
+                .align(Alignment.TopStart)
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.75f), CircleShape),
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
