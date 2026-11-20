@@ -28,10 +28,11 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationEventHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import data.model.local.MediaType
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.celebrities
@@ -103,7 +104,6 @@ private data class PageTab(
     val icon: ImageVector,
 )
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun App(
     appViewModel: AppViewModel = koinViewModel(),
@@ -114,9 +114,12 @@ fun App(
             val navigator = rememberNavigator(NowPlayingMovie)
             val isDetailScreen = navigator.isDetailScreen
 
-            BackHandler(enabled = navigator.canGoBack) {
-                navigator.popBackStack()
-            }
+            val backState = rememberNavigationEventState(NavigationEventInfo.None)
+            NavigationEventHandler(
+                state = backState,
+                isBackEnabled = navigator.canGoBack,
+                onBackCompleted = { navigator.popBackStack() },
+            )
 
             if (isDetailScreen) {
                 Crossfade(

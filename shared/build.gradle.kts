@@ -1,13 +1,10 @@
-import com.android.build.api.dsl.LibraryExtension
-import com.android.build.api.variant.HostTestBuilder
-import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.serialization)
     alias(libs.plugins.compose.compiler)
@@ -20,9 +17,21 @@ kotlin {
         browser()
     }
 
-    androidTarget {
+    android {
+        // Must differ from :androidApp's namespace; AGP 9 enforces unique package names.
+        namespace = "piashcse.kmp.movie.shared"
+        compileSdk {
+            version = release(libs.versions.android.compile.sdk.get().toInt()) {
+                minorApiLevel = libs.versions.android.compile.minor.get().toInt()
+            }
+        }
+        minSdk = libs.versions.android.min.sdk.get().toInt()
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
+        }
+        // Compose Preview needs the compiled Android resources on a host-test component.
+        withHostTest {
+            isIncludeAndroidResources = true
         }
     }
 
@@ -39,8 +48,6 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
-
         androidMain.dependencies {
             // Android platform-specific library dependencies (if any)
         }
@@ -80,44 +87,11 @@ kotlin {
             implementation(kotlin("test"))
             implementation(libs.kotlinx.coroutines.test)
         }
-        desktopMain.dependencies {
+        getByName("desktopMain").dependencies {
             implementation(libs.kotlinx.coroutines.swing)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-        }
-    }
-}
-
-extensions.configure<LibraryExtension> {
-    namespace = "piashcse.kmp.movie"
-    compileSdk = libs.versions.android.compile.sdk.get().toInt()
-    compileSdkMinor = libs.versions.android.compile.minor.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.min.sdk.get().toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    testOptions {
-        unitTests {
-            // Compose Preview resolution (and Robolectric-based UI tests) need the
-            // compiled Android resources on the unit-test classpath.
-            isIncludeAndroidResources = true
-        }
-    }
-}
-
-// Compose Preview needs a unit-test component for every variant to package Android XML
-// resources and themes for Layoutlib. The Kotlin Multiplatform plugin disables unit tests
-// for the release variant, which makes preview sync fail, so enable them explicitly.
-extensions.configure<LibraryAndroidComponentsExtension> {
-    beforeVariants(selector().all()) { variant ->
-        variant.hostTests[HostTestBuilder.UNIT_TEST_TYPE]?.apply {
-            enable = true
-            includeAndroidResources = true
         }
     }
 }
