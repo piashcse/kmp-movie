@@ -154,10 +154,10 @@ fun App(
                                 icon = {
                                     Icon(
                                         imageVector = item.icon,
-                                        contentDescription = item.title,
+                                        contentDescription = stringResource(item.titleRes),
                                     )
                                 },
-                                label = { Text(text = item.title) },
+                                label = { Text(text = stringResource(item.titleRes)) },
                             )
                         }
                     }

@@ -48,6 +48,13 @@
     <string name="empty_celebrities_subtitle">Start adding your favorite celebrities!</string>
 
     <string name="all">All</string>
+    <string name="now_playing">Now playing</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top rated</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="airing_today">Airing today</string>
+    <string name="on_the_air">On the air</string>
+    <string name="trending">Trending</string>
     <string name="theme_mode_toggle">Theme mode</string>
     <string name="theme_light">Light Mode</string>
     <string name="theme_dark">Dark Mode</string>
