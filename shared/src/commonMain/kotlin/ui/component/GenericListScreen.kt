@@ -1,10 +1,11 @@
 package ui.component
 
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -44,11 +45,16 @@ fun <T, S> GenericListScreen(
     additionalContent: @Composable (T) -> Unit = {}
 ) {
     val state by uiState.collectAsState()
-    val gridState = rememberLazyGridState()
+    // Saveable so the scroll position survives navigating to a detail screen and back.
+    val gridState = rememberSaveable(saver = LazyGridState.Saver) { LazyGridState() }
     val items = getItems(state)
 
     LaunchedEffect(Unit) {
-        loadItems()
+        // Re-entering a tab must not trigger another page load when the ViewModel already
+        // holds data (previously every recomposition of the screen fetched the next page).
+        if (items.isNullOrEmpty()) {
+            loadItems()
+        }
     }
 
     // Only show the full-screen spinner before the first page arrives; appending more

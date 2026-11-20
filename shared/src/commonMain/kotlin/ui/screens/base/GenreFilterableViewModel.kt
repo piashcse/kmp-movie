@@ -29,11 +29,14 @@ abstract class GenreFilterableViewModel<T, G : GenreItem, S>(
         viewModelScope.launch {
             loadGenres().collect { result ->
                 when (result) {
-                    is UiState.Success -> _availableGenres.value = result.data
-                    is UiState.Error -> {}
-                    is UiState.Loading -> {}
+                    is UiState.Loading -> Unit
+                    is UiState.Success -> {
+                        _availableGenres.value = result.data
+                        loadItems()
+                    }
+
+                    is UiState.Error -> loadItems()
                 }
-                loadItems()
             }
         }
     }
@@ -50,6 +53,7 @@ abstract class GenreFilterableViewModel<T, G : GenreItem, S>(
     protected abstract fun fetchPageUnfiltered(page: Int): Flow<UiState<List<T>>>
 
     fun selectGenre(genreId: Int?) {
+        if (genreId == _selectedGenreId.value) return
         _selectedGenreId.value = genreId
         resetPagination()
         loadItems()

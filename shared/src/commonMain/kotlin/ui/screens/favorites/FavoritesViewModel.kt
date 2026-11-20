@@ -6,8 +6,10 @@ import data.repository.FavoritesStore
 import kotlinx.coroutines.flow.StateFlow
 
 class FavoritesViewModel(
-    store: FavoritesStore,
+    private val store: FavoritesStore,
 ) : ViewModel() {
     val favorites: StateFlow<List<FavoriteItem>> = store.favorites
     val isLoaded: StateFlow<Boolean> = store.isLoaded
+
+    fun remove(item: FavoriteItem) = store.remove(item.id, item.mediaType)
 }
