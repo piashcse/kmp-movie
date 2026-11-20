@@ -6,19 +6,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BaseModel<T>(
     @SerialName("dates")
-    val dates: Dates?,
+    val dates: Dates? = null,
 
     @SerialName("page")
-    val page: Int,
+    val page: Int = 1,
 
     @SerialName("results")
-    val results: List<T>,
+    val results: List<T> = emptyList(),
 
     @SerialName("total_pages")
-    val totalPages: Int,
+    val totalPages: Int = 0,
 
     @SerialName("total_results")
-    val totalResults: Int
+    val totalResults: Int = 0
 )
 
 @Serializable

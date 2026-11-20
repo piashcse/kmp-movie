@@ -8,5 +8,5 @@ data class ArtistMovies(
     @SerialName("cast")
     val cast: List<ArtistMovie>,
     @SerialName("id")
-    val id: Int
+    val id: Int = 0
 )

@@ -32,5 +32,8 @@ data class ArtistDetail(
     @SerialName("popularity")
     val popularity: Double,
     @SerialName("profile_path")
-    val profilePath: String?
+    val profilePath: String?,
+
+    @SerialName("combined_credits")
+    val combinedCredits: ArtistMovies? = null,
 )

@@ -4,13 +4,10 @@ import data.model.BaseModel
 import data.model.Genre
 import data.model.MovieItem
 import data.model.TvSeriesItem
-import data.model.artist.Artist
 import data.model.artist.ArtistDetail
-import data.model.artist.ArtistMovies
 import data.model.celebrities.Celebrity
 import data.model.movie_detail.MovieDetail
 import data.model.tv_detail.TvSeriesDetail
-import data.model.tv_detail.credit.Credit
 
 interface ApiInterface {
     suspend fun nowPlayingMovies(
@@ -37,14 +34,6 @@ interface ApiInterface {
         searchKey: String
     ): BaseModel<MovieItem>
 
-    suspend fun recommendedMovies(
-        movieId: Int
-    ): BaseModel<MovieItem>
-
-    suspend fun movieCredit(
-        movieId: Int
-    ): Artist
-
     suspend fun artistDetail(
         personId: Int
     ): ArtistDetail
@@ -69,14 +58,6 @@ interface ApiInterface {
         seriesId: Int
     ): TvSeriesDetail
 
-    suspend fun recommendedTvSeries(
-        seriesId: Int
-    ): BaseModel<TvSeriesItem>
-
-    suspend fun creditTvSeries(
-        seriesId: Int
-    ): Credit
-
     suspend fun tvSeriesSearch(
         searchKey: String
     ): BaseModel<TvSeriesItem>
@@ -84,10 +65,6 @@ interface ApiInterface {
     suspend fun celebritySearch(
         searchKey: String
     ): BaseModel<Celebrity>
-
-    suspend fun artistMoviesAndTvSeries(
-        personId: Int
-    ): ArtistMovies
 
     suspend fun popularCelebrity(
         page: Int

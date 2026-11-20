@@ -1,10 +1,13 @@
 package data.model.tv_detail
 
 
+import data.model.BaseModel
 import data.model.Genre
+import data.model.TvSeriesItem
 import data.model.ProductionCompany
 import data.model.ProductionCountry
 import data.model.SpokenLanguage
+import data.model.tv_detail.credit.Credit
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -73,5 +76,11 @@ data class TvSeriesDetail(
     @SerialName("vote_average")
     val voteAverage: Double,
     @SerialName("vote_count")
-    val voteCount: Int
+    val voteCount: Int,
+
+    @SerialName("credits")
+    val credits: Credit? = null,
+
+    @SerialName("recommendations")
+    val recommendations: BaseModel<TvSeriesItem>? = null,
 )

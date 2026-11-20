@@ -26,39 +26,25 @@ class ArtistDetailViewModel(private val repo: Repository) : ViewModel() {
         fetchJob?.cancel()
         _uiState.value = ArtistDetailUiState()
         fetchJob = viewModelScope.launch {
-            launch { artistDetail(personId) }
-            launch { artistMoviesAndTvShows(personId) }
-        }
-    }
+            repo.artistDetail(personId).collect { result ->
+                _uiState.update { state ->
+                    when (result) {
+                        is UiState.Loading -> state.copy(isLoading = true)
+                        is UiState.Success -> {
+                            val detail = result.data
+                            state.copy(
+                                artistDetail = detail,
+                                artistMovies = detail.combinedCredits?.cast.orEmpty(),
+                                isLoading = false,
+                            )
+                        }
 
-    private suspend fun artistDetail(personId: Int) {
-        repo.artistDetail(personId).collect { result ->
-            handleStateUpdate(result) { state, data -> state.copy(artistDetail = data) }
-        }
-    }
-
-    private suspend fun artistMoviesAndTvShows(personId: Int) {
-        repo.artistMoviesAndTvShows(personId).collect { result ->
-            handleStateUpdate(result) { state, data -> state.copy(artistMovies = data?.cast.orEmpty()) }
-        }
-    }
-
-    private fun <T> handleStateUpdate(
-        result: UiState<T>,
-        stateUpdater: (ArtistDetailUiState, T?) -> ArtistDetailUiState,
-    ) {
-        _uiState.update { currentState ->
-            when (result) {
-                is UiState.Loading -> currentState.copy(isLoading = true)
-                is UiState.Success -> stateUpdater(
-                    currentState,
-                    result.data,
-                ).copy(isLoading = false)
-
-                is UiState.Error -> currentState.copy(
-                    isLoading = false,
-                    errorMessage = result.exception.message,
-                )
+                        is UiState.Error -> state.copy(
+                            isLoading = false,
+                            errorMessage = result.exception.message,
+                        )
+                    }
+                }
             }
         }
     }

@@ -1,9 +1,12 @@
 package data.model.movie_detail
 
+import data.model.BaseModel
 import data.model.Genre
+import data.model.MovieItem
 import data.model.ProductionCompany
 import data.model.ProductionCountry
 import data.model.SpokenLanguage
+import data.model.artist.Artist
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -82,5 +85,11 @@ data class MovieDetail(
     val voteAverage: Double,
 
     @SerialName("vote_count")
-    val voteCount: Int
+    val voteCount: Int,
+
+    @SerialName("credits")
+    val credits: Artist? = null,
+
+    @SerialName("recommendations")
+    val recommendations: BaseModel<MovieItem>? = null,
 )
