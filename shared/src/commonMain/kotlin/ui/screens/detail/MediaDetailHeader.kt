@@ -1,6 +1,5 @@
 package ui.screens.detail
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -24,11 +22,11 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlurEffect
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -66,7 +64,7 @@ fun MediaDetailHeader(
             url = backdropUrl,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(240.dp)
+                .height(260.dp)
                 .graphicsLayer {
                     alpha = 0.8f
                     shadowElevation = 10f
@@ -74,49 +72,31 @@ fun MediaDetailHeader(
                 },
         )
 
-        // Scrim so titles/info stay readable over bright (especially light-theme) backdrops.
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(240.dp)
-                .background(
-                    Brush.verticalGradient(
-                        0f to Color.Transparent,
-                        0.3f to MaterialTheme.colorScheme.surface.copy(alpha = 0.45f),
-                        0.6f to MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
-                        0.8f to MaterialTheme.colorScheme.surface,
-                        1f to MaterialTheme.colorScheme.surface,
-                    )
-                ),
-        )
-
         Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = Spacing.md, end = Spacing.md)
-                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.75f), CircleShape),
+                .padding(top = Spacing.md, end = Spacing.md),
         ) {
-            FavoriteItemButton(item = favoriteItem)
+            FavoriteItemButton(item = favoriteItem, tint = Color.White)
         }
 
         IconButton(
             onClick = onBack,
             modifier = Modifier
                 .padding(top = Spacing.md, start = Spacing.md)
-                .align(Alignment.TopStart)
-                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.75f), CircleShape),
+                .align(Alignment.TopStart),
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(Res.string.action_back),
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = Color.White,
             )
         }
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = Spacing.md, end = Spacing.md, top = 110.dp, bottom = Spacing.md),
+                .padding(start = Spacing.md, end = Spacing.md, top = 100.dp, bottom = Spacing.md),
         ) {
             Row {
                 ImageLoad(
@@ -124,7 +104,7 @@ fun MediaDetailHeader(
                     modifier = Modifier
                         .size(110.dp, 150.dp)
                         .clip(MaterialTheme.shapes.medium)
-                        .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.medium),
+                        .border(1.dp, Color.White.copy(alpha = 0.85f), MaterialTheme.shapes.medium),
                 )
                 Column(
                     modifier = Modifier
@@ -134,8 +114,13 @@ fun MediaDetailHeader(
                     Text(
                         text = title,
                         modifier = Modifier.semantics { heading() },
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.titleLarge,
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            shadow = Shadow(
+                                color = Color.Black.copy(alpha = 0.6f),
+                                blurRadius = 8f,
+                            )
+                        ),
                         fontWeight = FontWeight.SemiBold,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
@@ -167,7 +152,7 @@ fun MediaDetailHeader(
 @Composable
 private fun InfoCell(info: DetailInfo, modifier: Modifier = Modifier) {
     Column(modifier) {
-        SubtitlePrimary(text = info.label)
-        SubtitleSecondary(text = info.value)
+        SubtitlePrimary(text = info.label, color = Color.White.copy(alpha = 0.8f))
+        SubtitleSecondary(text = info.value, color = Color.White)
     }
 }
