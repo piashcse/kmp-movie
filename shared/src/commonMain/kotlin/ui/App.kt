@@ -5,15 +5,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -25,12 +25,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.SaveableStateHolder
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationEventHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
@@ -41,7 +41,6 @@ import kmp_movie.composeapp.generated.resources.celebrities
 import kmp_movie.composeapp.generated.resources.favorites
 import kmp_movie.composeapp.generated.resources.movies
 import kmp_movie.composeapp.generated.resources.tv_series
-import kotlinx.coroutines.launch
 import navigation.AiringTodayTvSeries
 import navigation.ArtistDetail
 import navigation.FavoriteCelebrity
@@ -62,6 +61,7 @@ import navigation.TrendingCelebrity
 import navigation.TvSeriesDetail
 import navigation.UpcomingMovie
 import navigation.rememberNavigator
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import theme.KmpMovieTheme
@@ -90,18 +90,18 @@ private const val PAGE_MOVIES = 0
 private const val PAGE_TV_SERIES = 1
 private const val PAGE_CELEBRITIES = 2
 private const val PAGE_FAVORITES = 3
-private const val PAGE_COUNT = 4
 private const val TOP_LEVEL_STATE_KEY = "top_level"
 
 private val pageTabs = listOf(
-    PageTab(Res.string.movies),
-    PageTab(Res.string.tv_series),
-    PageTab(Res.string.celebrities),
-    PageTab(Res.string.favorites),
+    PageTab(Res.string.movies, Icons.Filled.PlayArrow),
+    PageTab(Res.string.tv_series, Icons.AutoMirrored.Filled.List),
+    PageTab(Res.string.celebrities, Icons.Filled.Star),
+    PageTab(Res.string.favorites, Icons.Filled.Favorite),
 )
 
 private data class PageTab(
-    val titleRes: org.jetbrains.compose.resources.StringResource,
+    val titleRes: StringResource,
+    val icon: ImageVector,
 )
 
 @Composable
@@ -113,7 +113,7 @@ fun App(
         KmpMovieTheme(darkTheme = shouldUseDarkTheme()) {
             val navigator = rememberNavigator(NowPlayingMovie)
             val isDetailScreen = navigator.isDetailScreen
-            // Keeps list/pager state (scroll position, selected tab) while a detail screen is open.
+            // Keeps list state (scroll position, selected tab) while a detail screen is open.
             val saveableStateHolder = rememberSaveableStateHolder()
 
             val backState = rememberNavigationEventState(NavigationEventInfo.None)
@@ -122,6 +122,40 @@ fun App(
                 isBackEnabled = navigator.canGoBack,
                 onBackCompleted = { navigator.popBackStack() },
             )
+
+            // Remember the selected sub-tab of each top-level page.
+            var moviesIndex by rememberSaveable { mutableStateOf(0) }
+            var tvIndex by rememberSaveable { mutableStateOf(0) }
+            var celebritiesIndex by rememberSaveable { mutableStateOf(0) }
+            var favoritesIndex by rememberSaveable { mutableStateOf(0) }
+
+            fun selectedIndex(page: Int): Int = when (page) {
+                PAGE_MOVIES -> moviesIndex
+                PAGE_TV_SERIES -> tvIndex
+                PAGE_CELEBRITIES -> celebritiesIndex
+                else -> favoritesIndex
+            }
+
+            fun routeForPage(page: Int): TopLevelRoute =
+                getItemsForPage(page).getOrElse(selectedIndex(page)) { getDefaultRouteForPage(page) }
+
+            fun selectIndex(page: Int, index: Int) {
+                when (page) {
+                    PAGE_MOVIES -> moviesIndex = index
+                    PAGE_TV_SERIES -> tvIndex = index
+                    PAGE_CELEBRITIES -> celebritiesIndex = index
+                    else -> favoritesIndex = index
+                }
+            }
+
+            LaunchedEffect(navigator.currentRoute) {
+                val route = navigator.currentRoute
+                if (route is TopLevelRoute) {
+                    val page = getPageForRoute(route)
+                    val index = getItemsForPage(page).indexOf(route)
+                    if (index >= 0) selectIndex(page, index)
+                }
+            }
 
             if (isDetailScreen) {
                 Crossfade(
@@ -140,36 +174,47 @@ fun App(
                     }
                 }
             } else {
-                val currentTopLevelRoute = navigator.currentTopLevelRoute
-                val currentPage = getPageForRoute(currentTopLevelRoute)
+                val currentRoute = navigator.currentTopLevelRoute
+                val currentPage = getPageForRoute(currentRoute)
                 val currentItems = getItemsForPage(currentPage)
 
                 KMPNavigationSuiteScaffold(
                     windowAdaptiveInfo = windowAdaptiveInfo,
                     navigationSuiteItems = {
-                        currentItems.forEach { item ->
+                        pageTabs.forEachIndexed { pageIndex, tab ->
                             item(
-                                selected = navigator.currentRoute == item,
-                                onClick = { navigator.navigateToTopLevel(item) },
+                                selected = currentPage == pageIndex,
+                                onClick = {
+                                    val target = routeForPage(pageIndex)
+                                    if (navigator.currentRoute != target) {
+                                        navigator.navigateToTopLevel(target)
+                                    }
+                                },
                                 icon = {
                                     Icon(
-                                        imageVector = item.icon,
-                                        contentDescription = stringResource(item.titleRes),
+                                        imageVector = tab.icon,
+                                        contentDescription = stringResource(tab.titleRes),
                                     )
                                 },
-                                label = { Text(text = stringResource(item.titleRes)) },
+                                label = { Text(text = stringResource(tab.titleRes)) },
                             )
                         }
-                    }
+                    },
                 ) {
-                    // One stable pager for all top-level routes. Previously this was wrapped in a
-                    // Crossfade keyed by the route, so every tab/sub-tab switch recreated the
-                    // pager and re-entered every list screen.
                     saveableStateHolder.SaveableStateProvider(TOP_LEVEL_STATE_KEY) {
-                        ListScaffold(
-                            navigator = navigator,
-                            activeRoute = currentTopLevelRoute,
-                            currentPage = currentPage,
+                        TopLevelScaffold(
+                            page = currentPage,
+                            route = currentRoute,
+                            items = currentItems,
+                            selectedIndex = selectedIndex(currentPage),
+                            onSelectTab = { index ->
+                                if (index != selectedIndex(currentPage)) {
+                                    selectIndex(currentPage, index)
+                                    navigator.navigateToTopLevel(currentItems[index])
+                                }
+                            },
+                            onOpenSearch = { navigator.navigate(Search) },
+                            onNavigate = { navigator.navigate(it) },
                             saveableStateHolder = saveableStateHolder,
                         )
                     }
@@ -218,152 +263,59 @@ private fun DetailScreen(
     }
 }
 
-@Composable
-private fun ListScaffold(
-    navigator: navigation.Navigator,
-    activeRoute: TopLevelRoute,
-    currentPage: Int,
-    saveableStateHolder: SaveableStateHolder,
-) {
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = { navigator.navigate(Search) }) {
-                Icon(Icons.Filled.Search, contentDescription = stringResource(Res.string.action_search))
-            }
-        }
-    ) { paddingValues ->
-        MainScreen(
-            navigator = navigator,
-            activeRoute = activeRoute,
-            currentPage = currentPage,
-            saveableStateHolder = saveableStateHolder,
-            modifier = Modifier.padding(paddingValues),
-        )
-    }
-}
-
-@Composable
-private fun MainScreen(
-    navigator: navigation.Navigator,
-    activeRoute: TopLevelRoute,
-    currentPage: Int,
-    saveableStateHolder: SaveableStateHolder,
-    modifier: Modifier = Modifier,
-) {
-    val pagerState = rememberPagerState(initialPage = currentPage) { PAGE_COUNT }
-
-    // Remember the selected sub-tab of each top-level page so switching pages (or opening a
-    // detail and coming back) doesn't reset the bottom navigation to the first item.
-    var moviesIndex by rememberSaveable { mutableStateOf(0) }
-    var tvIndex by rememberSaveable { mutableStateOf(0) }
-    var celebritiesIndex by rememberSaveable { mutableStateOf(0) }
-    var favoritesIndex by rememberSaveable { mutableStateOf(0) }
-
-    fun selectedIndex(page: Int): Int = when (page) {
-        PAGE_MOVIES -> moviesIndex
-        PAGE_TV_SERIES -> tvIndex
-        PAGE_CELEBRITIES -> celebritiesIndex
-        else -> favoritesIndex
-    }
-
-    fun routeForPage(page: Int): TopLevelRoute =
-        getItemsForPage(page).getOrElse(selectedIndex(page)) { getDefaultRouteForPage(page) }
-
-    fun selectIndex(page: Int, index: Int) {
-        when (page) {
-            PAGE_MOVIES -> moviesIndex = index
-            PAGE_TV_SERIES -> tvIndex = index
-            PAGE_CELEBRITIES -> celebritiesIndex = index
-            else -> favoritesIndex = index
-        }
-    }
-
-    LaunchedEffect(activeRoute) {
-        val page = getPageForRoute(activeRoute)
-        val index = getItemsForPage(page).indexOf(activeRoute)
-        if (index >= 0) {
-            selectIndex(page, index)
-        }
-        if (pagerState.currentPage != page) {
-            pagerState.animateScrollToPage(page)
-        }
-    }
-
-    LaunchedEffect(pagerState.settledPage) {
-        val page = pagerState.settledPage
-        val targetRoute = routeForPage(page)
-        if (navigator.currentRoute != targetRoute) {
-            navigator.navigateToTopLevel(targetRoute)
-        }
-    }
-
-    TabScreen(
-        pagerState = pagerState,
-        routeForPage = { page -> routeForPage(page) },
-        saveableStateHolder = saveableStateHolder,
-        onNavigate = { navigator.navigate(it) },
-        modifier = modifier,
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TabScreen(
-    pagerState: PagerState,
-    routeForPage: (Int) -> TopLevelRoute,
-    saveableStateHolder: SaveableStateHolder,
+private fun TopLevelScaffold(
+    page: Int,
+    route: TopLevelRoute,
+    items: List<TopLevelRoute>,
+    selectedIndex: Int,
+    onSelectTab: (Int) -> Unit,
+    onOpenSearch: () -> Unit,
     onNavigate: (Route) -> Unit,
-    modifier: Modifier = Modifier,
+    saveableStateHolder: SaveableStateHolder,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     Scaffold(
         topBar = {
-            val currentTabIndex = pagerState.currentPage
             TopAppBar(
-                title = { Text(text = stringResource(pageTabs[currentTabIndex].titleRes)) },
+                title = { Text(text = stringResource(pageTabs[page].titleRes)) },
                 actions = { ThemeModeToggle() },
             )
         },
-        modifier = modifier,
+        floatingActionButton = {
+            FloatingActionButton(onClick = onOpenSearch) {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = stringResource(Res.string.action_search),
+                )
+            }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(paddingValues),
         ) {
-            PrimaryTabRow(selectedTabIndex = pagerState.currentPage) {
-                pageTabs.forEachIndexed { index, tab ->
-                    Tab(
-                        selected = pagerState.currentPage == index,
-                        onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
-                        text = {
-                            Text(
-                                stringResource(tab.titleRes),
-                                color = if (pagerState.currentPage == index) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.onSurfaceVariant
-                                },
-                            )
-                        },
-                    )
+            if (items.size > 1) {
+                PrimaryTabRow(selectedTabIndex = selectedIndex) {
+                    items.forEachIndexed { index, item ->
+                        Tab(
+                            selected = index == selectedIndex,
+                            onClick = { onSelectTab(index) },
+                            text = { Text(text = stringResource(item.titleRes)) },
+                        )
+                    }
                 }
             }
 
-            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-                val route = routeForPage(page)
-
-                // Only the sub-route content animates; the pager, tab row and bottom bar stay
-                // composed so switching tabs never tears the navigation shell down.
-                Crossfade(
-                    targetState = route,
-                    animationSpec = tween(180),
-                    label = "page_route_transition",
-                ) { targetRoute ->
-                    saveableStateHolder.SaveableStateProvider(targetRoute.toString()) {
-                        TopLevelContent(route = targetRoute, onNavigate = onNavigate)
-                    }
+            Crossfade(
+                targetState = route,
+                animationSpec = tween(180),
+                label = "page_route_transition",
+                modifier = Modifier.weight(1f),
+            ) { targetRoute ->
+                saveableStateHolder.SaveableStateProvider(targetRoute.toString()) {
+                    TopLevelContent(route = targetRoute, onNavigate = onNavigate)
                 }
             }
         }
