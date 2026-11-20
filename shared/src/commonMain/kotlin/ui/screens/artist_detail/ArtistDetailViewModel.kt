@@ -3,6 +3,7 @@ package ui.screens.artist_detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.repository.Repository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,8 +16,16 @@ class ArtistDetailViewModel(private val repo: Repository) : ViewModel() {
     private val _uiState = MutableStateFlow(ArtistDetailUiState())
     val uiState: StateFlow<ArtistDetailUiState> get() = _uiState.asStateFlow()
 
+    private var fetchJob: Job? = null
+    private var currentPersonId: Int? = null
+
     fun fetchArtistDetail(personId: Int) {
-        viewModelScope.launch {
+        if (currentPersonId == personId && _uiState.value.artistDetail != null) return
+
+        currentPersonId = personId
+        fetchJob?.cancel()
+        _uiState.value = ArtistDetailUiState()
+        fetchJob = viewModelScope.launch {
             launch { artistDetail(personId) }
             launch { artistMoviesAndTvShows(personId) }
         }
@@ -35,17 +44,20 @@ class ArtistDetailViewModel(private val repo: Repository) : ViewModel() {
     }
 
     private fun <T> handleStateUpdate(
-        result: UiState<T>, stateUpdater: (ArtistDetailUiState, T?) -> ArtistDetailUiState
+        result: UiState<T>,
+        stateUpdater: (ArtistDetailUiState, T?) -> ArtistDetailUiState,
     ) {
         _uiState.update { currentState ->
             when (result) {
                 is UiState.Loading -> currentState.copy(isLoading = true)
                 is UiState.Success -> stateUpdater(
-                    currentState, result.data
+                    currentState,
+                    result.data,
                 ).copy(isLoading = false)
 
                 is UiState.Error -> currentState.copy(
-                    isLoading = false, errorMessage = result.exception.message
+                    isLoading = false,
+                    errorMessage = result.exception.message,
                 )
             }
         }
