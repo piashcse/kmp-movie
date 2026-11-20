@@ -85,6 +85,7 @@ kotlin {
 extensions.configure<LibraryExtension> {
     namespace = "piashcse.kmp.movie"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdkMinor = libs.versions.android.compileSdkMinor.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -92,6 +93,13 @@ extensions.configure<LibraryExtension> {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+    testOptions {
+        unitTests {
+            // Compose Preview resolution (and Robolectric-based UI tests) need the
+            // compiled Android resources on the unit-test classpath.
+            isIncludeAndroidResources = true
+        }
     }
 }
 

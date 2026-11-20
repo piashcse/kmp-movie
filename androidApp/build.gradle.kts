@@ -10,6 +10,7 @@ plugins {
 extensions.configure<ApplicationExtension> {
     namespace = "piashcse.kmp.movie"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdkMinor = libs.versions.android.compileSdkMinor.get().toInt()
 
     defaultConfig {
         applicationId = "piashcse.kmp.movie"
@@ -31,6 +32,12 @@ extensions.configure<ApplicationExtension> {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+    testOptions {
+        unitTests {
+            // Compose Preview resolution needs compiled Android resources.
+            isIncludeAndroidResources = true
+        }
     }
 }
 
