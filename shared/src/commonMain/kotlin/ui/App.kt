@@ -28,6 +28,7 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigationevent.NavigationEventInfo
@@ -113,6 +114,8 @@ fun App(
         KmpMovieTheme(darkTheme = shouldUseDarkTheme()) {
             val navigator = rememberNavigator(NowPlayingMovie)
             val isDetailScreen = navigator.isDetailScreen
+            // Keeps list/pager state (scroll position, selected tab) while a detail screen is open.
+            val saveableStateHolder = rememberSaveableStateHolder()
 
             val backState = rememberNavigationEventState(NavigationEventInfo.None)
             NavigationEventHandler(
@@ -127,12 +130,14 @@ fun App(
                     animationSpec = tween(300),
                     label = "detail_transition",
                 ) { currentRoute ->
-                    Scaffold { paddingValues ->
-                        DetailScreen(
-                            navigator = navigator,
-                            currentRoute = currentRoute,
-                            modifier = Modifier.padding(paddingValues),
-                        )
+                    saveableStateHolder.SaveableStateProvider(currentRoute) {
+                        Scaffold { paddingValues ->
+                            DetailScreen(
+                                navigator = navigator,
+                                currentRoute = currentRoute,
+                                modifier = Modifier.padding(paddingValues),
+                            )
+                        }
                     }
                 }
             } else {
@@ -163,14 +168,16 @@ fun App(
                         animationSpec = tween(200),
                         label = "content_transition",
                     ) { currentRoute ->
-                        val activeRoute = currentRoute as TopLevelRoute
-                        val page = getPageForRoute(activeRoute)
+                        saveableStateHolder.SaveableStateProvider(currentRoute) {
+                            val activeRoute = currentRoute as TopLevelRoute
+                            val page = getPageForRoute(activeRoute)
 
-                        ListScaffold(
-                            navigator = navigator,
-                            activeRoute = activeRoute,
-                            currentPage = page,
-                        )
+                            ListScaffold(
+                                navigator = navigator,
+                                activeRoute = activeRoute,
+                                currentPage = page,
+                            )
+                        }
                     }
                 }
             }

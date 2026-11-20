@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,9 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
-import com.skydoves.landscapist.components.rememberImageComponent
 import constant.AppConstant
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.view_details
@@ -65,7 +62,6 @@ fun <T> MediaGrid(
                         .height(imageHeight)
                         .fillMaxWidth()
                         .cornerRadius(10)
-                        .shimmerBackground(RoundedCornerShape(10.dp))
                         .clickable(onClickLabel = stringResource(Res.string.view_details)) {
                             onClick(getItemId(item))
                         },
@@ -74,9 +70,6 @@ fun <T> MediaGrid(
                         contentScale = ContentScale.Crop,
                         alignment = Alignment.Center,
                     ),
-                    component = rememberImageComponent {
-                        +CircularRevealPlugin(duration = 800)
-                    },
                 )
                 
                 // Optional additional content (e.g., celebrity name and popularity)

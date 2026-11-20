@@ -3,11 +3,13 @@ package utils
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import utils.network.UiState
 
@@ -62,25 +64,31 @@ class Paginator<T>(
         }
     }
 }
+
+/**
+ * Requests the next page when the last visible item gets within [buffer] of the end.
+ *
+ * Watching the (total, lastVisible) pair instead of a single Boolean means appending a page
+ * while the user is still near the end triggers the next load instead of stalling.
+ */
 @Composable
 fun OnGridPagination(
     gridState: LazyGridState,
     buffer: Int = 5,
-    onLoadMore: () -> Unit
+    onLoadMore: () -> Unit,
 ) {
-    val shouldLoadMore = remember {
-        derivedStateOf {
-            val layoutInfo = gridState.layoutInfo
-            val totalItems = layoutInfo.totalItemsCount
-            if (totalItems == 0) return@derivedStateOf false
-            val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-            lastVisibleItem >= totalItems - buffer
-        }
-    }
+    val currentOnLoadMore by rememberUpdatedState(onLoadMore)
 
-    LaunchedEffect(shouldLoadMore.value) {
-        if (shouldLoadMore.value) {
-            onLoadMore()
+    LaunchedEffect(gridState, buffer) {
+        snapshotFlow {
+            val layoutInfo = gridState.layoutInfo
+            layoutInfo.totalItemsCount to (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1)
         }
+            .distinctUntilChanged()
+            .collect { (totalItems, lastVisibleItem) ->
+                if (totalItems > 0 && lastVisibleItem >= totalItems - buffer) {
+                    currentOnLoadMore()
+                }
+            }
     }
 }

@@ -61,7 +61,6 @@ import ui.component.ExpandableText
 import ui.component.FavoriteButton
 import ui.component.ImageLoad
 import ui.component.base.BaseColumn
-import ui.component.shimmerBackground
 import ui.component.text.SubtitlePrimary
 import ui.component.text.SubtitleSecondary
 import utils.roundTo
@@ -118,7 +117,6 @@ fun UiDetail(data: TvSeriesDetail, onBack: () -> Unit) {
                     shadowElevation = 10f
                     renderEffect = BlurEffect(15f, 15f)
                 }
-                .shimmerBackground(RoundedCornerShape(5.dp))
         )
         
         Row(
@@ -167,7 +165,6 @@ fun UiDetail(data: TvSeriesDetail, onBack: () -> Unit) {
                         .size(135.dp, 180.dp)
                         .cornerRadius(10)
                         .border(1.dp, Color.White, RoundedCornerShape(10.dp))
-                        .shimmerBackground(RoundedCornerShape(5.dp))
                 )
                 Column(
                     modifier = Modifier

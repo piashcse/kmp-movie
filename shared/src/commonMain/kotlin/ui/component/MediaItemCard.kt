@@ -14,8 +14,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,14 +21,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
-import com.skydoves.landscapist.components.rememberImageComponent
 import constant.AppConstant
-import data.model.local.FavoriteItem
-import data.model.local.MediaType
-import data.repository.FavoritesStore
-import org.koin.compose.koinInject
 import theme.cornerRadius
 import ui.theme.AppTheme
 
@@ -40,15 +32,11 @@ fun MediaItemCard(
     title: String,
     posterPath: String?,
     releaseDate: String,
-    mediaType: MediaType,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    showActions: Boolean = true,
+    isFavorite: Boolean = false,
+    onFavoriteClick: (() -> Unit)? = null,
 ) {
-    val favoritesStore = koinInject<FavoritesStore>()
-    val favorites by favoritesStore.favorites.collectAsState()
-    val isFavorite = favorites.any { it.id == id && it.mediaType == mediaType }
-
     Card(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
@@ -62,19 +50,15 @@ fun MediaItemCard(
                 modifier = Modifier
                     .height(200.dp)
                     .fillMaxWidth()
-                    .cornerRadius(10)
-                    .shimmerBackground(RoundedCornerShape(10.dp)),
+                    .cornerRadius(10),
                 imageOptions = ImageOptions(
                     contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                     contentDescription = title,
                 ),
-                component = rememberImageComponent {
-                    +CircularRevealPlugin(duration = 800)
-                },
             )
 
-            if (showActions) {
+            if (onFavoriteClick != null) {
                 Row(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -83,17 +67,7 @@ fun MediaItemCard(
                 ) {
                     FavoriteButton(
                         isFavorite = isFavorite,
-                        onClick = {
-                            favoritesStore.toggle(
-                                FavoriteItem(
-                                    id = id,
-                                    mediaType = mediaType,
-                                    title = title,
-                                    posterPath = posterPath,
-                                    releaseDate = releaseDate,
-                                )
-                            )
-                        },
+                        onClick = onFavoriteClick,
                     )
                 }
             }

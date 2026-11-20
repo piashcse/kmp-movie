@@ -80,8 +80,9 @@ fun FavoritesScreen(
                             title = favorite.title,
                             posterPath = favorite.posterPath,
                             releaseDate = favorite.releaseDate.orEmpty(),
-                            mediaType = favorite.mediaType,
                             onClick = { onNavigateToDetail(favorite.id) },
+                            isFavorite = true,
+                            onFavoriteClick = { viewModel.remove(favorite) },
                         )
                     }
                 }

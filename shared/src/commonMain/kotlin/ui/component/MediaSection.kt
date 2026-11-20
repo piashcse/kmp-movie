@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,9 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
-import com.skydoves.landscapist.components.rememberImageComponent
 import constant.AppConstant
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.cast
@@ -45,10 +42,7 @@ fun ImageLoad(url: String, modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop,
             alignment = Alignment.Center,
         ),
-        component = rememberImageComponent {
-            +CircularRevealPlugin(duration = 800)
-        },
-        modifier = modifier.shimmerBackground(RoundedCornerShape(5.dp)),
+        modifier = modifier,
     )
 }
 
@@ -81,9 +75,6 @@ fun ArtistAndCrewSection(
                             contentScale = ContentScale.Crop,
                             alignment = Alignment.Center,
                         ),
-                        component = rememberImageComponent {
-                            +CircularRevealPlugin(duration = 800)
-                        },
                         modifier = Modifier
                             .padding(bottom = 4.dp)
                             .size(80.dp)

@@ -31,9 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
-import com.skydoves.landscapist.components.rememberImageComponent
 import constant.AppConstant
 import data.model.artist.ArtistMovie
 import data.model.local.FavoriteItem
@@ -99,9 +97,6 @@ fun ArtistDetail(
                                 contentScale = ContentScale.Crop,
                                 alignment = Alignment.Center,
                             ),
-                            component = rememberImageComponent {
-                                +CircularRevealPlugin(duration = 800)
-                            },
                         )
                         Column {
                             Text(
@@ -225,11 +220,6 @@ fun ArtistMoviesAndTvShows(artistMovies: List<ArtistMovie>, onMovieClick: (Artis
                             contentScale = ContentScale.Crop,
                             alignment = Alignment.Center,
                         ),
-                        component = rememberImageComponent {
-                            +CircularRevealPlugin(
-                                duration = 800
-                            )
-                        },
                     )
                 }
             })

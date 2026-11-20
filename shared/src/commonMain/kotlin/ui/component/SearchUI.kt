@@ -31,9 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
 import com.skydoves.landscapist.coil3.CoilImage
-import com.skydoves.landscapist.components.rememberImageComponent
 import constant.AppConstant
 import data.model.MovieItem
 import data.model.TvSeriesItem
@@ -231,14 +229,10 @@ private fun SearchResultRow(
                 contentDescription = contentDescription,
                 colorFilter = null,
             ),
-            component = rememberImageComponent {
-                +CircularRevealPlugin(duration = 800)
-            },
             modifier = Modifier
                 .height(120.dp)
                 .width(100.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .shimmerBackground(RoundedCornerShape(8.dp)),
+                .clip(RoundedCornerShape(8.dp)),
         )
         Column(modifier = Modifier.padding(start = 12.dp)) {
             Text(
