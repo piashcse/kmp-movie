@@ -13,7 +13,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.encodedPath
 
-class ApiService : ApiInterface {
+class ApiService {
     
     // Helper function for paginated endpoints with reified
     private suspend inline fun <reified T> getPaginated(
@@ -51,36 +51,36 @@ class ApiService : ApiInterface {
     }.body()
     
     // Movie endpoints
-    override suspend fun nowPlayingMovies(page: Int) = getPaginated<MovieItem>("movie/now_playing", page, null)
-    override suspend fun popularMovies(page: Int) = getPaginated<MovieItem>("movie/popular", page, null)
-    override suspend fun topRatedMovies(page: Int) = getPaginated<MovieItem>("movie/top_rated", page, null)
-    override suspend fun upcomingMovies(page: Int) = getPaginated<MovieItem>("movie/upcoming", page, null)
-    override suspend fun movieDetail(movieId: Int) = getItem<MovieDetail>("movie/$movieId") {
+    suspend fun nowPlayingMovies(page: Int) = getPaginated<MovieItem>("movie/now_playing", page, null)
+    suspend fun popularMovies(page: Int) = getPaginated<MovieItem>("movie/popular", page, null)
+    suspend fun topRatedMovies(page: Int) = getPaginated<MovieItem>("movie/top_rated", page, null)
+    suspend fun upcomingMovies(page: Int) = getPaginated<MovieItem>("movie/upcoming", page, null)
+    suspend fun movieDetail(movieId: Int) = getItem<MovieDetail>("movie/$movieId") {
         it.parameters.append("append_to_response", "credits,recommendations")
     }
-    override suspend fun movieSearch(searchKey: String) = search<MovieItem>("search/movie", searchKey)
+    suspend fun movieSearch(searchKey: String) = search<MovieItem>("search/movie", searchKey)
 
     // TV Series endpoints
-    override suspend fun airingTodayTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/airing_today", page, null)
-    override suspend fun onTheAirTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/on_the_air", page, null)
-    override suspend fun popularTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/popular", page, null)
-    override suspend fun topRatedTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/top_rated", page, null)
-    override suspend fun tvSeriesDetail(seriesId: Int) = getItem<TvSeriesDetail>("tv/$seriesId") {
+    suspend fun airingTodayTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/airing_today", page, null)
+    suspend fun onTheAirTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/on_the_air", page, null)
+    suspend fun popularTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/popular", page, null)
+    suspend fun topRatedTvSeries(page: Int) = getPaginated<TvSeriesItem>("tv/top_rated", page, null)
+    suspend fun tvSeriesDetail(seriesId: Int) = getItem<TvSeriesDetail>("tv/$seriesId") {
         it.parameters.append("append_to_response", "credits,recommendations")
     }
-    override suspend fun tvSeriesSearch(searchKey: String) = search<TvSeriesItem>("search/tv", searchKey)
+    suspend fun tvSeriesSearch(searchKey: String) = search<TvSeriesItem>("search/tv", searchKey)
 
     // Celebrity endpoints
-    override suspend fun popularCelebrity(page: Int) = getPaginated<Celebrity>("person/popular", page, null)
-    override suspend fun trendingCelebrity(page: Int) = getPaginated<Celebrity>("trending/person/week", page, null)
-    override suspend fun celebritySearch(searchKey: String) = search<Celebrity>("search/person", searchKey)
-    override suspend fun artistDetail(personId: Int) = getItem<ArtistDetail>("person/$personId") {
+    suspend fun popularCelebrity(page: Int) = getPaginated<Celebrity>("person/popular", page, null)
+    suspend fun trendingCelebrity(page: Int) = getPaginated<Celebrity>("trending/person/week", page, null)
+    suspend fun celebritySearch(searchKey: String) = search<Celebrity>("search/person", searchKey)
+    suspend fun artistDetail(personId: Int) = getItem<ArtistDetail>("person/$personId") {
         it.parameters.append("append_to_response", "combined_credits")
     }
 
     // Genre endpoints
-    override suspend fun movieGenres(): List<Genre> = apiClient.get { url { encodedPath = "genre/movie/list" } }.body<GenreResponse>().genres
-    override suspend fun tvGenres(): List<Genre> = apiClient.get { url { encodedPath = "genre/tv/list" } }.body<GenreResponse>().genres
-    override suspend fun moviesByGenre(genreId: Int, page: Int): BaseModel<MovieItem> = getPaginated<MovieItem>("discover/movie", page) { url -> url.parameters.append("with_genres", genreId.toString()) }
-    override suspend fun tvSeriesByGenre(genreId: Int, page: Int): BaseModel<TvSeriesItem> = getPaginated<TvSeriesItem>("discover/tv", page) { url -> url.parameters.append("with_genres", genreId.toString()) }
+    suspend fun movieGenres(): List<Genre> = apiClient.get { url { encodedPath = "genre/movie/list" } }.body<GenreResponse>().genres
+    suspend fun tvGenres(): List<Genre> = apiClient.get { url { encodedPath = "genre/tv/list" } }.body<GenreResponse>().genres
+    suspend fun moviesByGenre(genreId: Int, page: Int): BaseModel<MovieItem> = getPaginated<MovieItem>("discover/movie", page) { url -> url.parameters.append("with_genres", genreId.toString()) }
+    suspend fun tvSeriesByGenre(genreId: Int, page: Int): BaseModel<TvSeriesItem> = getPaginated<TvSeriesItem>("discover/tv", page) { url -> url.parameters.append("with_genres", genreId.toString()) }
 }

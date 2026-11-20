@@ -24,7 +24,6 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
 import constant.AppConstant
 import theme.cornerRadius
-import ui.theme.AppTheme
 
 @Composable
 fun MediaItemCard(
@@ -42,7 +41,7 @@ fun MediaItemCard(
             .clip(RoundedCornerShape(10.dp))
             .clickable(onClick = onClick),
         shape = CardDefaults.shape,
-        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Box {
             CoilImage(
@@ -83,14 +82,14 @@ fun MediaItemCard(
                 style = MaterialTheme.typography.titleSmall,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                color = AppTheme.colors.onSurface,
+                color = MaterialTheme.colorScheme.onSurface,
             )
 
             if (releaseDate.isNotEmpty()) {
                 Text(
                     text = releaseDate,
                     style = MaterialTheme.typography.bodySmall,
-                    color = AppTheme.colors.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
