@@ -85,6 +85,7 @@ kotlin {
 extensions.configure<LibraryExtension> {
     namespace = "piashcse.kmp.movie"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdkMinor = libs.versions.android.compileSdkMinor.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
