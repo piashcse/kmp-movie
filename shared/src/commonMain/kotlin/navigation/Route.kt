@@ -3,9 +3,9 @@ package navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed interface Route
@@ -17,12 +17,12 @@ sealed interface TopLevelRoute : Route {
 
 data object NowPlayingMovie : TopLevelRoute {
     override val title = "Now playing"
-    override val icon = Icons.Filled.Movie
+    override val icon = Icons.Filled.PlayArrow
 }
 
 data object PopularMovie : TopLevelRoute {
     override val title = "Popular"
-    override val icon = Icons.Filled.Timeline
+    override val icon = Icons.AutoMirrored.Filled.List
 }
 
 data object TopRatedMovie : TopLevelRoute {
@@ -37,12 +37,12 @@ data object UpcomingMovie : TopLevelRoute {
 
 data object AiringTodayTvSeries : TopLevelRoute {
     override val title = "Airing today"
-    override val icon = Icons.Filled.Movie
+    override val icon = Icons.Filled.PlayArrow
 }
 
 data object OnTheAirTvSeries : TopLevelRoute {
     override val title = "On the air"
-    override val icon = Icons.Filled.Timeline
+    override val icon = Icons.AutoMirrored.Filled.List
 }
 
 data object PopularTvSeries : TopLevelRoute {
@@ -57,7 +57,7 @@ data object TopRatedTvSeries : TopLevelRoute {
 
 data object TrendingCelebrity : TopLevelRoute {
     override val title = "Trending"
-    override val icon = Icons.Filled.Timeline
+    override val icon = Icons.AutoMirrored.Filled.List
 }
 
 data object PopularCelebrity : TopLevelRoute {
@@ -75,12 +75,12 @@ data object Search : Route
 
 data object FavoriteMovie : TopLevelRoute {
     override val title = "Movies"
-    override val icon = Icons.Filled.Movie
+    override val icon = Icons.Filled.PlayArrow
 }
 
 data object FavoriteTvSeries : TopLevelRoute {
     override val title = "TV Series"
-    override val icon = Icons.Filled.Timeline
+    override val icon = Icons.AutoMirrored.Filled.List
 }
 
 data object FavoriteCelebrity : TopLevelRoute {

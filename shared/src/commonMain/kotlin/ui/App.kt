@@ -36,6 +36,7 @@ import androidx.navigationevent.compose.NavigationEventHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import data.model.local.MediaType
 import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.action_search
 import kmp_movie.composeapp.generated.resources.celebrities
 import kmp_movie.composeapp.generated.resources.favorites
 import kmp_movie.composeapp.generated.resources.movies
@@ -227,7 +228,7 @@ private fun ListScaffold(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { navigator.navigate(Search) }) {
-                Icon(Icons.Filled.Search, contentDescription = "Search")
+                Icon(Icons.Filled.Search, contentDescription = stringResource(Res.string.action_search))
             }
         }
     ) { paddingValues ->

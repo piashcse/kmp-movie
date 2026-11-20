@@ -24,8 +24,8 @@ import utils.storage.LocalStorageManager
  */
 class FavoritesStore(
     private val storage: LocalStorageManager,
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
 ) {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val writeMutex = Mutex()
 
     private val _favorites = MutableStateFlow<List<FavoriteItem>>(emptyList())

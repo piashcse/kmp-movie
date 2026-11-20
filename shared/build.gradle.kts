@@ -62,12 +62,11 @@ kotlin {
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
             implementation(libs.androidx.navigationevent.compose)
-            implementation(libs.compose.material.icons.extended)
+            implementation(libs.compose.material.icons.core)
             implementation(libs.compose.components.resources)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.client.logging)
             implementation(libs.landscapist.coil)
             implementation(libs.androidx.lifecycle)
             implementation(libs.compose.material3.window.size)
@@ -84,6 +83,7 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.multiplatform.settings.test)
         }
         getByName("desktopMain").dependencies {
             implementation(libs.kotlinx.coroutines.swing)
@@ -112,8 +112,8 @@ fun Project.loadLocalProperty(
     val localPropertiesFile = project.rootProject.file(path)
     if (localPropertiesFile.exists()) {
         localProperties.load(localPropertiesFile.inputStream())
-        return localProperties.getProperty(propertyName)
-    } else {
-        throw GradleException("can not find property : $propertyName")
+        localProperties.getProperty(propertyName)?.takeIf { it.isNotBlank() }?.let { return it }
     }
+    // CI and other environments can provide the key without a local.properties file.
+    return providers.environmentVariable(propertyName).orNull.orEmpty()
 }

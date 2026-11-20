@@ -5,3 +5,42 @@ html, body {
     padding: 0;
     overflow: hidden;
 }
+
+#loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #6750a4;
+    background: #fffbfe;
+    z-index: 10;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #eaddff;
+    border-top-color: #6750a4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-color-scheme: dark) {
+    #loading {
+        color: #d0bcff;
+        background: #1c1b1f;
+    }
+
+    .spinner {
+        border-color: #4f378b;
+        border-top-color: #d0bcff;
+    }
+}

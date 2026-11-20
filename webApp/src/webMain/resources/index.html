@@ -3,10 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KMP Movie — movies, TV series and celebrities built with Compose Multiplatform">
     <title>kmp-movie</title>
     <link type="text/css" rel="stylesheet" href="styles.css">
     <script type="application/javascript" src="webApp.js"></script>
 </head>
 <body>
+<div id="loading">
+    <div class="spinner"></div>
+    <p>Loading KMP Movie…</p>
+</div>
+<script>
+    // Remove the static loader as soon as Compose renders its canvas.
+    const observer = new MutationObserver(() => {
+        if (document.querySelector('canvas')) {
+            document.getElementById('loading')?.remove();
+            observer.disconnect();
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+</script>
 </body>
 </html>

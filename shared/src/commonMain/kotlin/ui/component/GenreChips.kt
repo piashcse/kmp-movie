@@ -12,6 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kmp_movie.composeapp.generated.resources.Res
+import kmp_movie.composeapp.generated.resources.all
+import org.jetbrains.compose.resources.stringResource
 
 interface GenreItem {
     val id: Int
@@ -35,7 +38,7 @@ fun GenreChips(
         FilterChip(
             selected = selectedGenreId == null,
             onClick = { onGenreSelected(null) },
-            label = { Text("All") },
+            label = { Text(stringResource(Res.string.all)) },
             shape = RoundedCornerShape(50.dp) // Pill-shaped corners
         )
 
