@@ -9,6 +9,7 @@
 ![badge-iOS](https://img.shields.io/badge/Platform-iOS-lightgray)
 ![badge-desktop](http://img.shields.io/badge/Platform-Desktop-4D76CD.svg?style=flat)
 ![badge-web](https://img.shields.io/badge/Platform-Web-blueviolet.svg?style=flat)
+[![CI](https://github.com/piashcse/kmp-movie/actions/workflows/ci.yml/badge.svg)](https://github.com/piashcse/kmp-movie/actions/workflows/ci.yml)
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 <a href="https://github.com/piashcse"><img alt="License" src="https://img.shields.io/static/v1?label=GitHub&message=piashcse&color=C51162"/></a>
 
@@ -140,6 +141,19 @@ To build the debug APK:
 - run `./gradlew :androidApp:assembleDebug`
 - find the `.apk` in `androidApp/build/outputs/apk/debug/androidApp-debug.apk`
 - run Android host tests: `./gradlew :shared:testAndroidHostTest`
+
+#### Release signing
+
+Release builds are minified with R8 and resource shrinking. To produce a signed APK/Bundle, provide:
+
+```bash
+export KEYSTORE_PATH=/absolute/path/to/release.keystore
+export KEYSTORE_PASSWORD=...
+export KEY_ALIAS=...
+export KEY_PASSWORD=...
+```
+
+Without these variables `assembleRelease` still works but produces an unsigned APK.
 
 ### iOS
 
