@@ -94,6 +94,13 @@ extensions.configure<LibraryExtension> {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    testOptions {
+        unitTests {
+            // Compose Preview resolution (and Robolectric-based UI tests) need the
+            // compiled Android resources on the unit-test classpath.
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 compose.resources {

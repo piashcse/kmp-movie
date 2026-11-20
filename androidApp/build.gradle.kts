@@ -33,6 +33,12 @@ extensions.configure<ApplicationExtension> {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    testOptions {
+        unitTests {
+            // Compose Preview resolution needs compiled Android resources.
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 kotlin {
