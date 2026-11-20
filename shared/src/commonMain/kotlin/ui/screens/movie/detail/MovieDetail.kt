@@ -34,6 +34,7 @@ import ui.component.ArtistAndCrewSection
 import ui.component.CastMember
 import ui.component.RecommendedSection
 import ui.component.base.BaseColumn
+import ui.component.detail.MediaDetailActions
 import ui.component.skeleton.MediaDetailSkeleton
 import ui.screens.detail.DetailInfo
 import ui.screens.detail.MediaDetailHeader
@@ -64,7 +65,15 @@ fun MovieDetail(
         loading = uiState.isLoading && uiState.movieDetail == null,
         errorMessage = uiState.errorMessage
     ) {
-        uiState.movieDetail?.let { UiDetail(it, onBack) }
+        uiState.movieDetail?.let { data ->
+            UiDetail(data, onBack)
+            MediaDetailActions(
+                title = data.title,
+                shareUrl = "https://www.themoviedb.org/movie/${data.id}",
+                videos = data.videos,
+                watchProviders = data.watchProviders,
+            )
+        }
         Spacer(modifier = Modifier.height(10.dp))
         Column(modifier = Modifier.padding(horizontal = 10.dp)) {
             if (uiState.recommendedMovies.isNotEmpty()) {

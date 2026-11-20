@@ -35,6 +35,7 @@ import ui.component.CastMember
 import ui.component.RecommendedSection
 import ui.component.SeasonsSection
 import ui.component.base.BaseColumn
+import ui.component.detail.MediaDetailActions
 import ui.component.skeleton.MediaDetailSkeleton
 import ui.screens.detail.DetailInfo
 import ui.screens.detail.MediaDetailHeader
@@ -65,7 +66,15 @@ fun TvSeriesDetail(
         loading = uiState.isLoading && uiState.tvSeriesDetail == null,
         errorMessage = uiState.errorMessage
     ) {
-        uiState.tvSeriesDetail?.let { UiDetail(it, onBack) }
+        uiState.tvSeriesDetail?.let { data ->
+            UiDetail(data, onBack)
+            MediaDetailActions(
+                title = data.name,
+                shareUrl = "https://www.themoviedb.org/tv/${data.id}",
+                videos = data.videos,
+                watchProviders = data.watchProviders,
+            )
+        }
         Spacer(modifier = Modifier.height(10.dp))
         Column(modifier = Modifier.padding(horizontal = 10.dp)) {
             uiState.tvSeriesDetail?.seasons?.takeIf { it.isNotEmpty() }?.let { seasons ->

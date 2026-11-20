@@ -62,6 +62,10 @@ UI experience across all platforms, leveraging [The Movie DB API](https://www.th
 - ❤️ **Reactive favorites** shared between all screens
 - 🔎 **Debounced search** with movie, TV and celebrity results
 - 📄 **Pagination** on all platforms
+- 🖥️ **Two-pane list/detail** on wide windows and tablets
+- 🎬 **Trailer, share and watch-provider** actions on detail pages
+- 🔗 **Deep links** on the web (`#/movie/27205`, `#/series/1399`, `#/person/31`)
+- 🪟 **Persistent desktop window** size, position and maximized state
 
 ## Architecture
 
@@ -169,11 +173,14 @@ To run the application on an iPhone device/simulator:
 - Run the desktop application: `./gradlew :desktopApp:run`
 - Run with Compose Hot Reload: `./gradlew :desktopApp:hotRun`
 - Run desktop tests: `./gradlew :shared:desktopTest`
+- Window size, position and maximized state are restored on the next launch.
 
 ### Web
 
 - Before running make sure you have `yarn 1.22.22`
 - Run the web application: `./gradlew :webApp:wasmJsBrowserDevelopmentRun`
+- Routes are kept in the URL hash, so refreshing and browser back/forward work. Examples:
+  `#/movies/popular`, `#/tv/top-rated`, `#/movie/27205`, `#/series/1399`, `#/person/31`.
 
 ## Project structure
 

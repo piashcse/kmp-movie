@@ -88,6 +88,9 @@ kotlin {
         getByName("desktopMain").dependencies {
             implementation(libs.kotlinx.coroutines.swing)
         }
+        getByName("wasmJsMain").dependencies {
+            implementation(libs.kotlinx.browser)
+        }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
