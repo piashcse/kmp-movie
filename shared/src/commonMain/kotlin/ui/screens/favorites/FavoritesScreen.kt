@@ -19,11 +19,16 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +41,9 @@ import kmp_movie.composeapp.generated.resources.empty_movies_subtitle
 import kmp_movie.composeapp.generated.resources.empty_movies_title
 import kmp_movie.composeapp.generated.resources.empty_tv_series_subtitle
 import kmp_movie.composeapp.generated.resources.empty_tv_series_title
+import kmp_movie.composeapp.generated.resources.removed_from_favorites
+import kmp_movie.composeapp.generated.resources.undo
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import ui.component.MediaItemCard
@@ -52,8 +60,15 @@ fun FavoritesScreen(
     val filtered = remember(favorites, mediaType) {
         favorites.filter { it.mediaType == mediaType }
     }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val removedMessage = stringResource(Res.string.removed_from_favorites)
+    val undoLabel = stringResource(Res.string.undo)
 
-    Scaffold(modifier = modifier.fillMaxSize()) { paddingValues ->
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -81,7 +96,19 @@ fun FavoritesScreen(
                             releaseDate = favorite.releaseDate.orEmpty(),
                             onClick = { onNavigateToDetail(favorite.id) },
                             isFavorite = true,
-                            onFavoriteClick = { viewModel.remove(favorite) },
+                            onFavoriteClick = {
+                                viewModel.remove(favorite)
+                                scope.launch {
+                                    val result = snackbarHostState.showSnackbar(
+                                        message = removedMessage,
+                                        actionLabel = undoLabel,
+                                        duration = SnackbarDuration.Short,
+                                    )
+                                    if (result == SnackbarResult.ActionPerformed) {
+                                        viewModel.restore(favorite)
+                                    }
+                                }
+                            },
                         )
                     }
                 }

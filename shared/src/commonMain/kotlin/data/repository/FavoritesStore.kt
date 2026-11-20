@@ -58,6 +58,14 @@ class FavoritesStore(
         persist()
     }
 
+    fun add(item: FavoriteItem) {
+        _favorites.update { current ->
+            val exists = current.any { it.id == item.id && it.mediaType == item.mediaType }
+            if (exists) current else current + item
+        }
+        persist()
+    }
+
     fun remove(id: Int, mediaType: MediaType) {
         _favorites.update { current ->
             current.filterNot { it.id == id && it.mediaType == mediaType }
