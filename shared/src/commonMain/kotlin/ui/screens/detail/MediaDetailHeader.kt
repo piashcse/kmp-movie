@@ -1,7 +1,6 @@
 package ui.screens.detail
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,7 +26,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import data.model.local.FavoriteItem
 import kmp_movie.composeapp.generated.resources.Res
 import kmp_movie.composeapp.generated.resources.action_back
@@ -43,8 +41,8 @@ import ui.component.text.SubtitleSecondary
 data class DetailInfo(val label: String, val value: String)
 
 /**
- * Shared header used by the movie and TV detail screens: blurred backdrop, poster, title,
- * a 2x2 info grid, favorite toggle and the expandable overview.
+ * Shared header used by the movie and TV detail screens. The content flows below the
+ * backdrop instead of using a fixed overlay height, so it stays readable with large fonts.
  */
 @Composable
 fun MediaDetailHeader(
@@ -62,7 +60,7 @@ fun MediaDetailHeader(
             url = backdropUrl,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(270.dp)
+                .height(240.dp)
                 .graphicsLayer {
                     alpha = 0.8f
                     shadowElevation = 10f
@@ -73,15 +71,15 @@ fun MediaDetailHeader(
         Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = 16.dp, end = 16.dp),
+                .padding(top = 12.dp, end = 12.dp),
         ) {
-            FavoriteItemButton(item = favoriteItem, modifier = Modifier.size(32.dp))
+            FavoriteItemButton(item = favoriteItem, modifier = Modifier.size(36.dp))
         }
 
         IconButton(
             onClick = onBack,
             modifier = Modifier
-                .padding(top = 16.dp, start = 16.dp)
+                .padding(top = 12.dp, start = 12.dp)
                 .align(Alignment.TopStart),
         ) {
             Icon(
@@ -91,28 +89,30 @@ fun MediaDetailHeader(
             )
         }
 
-        Column(modifier = Modifier.padding(start = 10.dp, top = 200.dp, end = 10.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 12.dp, end = 12.dp, top = 110.dp, bottom = 12.dp),
+        ) {
             Row {
                 ImageLoad(
                     url = posterUrl,
                     modifier = Modifier
-                        .size(135.dp, 180.dp)
+                        .size(110.dp, 150.dp)
                         .cornerRadius(10)
                         .border(1.dp, Color.White, RoundedCornerShape(10.dp)),
                 )
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .padding(start = 10.dp),
-                    verticalArrangement = Arrangement.Bottom,
+                        .weight(1f)
+                        .padding(start = 12.dp),
                 ) {
                     Text(
                         text = title,
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 18.sp,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold,
-                        maxLines = 1,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -126,14 +126,15 @@ fun MediaDetailHeader(
                     }
                 }
             }
+
             Text(
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier.padding(top = 16.dp),
                 text = descriptionLabel,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 17.sp,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
-            ExpandableText(text = overview, maxLines = 2)
+            ExpandableText(text = overview, maxLines = 3)
         }
     }
 }
