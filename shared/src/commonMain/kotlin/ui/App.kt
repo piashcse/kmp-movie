@@ -27,8 +27,13 @@ import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.SaveableStateHolder
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigationevent.NavigationEventInfo
@@ -92,6 +97,7 @@ private const val PAGE_TV_SERIES = 1
 private const val PAGE_CELEBRITIES = 2
 private const val PAGE_FAVORITES = 3
 private const val PAGE_COUNT = 4
+private const val TOP_LEVEL_STATE_KEY = "top_level"
 
 private val pageTabs = listOf(
     PageTab(Res.string.movies, Icons.Filled.Movie),
@@ -163,21 +169,16 @@ fun App(
                         }
                     }
                 ) {
-                    Crossfade(
-                        targetState = navigator.currentRoute,
-                        animationSpec = tween(200),
-                        label = "content_transition",
-                    ) { currentRoute ->
-                        saveableStateHolder.SaveableStateProvider(currentRoute.toString()) {
-                            val activeRoute = currentRoute as TopLevelRoute
-                            val page = getPageForRoute(activeRoute)
-
-                            ListScaffold(
-                                navigator = navigator,
-                                activeRoute = activeRoute,
-                                currentPage = page,
-                            )
-                        }
+                    // One stable pager for all top-level routes. Previously this was wrapped in a
+                    // Crossfade keyed by the route, so every tab/sub-tab switch recreated the
+                    // pager and re-entered every list screen.
+                    saveableStateHolder.SaveableStateProvider(TOP_LEVEL_STATE_KEY) {
+                        ListScaffold(
+                            navigator = navigator,
+                            activeRoute = currentTopLevelRoute,
+                            currentPage = currentPage,
+                            saveableStateHolder = saveableStateHolder,
+                        )
                     }
                 }
             }
@@ -236,6 +237,7 @@ private fun ListScaffold(
     navigator: navigation.Navigator,
     activeRoute: TopLevelRoute,
     currentPage: Int,
+    saveableStateHolder: SaveableStateHolder,
 ) {
     Scaffold(
         floatingActionButton = {
@@ -248,6 +250,7 @@ private fun ListScaffold(
             navigator = navigator,
             activeRoute = activeRoute,
             currentPage = currentPage,
+            saveableStateHolder = saveableStateHolder,
             modifier = Modifier.padding(paddingValues),
         )
     }
@@ -258,12 +261,43 @@ private fun MainScreen(
     navigator: navigation.Navigator,
     activeRoute: TopLevelRoute,
     currentPage: Int,
+    saveableStateHolder: SaveableStateHolder,
     modifier: Modifier = Modifier,
 ) {
     val pagerState = rememberPagerState(initialPage = currentPage) { PAGE_COUNT }
 
+    // Remember the selected sub-tab of each top-level page so switching pages (or opening a
+    // detail and coming back) doesn't reset the bottom navigation to the first item.
+    var moviesIndex by rememberSaveable { mutableStateOf(0) }
+    var tvIndex by rememberSaveable { mutableStateOf(0) }
+    var celebritiesIndex by rememberSaveable { mutableStateOf(0) }
+    var favoritesIndex by rememberSaveable { mutableStateOf(0) }
+
+    fun selectedIndex(page: Int): Int = when (page) {
+        PAGE_MOVIES -> moviesIndex
+        PAGE_TV_SERIES -> tvIndex
+        PAGE_CELEBRITIES -> celebritiesIndex
+        else -> favoritesIndex
+    }
+
+    fun routeForPage(page: Int): TopLevelRoute =
+        getItemsForPage(page).getOrElse(selectedIndex(page)) { getDefaultRouteForPage(page) }
+
+    fun selectIndex(page: Int, index: Int) {
+        when (page) {
+            PAGE_MOVIES -> moviesIndex = index
+            PAGE_TV_SERIES -> tvIndex = index
+            PAGE_CELEBRITIES -> celebritiesIndex = index
+            else -> favoritesIndex = index
+        }
+    }
+
     LaunchedEffect(activeRoute) {
         val page = getPageForRoute(activeRoute)
+        val index = getItemsForPage(page).indexOf(activeRoute)
+        if (index >= 0) {
+            selectIndex(page, index)
+        }
         if (pagerState.currentPage != page) {
             pagerState.animateScrollToPage(page)
         }
@@ -271,17 +305,16 @@ private fun MainScreen(
 
     LaunchedEffect(pagerState.settledPage) {
         val page = pagerState.settledPage
-        if (page != getPageForRoute(activeRoute)) {
-            val newRoute = getDefaultRouteForPage(page)
-            if (navigator.currentRoute != newRoute) {
-                navigator.navigateToTopLevel(newRoute)
-            }
+        val targetRoute = routeForPage(page)
+        if (navigator.currentRoute != targetRoute) {
+            navigator.navigateToTopLevel(targetRoute)
         }
     }
 
     TabScreen(
         pagerState = pagerState,
-        activeRoute = activeRoute,
+        routeForPage = { page -> routeForPage(page) },
+        saveableStateHolder = saveableStateHolder,
         onNavigate = { navigator.navigate(it) },
         modifier = modifier,
     )
@@ -291,7 +324,8 @@ private fun MainScreen(
 @Composable
 private fun TabScreen(
     pagerState: PagerState,
-    activeRoute: TopLevelRoute,
+    routeForPage: (Int) -> TopLevelRoute,
+    saveableStateHolder: SaveableStateHolder,
     onNavigate: (Route) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -332,55 +366,72 @@ private fun TabScreen(
             }
 
             HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-                val route = if (page == getPageForRoute(activeRoute)) activeRoute
-                else getDefaultRouteForPage(page)
+                val route = routeForPage(page)
 
-                when (route) {
-                    is NowPlayingMovie -> NowPlayingScreen(
-                        onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
-                    )
-                    is PopularMovie -> PopularMovieScreen(
-                        onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
-                    )
-                    is TopRatedMovie -> TopRatedMovieScreen(
-                        onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
-                    )
-                    is UpcomingMovie -> UpcomingMovieScreen(
-                        onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
-                    )
-                    is AiringTodayTvSeries -> AiringTodayTvSeriesScreen(
-                        onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) },
-                    )
-                    is OnTheAirTvSeries -> OnTheAirTvSeriesScreen(
-                        onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) },
-                    )
-                    is PopularTvSeries -> PopularTvSeriesScreen(
-                        onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) },
-                    )
-                    is TopRatedTvSeries -> TopRatedTvSeriesScreen(
-                        onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) },
-                    )
-                    is PopularCelebrity -> PopularCelebritiesScreen(
-                        onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) },
-                    )
-                    is TrendingCelebrity -> TrendingCelebritiesScreen(
-                        onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) },
-                    )
-                    is FavoriteMovie -> FavoritesScreen(
-                        mediaType = MediaType.MOVIE,
-                        onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
-                    )
-                    is FavoriteTvSeries -> FavoritesScreen(
-                        mediaType = MediaType.TV,
-                        onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) },
-                    )
-                    is FavoriteCelebrity -> FavoritesScreen(
-                        mediaType = MediaType.PERSON,
-                        onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) },
-                    )
+                // Only the sub-route content animates; the pager, tab row and bottom bar stay
+                // composed so switching tabs never tears the navigation shell down.
+                Crossfade(
+                    targetState = route,
+                    animationSpec = tween(180),
+                    label = "page_route_transition",
+                ) { targetRoute ->
+                    saveableStateHolder.SaveableStateProvider(targetRoute.toString()) {
+                        TopLevelContent(route = targetRoute, onNavigate = onNavigate)
+                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun TopLevelContent(
+    route: TopLevelRoute,
+    onNavigate: (Route) -> Unit,
+) {
+    when (route) {
+        is NowPlayingMovie -> NowPlayingScreen(
+            onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
+        )
+        is PopularMovie -> PopularMovieScreen(
+            onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
+        )
+        is TopRatedMovie -> TopRatedMovieScreen(
+            onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
+        )
+        is UpcomingMovie -> UpcomingMovieScreen(
+            onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
+        )
+        is AiringTodayTvSeries -> AiringTodayTvSeriesScreen(
+            onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) },
+        )
+        is OnTheAirTvSeries -> OnTheAirTvSeriesScreen(
+            onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) },
+        )
+        is PopularTvSeries -> PopularTvSeriesScreen(
+            onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) },
+        )
+        is TopRatedTvSeries -> TopRatedTvSeriesScreen(
+            onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) },
+        )
+        is PopularCelebrity -> PopularCelebritiesScreen(
+            onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) },
+        )
+        is TrendingCelebrity -> TrendingCelebritiesScreen(
+            onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) },
+        )
+        is FavoriteMovie -> FavoritesScreen(
+            mediaType = MediaType.MOVIE,
+            onNavigateToDetail = { id -> onNavigate(MovieDetail(id)) },
+        )
+        is FavoriteTvSeries -> FavoritesScreen(
+            mediaType = MediaType.TV,
+            onNavigateToDetail = { id -> onNavigate(TvSeriesDetail(id)) },
+        )
+        is FavoriteCelebrity -> FavoritesScreen(
+            mediaType = MediaType.PERSON,
+            onNavigateToDetail = { id -> onNavigate(ArtistDetail(id)) },
+        )
     }
 }
 

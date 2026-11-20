@@ -50,7 +50,11 @@ fun <T, S> GenericListScreen(
     val items = getItems(state)
 
     LaunchedEffect(Unit) {
-        loadItems()
+        // Re-entering a tab must not trigger another page load when the ViewModel already
+        // holds data (previously every recomposition of the screen fetched the next page).
+        if (items.isNullOrEmpty()) {
+            loadItems()
+        }
     }
 
     // Only show the full-screen spinner before the first page arrives; appending more
