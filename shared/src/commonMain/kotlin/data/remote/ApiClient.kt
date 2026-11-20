@@ -8,10 +8,13 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
 import kmp_movie.composeApp.BuildConfig
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 
 private const val TIMEOUT_MILLIS = 30000L
 
+@OptIn(ExperimentalSerializationApi::class)
 val apiClient = HttpClient {
     defaultRequest {
         url {
@@ -32,6 +35,7 @@ val apiClient = HttpClient {
         json(Json {
             ignoreUnknownKeys = true
             explicitNulls = false
+            namingStrategy = JsonNamingStrategy.SnakeCase
         })
     }
 }
