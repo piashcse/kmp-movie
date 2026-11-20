@@ -1,11 +1,14 @@
 import androidx.compose.ui.window.ComposeUIViewController
 import di.initKoinPlatform
+import org.koin.mp.KoinPlatform
 import platform.UIKit.UIViewController
 import ui.App
 
 fun MainViewController(): UIViewController {
-    // Start Koin before the composition runs so ViewModels can be resolved on first frame.
-    initKoinPlatform()
+    // Don't start Koin twice when the controller is recreated (e.g. multiple scenes).
+    if (KoinPlatform.getKoinOrNull() == null) {
+        initKoinPlatform()
+    }
     return ComposeUIViewController {
         App()
     }
