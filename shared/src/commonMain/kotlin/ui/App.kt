@@ -130,7 +130,7 @@ fun App(
                     animationSpec = tween(300),
                     label = "detail_transition",
                 ) { currentRoute ->
-                    saveableStateHolder.SaveableStateProvider(currentRoute) {
+                    saveableStateHolder.SaveableStateProvider(currentRoute.toString()) {
                         Scaffold { paddingValues ->
                             DetailScreen(
                                 navigator = navigator,
@@ -168,7 +168,7 @@ fun App(
                         animationSpec = tween(200),
                         label = "content_transition",
                     ) { currentRoute ->
-                        saveableStateHolder.SaveableStateProvider(currentRoute) {
+                        saveableStateHolder.SaveableStateProvider(currentRoute.toString()) {
                             val activeRoute = currentRoute as TopLevelRoute
                             val page = getPageForRoute(activeRoute)
 
