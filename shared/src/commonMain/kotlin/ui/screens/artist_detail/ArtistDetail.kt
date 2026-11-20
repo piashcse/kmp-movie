@@ -72,6 +72,7 @@ fun ArtistDetail(
 
     BaseColumn(
         modifier = modifier,
+        onRetry = { viewModel.fetchArtistDetail(personId) },
         loading = uiState.isLoading && uiState.artistDetail == null,
         errorMessage = uiState.errorMessage
     ) {

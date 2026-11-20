@@ -18,7 +18,12 @@ abstract class PaginatedViewModel<T> : ViewModel() {
     protected val paginator = Paginator<T>(
         scope = viewModelScope,
         onLoadUpdated = { isLoading ->
-            _uiState.update { it.copy(isLoading = isLoading) }
+            _uiState.update {
+                it.copy(
+                    isLoading = isLoading,
+                    errorMessage = if (isLoading) null else it.errorMessage,
+                )
+            }
         },
         onRequest = { page -> fetchPage(page) },
         onError = { throwable ->
@@ -26,6 +31,9 @@ abstract class PaginatedViewModel<T> : ViewModel() {
         },
         onSuccess = { items, _ ->
             _uiState.update { it.copy(items = it.items + items) }
+        },
+        onEndReached = {
+            _uiState.update { it.copy(endReached = true) }
         },
     )
 
@@ -35,6 +43,6 @@ abstract class PaginatedViewModel<T> : ViewModel() {
 
     protected fun resetPagination() {
         paginator.reset()
-        _uiState.update { it.copy(items = emptyList(), errorMessage = null) }
+        _uiState.update { it.copy(items = emptyList(), errorMessage = null, endReached = false) }
     }
 }

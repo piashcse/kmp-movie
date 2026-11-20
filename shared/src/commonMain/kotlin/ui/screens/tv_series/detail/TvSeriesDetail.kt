@@ -58,6 +58,7 @@ fun TvSeriesDetail(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.surface),
+        onRetry = { viewModel.fetchTvSeriesDetails(seriesId) },
         loading = uiState.isLoading && uiState.tvSeriesDetail == null,
         errorMessage = uiState.errorMessage
     ) {

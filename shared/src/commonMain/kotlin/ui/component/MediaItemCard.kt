@@ -1,5 +1,6 @@
 package ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,6 +50,7 @@ fun MediaItemCard(
                 modifier = Modifier
                     .height(200.dp)
                     .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
                     .cornerRadius(10),
                 imageOptions = ImageOptions(
                     contentScale = ContentScale.Crop,

@@ -48,6 +48,13 @@
     <string name="empty_celebrities_subtitle">Start adding your favorite celebrities!</string>
 
     <string name="all">All</string>
+    <string name="retry">Retry</string>
+    <string name="no_results">No results found</string>
+    <string name="no_results_for">No results for “%1$s”</string>
+    <string name="end_of_list">You&#39;ve reached the end</string>
+    <string name="search_prompt">Search for movies, TV series or celebrities</string>
+    <string name="removed_from_favorites">Removed from favorites</string>
+    <string name="undo">Undo</string>
     <string name="now_playing">Now playing</string>
     <string name="popular">Popular</string>
     <string name="top_rated">Top rated</string>

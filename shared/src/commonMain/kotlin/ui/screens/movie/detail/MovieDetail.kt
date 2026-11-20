@@ -58,6 +58,7 @@ fun MovieDetail(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.surface),
+        onRetry = { viewModel.fetchMovieDetails(movieId) },
         loading = uiState.isLoading && uiState.movieDetail == null,
         errorMessage = uiState.errorMessage
     ) {

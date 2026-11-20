@@ -43,7 +43,7 @@ fun ImageLoad(url: String, modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop,
             alignment = Alignment.Center,
         ),
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colorScheme.surfaceVariant),
     )
 }
 
