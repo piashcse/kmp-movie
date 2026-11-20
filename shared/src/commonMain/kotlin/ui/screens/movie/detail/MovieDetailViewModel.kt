@@ -3,6 +3,7 @@ package ui.screens.movie.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.repository.Repository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,8 +16,16 @@ class MovieDetailViewModel(private val repo: Repository) : ViewModel() {
     private val _uiState = MutableStateFlow(MovieDetailUiState())
     val uiState: StateFlow<MovieDetailUiState> get() = _uiState.asStateFlow()
 
+    private var fetchJob: Job? = null
+    private var currentMovieId: Int? = null
+
     fun fetchMovieDetails(movieId: Int) {
-        viewModelScope.launch {
+        if (currentMovieId == movieId && _uiState.value.movieDetail != null) return
+
+        currentMovieId = movieId
+        fetchJob?.cancel()
+        _uiState.value = MovieDetailUiState()
+        fetchJob = viewModelScope.launch {
             launch { updateMovieDetail(movieId) }
             launch { updateRecommendedMovies(movieId) }
             launch { updateMovieCredit(movieId) }
@@ -32,9 +41,7 @@ class MovieDetailViewModel(private val repo: Repository) : ViewModel() {
     private suspend fun updateRecommendedMovies(movieId: Int) {
         repo.recommendedMovie(movieId).collect { result ->
             handleStateUpdate(result) { state, data ->
-                state.copy(
-                    recommendedMovies = data ?: emptyList()
-                )
+                state.copy(recommendedMovies = data.orEmpty())
             }
         }
     }
@@ -47,19 +54,19 @@ class MovieDetailViewModel(private val repo: Repository) : ViewModel() {
 
     private fun <T> handleStateUpdate(
         result: UiState<T>,
-        stateUpdater: (MovieDetailUiState, T?) -> MovieDetailUiState
+        stateUpdater: (MovieDetailUiState, T?) -> MovieDetailUiState,
     ) {
         _uiState.update { currentState ->
             when (result) {
                 is UiState.Loading -> currentState.copy(isLoading = true)
                 is UiState.Success -> stateUpdater(
                     currentState,
-                    result.data
+                    result.data,
                 ).copy(isLoading = false)
 
                 is UiState.Error -> currentState.copy(
                     isLoading = false,
-                    errorMessage = result.exception.message
+                    errorMessage = result.exception.message,
                 )
             }
         }

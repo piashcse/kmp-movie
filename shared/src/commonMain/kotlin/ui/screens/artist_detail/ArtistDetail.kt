@@ -42,6 +42,10 @@ import kmp_movie.composeapp.generated.resources.artist_movies
 import kmp_movie.composeapp.generated.resources.biography
 import kmp_movie.composeapp.generated.resources.birth_day
 import kmp_movie.composeapp.generated.resources.gender
+import kmp_movie.composeapp.generated.resources.gender_female
+import kmp_movie.composeapp.generated.resources.gender_male
+import kmp_movie.composeapp.generated.resources.gender_non_binary
+import kmp_movie.composeapp.generated.resources.gender_unspecified
 import kmp_movie.composeapp.generated.resources.know_for
 import kmp_movie.composeapp.generated.resources.place_of_birth
 import org.jetbrains.compose.resources.stringResource
@@ -107,7 +111,14 @@ fun ArtistDetail(
                             )
                             PersonalInfo(
                                 stringResource(Res.string.gender),
-                                artist.gender.toString()
+                                stringResource(
+                                    when (artist.gender) {
+                                        1 -> Res.string.gender_female
+                                        2 -> Res.string.gender_male
+                                        3 -> Res.string.gender_non_binary
+                                        else -> Res.string.gender_unspecified
+                                    }
+                                )
                             )
                             PersonalInfo(stringResource(Res.string.birth_day), artist.birthday ?: "")
                             PersonalInfo(

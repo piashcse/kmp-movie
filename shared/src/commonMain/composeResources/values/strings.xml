@@ -46,4 +46,17 @@
     <string name="empty_tv_series_subtitle">Start adding your favorite TV series!</string>
     <string name="empty_celebrities_title">No favorite celebrities yet</string>
     <string name="empty_celebrities_subtitle">Start adding your favorite celebrities!</string>
+
+    <string name="all">All</string>
+    <string name="theme_mode_toggle">Theme mode</string>
+    <string name="theme_light">Light Mode</string>
+    <string name="theme_dark">Dark Mode</string>
+    <string name="theme_system">System Default</string>
+    <string name="theme_light_short">Light</string>
+    <string name="theme_dark_short">Dark</string>
+    <string name="theme_system_short">System</string>
+    <string name="gender_unspecified">Not specified</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_non_binary">Non-binary</string>
 </resources>

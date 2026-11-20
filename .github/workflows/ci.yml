@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK 37.1
+        run: sdkmanager "platforms;android-37.1" "build-tools;37.0.0"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build and test
+        env:
+          API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          ./gradlew :shared:desktopTest \
+            :shared:testAndroidHostTest \
+            :androidApp:assembleDebug \
+            --stacktrace
